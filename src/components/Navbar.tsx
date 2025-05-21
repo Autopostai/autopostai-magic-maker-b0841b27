@@ -1,0 +1,70 @@
+
+import { Link } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { Sparkles } from "lucide-react";
+
+export function Navbar() {
+  const isLoggedIn = false; // Substituir por lógica de autenticação
+
+  return (
+    <nav className="border-b bg-white">
+      <div className="container flex h-16 items-center justify-between px-4">
+        <Link to="/" className="flex items-center gap-2 font-bold text-xl">
+          <div className="bg-purple-100 p-1 rounded-full">
+            <Sparkles className="w-5 h-5 text-purple-600" />
+          </div>
+          <span className="bg-gradient-to-r from-purple-700 to-blue-600 bg-clip-text text-transparent">
+            AutoPostAI
+          </span>
+        </Link>
+
+        <div className="hidden md:flex items-center gap-6">
+          <Link to="/pricing" className="text-sm font-medium text-gray-700 hover:text-purple-600">
+            Preços
+          </Link>
+          <Link to="/#features" className="text-sm font-medium text-gray-700 hover:text-purple-600">
+            Recursos
+          </Link>
+          {isLoggedIn ? (
+            <>
+              <Link to="/dashboard">
+                <Button variant="ghost">Dashboard</Button>
+              </Link>
+              <Link to="/create">
+                <Button>Criar Conteúdo</Button>
+              </Link>
+            </>
+          ) : (
+            <>
+              <Link to="/login">
+                <Button variant="ghost">Entrar</Button>
+              </Link>
+              <Link to="/register">
+                <Button>Criar Conta</Button>
+              </Link>
+            </>
+          )}
+        </div>
+
+        <Button variant="ghost" size="icon" className="md:hidden">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="h-6 w-6"
+          >
+            <line x1="4" x2="20" y1="12" y2="12"></line>
+            <line x1="4" x2="20" y1="6" y2="6"></line>
+            <line x1="4" x2="20" y1="18" y2="18"></line>
+          </svg>
+        </Button>
+      </div>
+    </nav>
+  );
+}
