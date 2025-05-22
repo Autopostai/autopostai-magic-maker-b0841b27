@@ -13,7 +13,7 @@ import {
   Download, Share, Image as ImageIcon, Text, Bold, Italic, 
   Underline, AlignLeft, AlignCenter, AlignRight, 
   ChevronLeft, ChevronRight, Upload, Music, Mic, 
-  Film, Play, Square, Plus, CheckCircle2 
+  Film, Play, Square, Plus, CheckCircle2, MessageSquare
 } from "lucide-react";
 import { ContentGenerationData } from "@/pages/CreateContent";
 import { toast } from "sonner";
