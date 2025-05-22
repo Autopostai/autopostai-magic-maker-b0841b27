@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Image, Video, FileText, Loader2, CheckCircle2 } from "lucide-react";
+import { Image, Video, FileText, Loader2, CheckCircle2, Film, MessageSquare } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
 import { VisualEditor } from "@/components/VisualEditor";
 import { toast } from "sonner";
@@ -23,8 +23,10 @@ export type ContentGenerationData = {
 export default function CreateContent() {
   const [loading, setLoading] = useState(false);
   const [contentType, setContentType] = useState("carrossel");
+  const [carouselType, setCarouselType] = useState("multi");
   const [currentStep, setCurrentStep] = useState<"generate" | "edit">("generate");
   const [generatedContent, setGeneratedContent] = useState<ContentGenerationData | null>(null);
+  const [artStyle, setArtStyle] = useState("minimalista");
   
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -97,8 +99,10 @@ export default function CreateContent() {
                           </SelectTrigger>
                           <SelectContent>
                             <SelectItem value="educativo">Educativo</SelectItem>
+                            <SelectItem value="persuasivo">Persuasivo</SelectItem>
+                            <SelectItem value="informal">Informal</SelectItem>
                             <SelectItem value="divertido">Divertido</SelectItem>
-                            <SelectItem value="profundo">Profundo</SelectItem>
+                            <SelectItem value="emocional">Profundo e Emocional</SelectItem>
                             <SelectItem value="vendas">Vendas</SelectItem>
                           </SelectContent>
                         </Select>
@@ -113,7 +117,7 @@ export default function CreateContent() {
                     <div className="space-y-2">
                       <Label>Tipo de Conteúdo</Label>
                       <Tabs defaultValue="carrossel" onValueChange={setContentType} className="w-full">
-                        <TabsList className="grid grid-cols-3">
+                        <TabsList className="grid grid-cols-4">
                           <TabsTrigger value="carrossel" className="flex items-center gap-2">
                             <Image className="h-4 w-4" />
                             Carrossel
@@ -126,37 +130,89 @@ export default function CreateContent() {
                             <FileText className="h-4 w-4" />
                             Legenda
                           </TabsTrigger>
+                          <TabsTrigger value="reels" className="flex items-center gap-2">
+                            <Film className="h-4 w-4" />
+                            Reels/Shorts
+                          </TabsTrigger>
                         </TabsList>
                         
                         <TabsContent value="carrossel" className="pt-4">
-                          <div className="space-y-2">
-                            <Label htmlFor="slides">Quantidade de Slides</Label>
-                            <Select defaultValue="5">
-                              <SelectTrigger>
-                                <SelectValue placeholder="Selecione a quantidade" />
-                              </SelectTrigger>
-                              <SelectContent>
-                                <SelectItem value="5">5 slides</SelectItem>
-                                <SelectItem value="7">7 slides</SelectItem>
-                                <SelectItem value="10">10 slides</SelectItem>
-                              </SelectContent>
-                            </Select>
+                          <div className="space-y-4">
+                            <div className="space-y-2">
+                              <Label htmlFor="carouselType">Tipo de Publicação</Label>
+                              <Select defaultValue="multi" onValueChange={setCarouselType}>
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Selecione o tipo" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  <SelectItem value="multi">Carrossel (Múltiplos Slides)</SelectItem>
+                                  <SelectItem value="single">Post Único</SelectItem>
+                                </SelectContent>
+                              </Select>
+                            </div>
+                            
+                            {carouselType === "multi" && (
+                              <div className="space-y-2">
+                                <Label htmlFor="slides">Quantidade de Slides</Label>
+                                <Select defaultValue="5">
+                                  <SelectTrigger>
+                                    <SelectValue placeholder="Selecione a quantidade" />
+                                  </SelectTrigger>
+                                  <SelectContent>
+                                    <SelectItem value="3">3 slides</SelectItem>
+                                    <SelectItem value="5">5 slides</SelectItem>
+                                    <SelectItem value="7">7 slides</SelectItem>
+                                    <SelectItem value="10">10 slides</SelectItem>
+                                  </SelectContent>
+                                </Select>
+                              </div>
+                            )}
+                            
+                            <div className="space-y-2">
+                              <Label htmlFor="artStyle">Estilo Visual</Label>
+                              <Select defaultValue="minimalista" onValueChange={setArtStyle}>
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Selecione o estilo visual" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  <SelectItem value="minimalista">Minimalista</SelectItem>
+                                  <SelectItem value="tumblr">Tumblr</SelectItem>
+                                  <SelectItem value="informal">Informal</SelectItem>
+                                  <SelectItem value="corporativo">Corporativo</SelectItem>
+                                  <SelectItem value="moderno">Moderno e Colorido</SelectItem>
+                                  <SelectItem value="elegante">Elegante</SelectItem>
+                                  <SelectItem value="retro">Retrô</SelectItem>
+                                  <SelectItem value="custom">Criar do Zero</SelectItem>
+                                </SelectContent>
+                              </Select>
+                            </div>
                           </div>
                         </TabsContent>
                         
                         <TabsContent value="video" className="pt-4">
-                          <div className="space-y-2">
-                            <Label htmlFor="duration">Duração do Vídeo</Label>
-                            <Select defaultValue="30">
-                              <SelectTrigger>
-                                <SelectValue placeholder="Selecione a duração" />
-                              </SelectTrigger>
-                              <SelectContent>
-                                <SelectItem value="15">15 segundos</SelectItem>
-                                <SelectItem value="30">30 segundos</SelectItem>
-                                <SelectItem value="60">60 segundos</SelectItem>
-                              </SelectContent>
-                            </Select>
+                          <div className="space-y-4">
+                            <div className="space-y-2">
+                              <Label htmlFor="duration">Duração do Vídeo</Label>
+                              <Select defaultValue="30">
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Selecione a duração" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  <SelectItem value="15">15 segundos</SelectItem>
+                                  <SelectItem value="30">30 segundos</SelectItem>
+                                  <SelectItem value="60">60 segundos</SelectItem>
+                                  <SelectItem value="90">90 segundos</SelectItem>
+                                </SelectContent>
+                              </Select>
+                            </div>
+                            <div className="space-y-2">
+                              <Label htmlFor="scriptType">Tipo de Roteiro</Label>
+                              <Textarea 
+                                id="scriptType" 
+                                placeholder="Descreva o tipo de roteiro que você deseja. Ex: Um roteiro informativo sobre os benefícios da meditação"
+                                className="min-h-[80px]"
+                              />
+                            </div>
                           </div>
                         </TabsContent>
                         
@@ -173,6 +229,27 @@ export default function CreateContent() {
                                 <SelectItem value="long">Longa</SelectItem>
                               </SelectContent>
                             </Select>
+                          </div>
+                        </TabsContent>
+                        
+                        <TabsContent value="reels" className="pt-4">
+                          <div className="space-y-4">
+                            <div className="space-y-2">
+                              <Label htmlFor="videoUpload">Upload de Vídeo</Label>
+                              <Input id="videoUpload" type="file" accept="video/*" />
+                            </div>
+                            <div className="space-y-2">
+                              <Label htmlFor="videoUrl">Ou URL do Vídeo</Label>
+                              <Input id="videoUrl" placeholder="Cole o link do vídeo aqui..." />
+                            </div>
+                            <div className="space-y-2">
+                              <Label htmlFor="reelsDescription">Descrição do Conteúdo</Label>
+                              <Textarea 
+                                id="reelsDescription" 
+                                placeholder="O que você deseja mostrar neste Reels/Short?"
+                                className="min-h-[80px]"
+                              />
+                            </div>
                           </div>
                         </TabsContent>
                       </Tabs>
@@ -226,7 +303,12 @@ export default function CreateContent() {
                 </div>
               </div>
               
-              <VisualEditor content={generatedContent} contentType={contentType} />
+              <VisualEditor 
+                content={generatedContent} 
+                contentType={contentType}
+                artStyle={artStyle} 
+                carouselType={carouselType} 
+              />
             </div>
           )}
         </div>
