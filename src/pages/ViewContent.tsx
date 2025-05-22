@@ -69,8 +69,7 @@ export default function ViewContent() {
   
   const handleCopyCaption = () => {
     navigator.clipboard.writeText(contentData.caption);
-    toast({
-      title: "Copiado!",
+    toast("Copiado!", {
       description: "Legenda copiada para a área de transferência."
     });
   };
@@ -78,16 +77,14 @@ export default function ViewContent() {
   const handleCopyScript = () => {
     if (contentData.script) {
       navigator.clipboard.writeText(contentData.script);
-      toast({
-        title: "Copiado!",
+      toast("Copiado!", {
         description: "Roteiro copiado para a área de transferência."
       });
     }
   };
   
   const handleDownload = () => {
-    toast({
-      title: "Download iniciado",
+    toast("Download iniciado", {
       description: "Seu conteúdo está sendo preparado para download."
     });
   };
@@ -273,7 +270,9 @@ export default function ViewContent() {
                         </div>
                         <Button onClick={() => {
                           navigator.clipboard.writeText(contentData.hashtags.map(tag => `#${tag}`).join(' '));
-                          toast.success("Hashtags copiadas para a área de transferência");
+                          toast("Hashtags copiadas", {
+                            description: "Hashtags copiadas para a área de transferência"
+                          });
                         }} variant="outline" className="w-full mt-4">
                           <Copy className="mr-2 h-4 w-4" /> Copiar Hashtags
                         </Button>
