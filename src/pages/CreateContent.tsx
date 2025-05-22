@@ -11,6 +11,7 @@ import { Image, Video, FileText, Loader2, CheckCircle2, Film, MessageSquare } fr
 import { Textarea } from "@/components/ui/textarea";
 import { VisualEditor } from "@/components/VisualEditor";
 import { toast } from "sonner";
+import { generateContent, AIContentGeneratorParams } from "@/services/aiService";
 
 export type ContentGenerationData = {
   title?: string;
@@ -22,44 +23,81 @@ export type ContentGenerationData = {
 
 export default function CreateContent() {
   const [loading, setLoading] = useState(false);
-  const [contentType, setContentType] = useState("carrossel");
+  const [contentType, setContentType] = useState<AIContentGeneratorParams["contentType"]>("carrossel");
   const [carouselType, setCarouselType] = useState("multi");
   const [currentStep, setCurrentStep] = useState<"generate" | "edit">("generate");
   const [generatedContent, setGeneratedContent] = useState<ContentGenerationData | null>(null);
   const [artStyle, setArtStyle] = useState("minimalista");
   
-  const handleSubmit = (e: React.FormEvent) => {
+  // Form inputs
+  const [niche, setNiche] = useState("");
+  const [style, setStyle] = useState("educativo");
+  const [target, setTarget] = useState("");
+  const [topic, setTopic] = useState("");
+  const [slideCount, setSlideCount] = useState("5");
+  const [videoDuration, setVideoDuration] = useState("30");
+  const [captionLength, setCaptionLength] = useState("medium");
+  
+  // Upload states
+  const [uploadedVideo, setUploadedVideo] = useState<File | null>(null);
+  const [videoUrl, setVideoUrl] = useState("");
+  
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     
-    // Simulando uma chamada à API
-    setTimeout(() => {
-      setLoading(false);
-      
-      // Dados simulados para exemplo
-      const mockGeneratedContent: ContentGenerationData = {
-        title: "5 Dicas para Melhorar sua Saúde Mental",
-        slides: [
-          "1. Pratique meditação diariamente por 10 minutos",
-          "2. Estabeleça uma rotina de sono consistente",
-          "3. Desconecte-se das redes sociais por 2 horas antes de dormir",
-          "4. Mantenha um diário de gratidão",
-          "5. Busque ajuda profissional quando necessário"
-        ],
-        caption: "Sua saúde mental é prioridade! Neste post compartilho 5 dicas práticas que podem transformar sua relação com você mesmo. Qual dessas você já pratica? Comente abaixo! ✨ #saudeMental #bemestar",
-        hashtags: ["#saudeMental", "#bemestar", "#autoconhecimento", "#psicologia", "#dicasdesaude"]
+    try {
+      // Configurar parâmetros para a API
+      const params: AIContentGeneratorParams = {
+        contentType,
+        niche,
+        style,
+        target,
+        topic
       };
       
-      setGeneratedContent(mockGeneratedContent);
+      // Adicionar parâmetros específicos do tipo de conteúdo
+      if (contentType === "carrossel") {
+        params.carouselType = carouselType as any;
+        params.slides = parseInt(slideCount);
+      } else if (contentType === "video") {
+        params.duration = parseInt(videoDuration);
+      } else if (contentType === "legenda") {
+        params.length = captionLength as any;
+      }
+      
+      // Chamar API para gerar conteúdo
+      const content = await generateContent(params);
+      
+      // Atualizar estado com o conteúdo gerado
+      setGeneratedContent(content);
       setCurrentStep("edit");
-      toast.success("Conteúdo gerado com sucesso! Agora você pode personalizá-lo.", {
+      
+      toast.success("Conteúdo gerado com sucesso!", {
         description: "Use o editor visual para personalizar seu conteúdo antes de exportar.",
       });
-    }, 3000);
+    } catch (error) {
+      console.error("Erro ao gerar conteúdo:", error);
+      toast.error("Erro na geração de conteúdo", {
+        description: "Ocorreu um problema ao gerar seu conteúdo. Tente novamente."
+      });
+    } finally {
+      setLoading(false);
+    }
   };
   
   const handleBackToGenerate = () => {
     setCurrentStep("generate");
+  };
+
+  const handleVideoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setUploadedVideo(file);
+      toast.success("Vídeo carregado", {
+        description: "Seu vídeo foi carregado e está pronto para processamento."
+      });
+    }
   };
 
   return (
@@ -69,7 +107,7 @@ export default function CreateContent() {
         <div className="max-w-6xl mx-auto">
           <h1 className="text-3xl font-bold mb-6 text-center">
             {currentStep === "generate" 
-              ? "Criar Novo Conteúdo" 
+              ? "Criar Novo Conteúdo em Segundos" 
               : "Personalizar Conteúdo"}
           </h1>
           
@@ -78,7 +116,7 @@ export default function CreateContent() {
               <CardHeader>
                 <CardTitle>Definir Parâmetros</CardTitle>
                 <CardDescription>
-                  Preencha as informações abaixo para gerar seu conteúdo
+                  Preencha as informações abaixo para gerar seu conteúdo em menos de 30 segundos
                 </CardDescription>
               </CardHeader>
               
@@ -87,13 +125,21 @@ export default function CreateContent() {
                   <div className="space-y-6">
                     <div className="space-y-2">
                       <Label htmlFor="niche">Nicho</Label>
-                      <Input id="niche" placeholder="Ex: Psicologia, Marketing, Finanças, Moda..." />
+                      <Input 
+                        id="niche" 
+                        placeholder="Ex: Psicologia, Marketing, Finanças, Moda..." 
+                        value={niche}
+                        onChange={(e) => setNiche(e.target.value)}
+                      />
                     </div>
                     
                     <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                       <div className="space-y-2">
                         <Label htmlFor="style">Estilo de Escrita</Label>
-                        <Select defaultValue="educativo">
+                        <Select 
+                          defaultValue={style} 
+                          onValueChange={setStyle}
+                        >
                           <SelectTrigger>
                             <SelectValue placeholder="Selecione o estilo" />
                           </SelectTrigger>
@@ -110,13 +156,18 @@ export default function CreateContent() {
                       
                       <div className="space-y-2">
                         <Label htmlFor="target">Público-alvo</Label>
-                        <Input id="target" placeholder="Ex: Mulheres 25-35 anos, Empreendedores..." />
+                        <Input 
+                          id="target" 
+                          placeholder="Ex: Mulheres 25-35 anos, Empreendedores..." 
+                          value={target}
+                          onChange={(e) => setTarget(e.target.value)}
+                        />
                       </div>
                     </div>
                     
                     <div className="space-y-2">
                       <Label>Tipo de Conteúdo</Label>
-                      <Tabs defaultValue="carrossel" onValueChange={setContentType} className="w-full">
+                      <Tabs defaultValue="carrossel" onValueChange={(v) => setContentType(v as AIContentGeneratorParams["contentType"])} className="w-full">
                         <TabsList className="grid grid-cols-4">
                           <TabsTrigger value="carrossel" className="flex items-center gap-2">
                             <Image className="h-4 w-4" />
@@ -154,7 +205,7 @@ export default function CreateContent() {
                             {carouselType === "multi" && (
                               <div className="space-y-2">
                                 <Label htmlFor="slides">Quantidade de Slides</Label>
-                                <Select defaultValue="5">
+                                <Select defaultValue="5" onValueChange={setSlideCount}>
                                   <SelectTrigger>
                                     <SelectValue placeholder="Selecione a quantidade" />
                                   </SelectTrigger>
@@ -193,7 +244,7 @@ export default function CreateContent() {
                           <div className="space-y-4">
                             <div className="space-y-2">
                               <Label htmlFor="duration">Duração do Vídeo</Label>
-                              <Select defaultValue="30">
+                              <Select defaultValue="30" onValueChange={setVideoDuration}>
                                 <SelectTrigger>
                                   <SelectValue placeholder="Selecione a duração" />
                                 </SelectTrigger>
@@ -211,6 +262,8 @@ export default function CreateContent() {
                                 id="scriptType" 
                                 placeholder="Descreva o tipo de roteiro que você deseja. Ex: Um roteiro informativo sobre os benefícios da meditação"
                                 className="min-h-[80px]"
+                                value={topic}
+                                onChange={(e) => setTopic(e.target.value)}
                               />
                             </div>
                           </div>
@@ -219,7 +272,7 @@ export default function CreateContent() {
                         <TabsContent value="legenda" className="pt-4">
                           <div className="space-y-2">
                             <Label htmlFor="length">Tamanho da Legenda</Label>
-                            <Select defaultValue="medium">
+                            <Select defaultValue="medium" onValueChange={setCaptionLength}>
                               <SelectTrigger>
                                 <SelectValue placeholder="Selecione o tamanho" />
                               </SelectTrigger>
@@ -236,11 +289,26 @@ export default function CreateContent() {
                           <div className="space-y-4">
                             <div className="space-y-2">
                               <Label htmlFor="videoUpload">Upload de Vídeo</Label>
-                              <Input id="videoUpload" type="file" accept="video/*" />
+                              <Input 
+                                id="videoUpload" 
+                                type="file" 
+                                accept="video/*" 
+                                onChange={handleVideoUpload}
+                              />
+                              {uploadedVideo && (
+                                <p className="text-sm text-green-600 mt-1">
+                                  ✓ Vídeo selecionado: {uploadedVideo.name}
+                                </p>
+                              )}
                             </div>
                             <div className="space-y-2">
                               <Label htmlFor="videoUrl">Ou URL do Vídeo</Label>
-                              <Input id="videoUrl" placeholder="Cole o link do vídeo aqui..." />
+                              <Input 
+                                id="videoUrl" 
+                                placeholder="Cole o link do vídeo aqui..." 
+                                value={videoUrl}
+                                onChange={(e) => setVideoUrl(e.target.value)}
+                              />
                             </div>
                             <div className="space-y-2">
                               <Label htmlFor="reelsDescription">Descrição do Conteúdo</Label>
@@ -248,6 +316,8 @@ export default function CreateContent() {
                                 id="reelsDescription" 
                                 placeholder="O que você deseja mostrar neste Reels/Short?"
                                 className="min-h-[80px]"
+                                value={topic}
+                                onChange={(e) => setTopic(e.target.value)}
                               />
                             </div>
                           </div>
@@ -261,6 +331,8 @@ export default function CreateContent() {
                         id="topic" 
                         placeholder="Descreva um tópico específico ou deixe em branco para a IA sugerir"
                         className="min-h-[100px]"
+                        value={topic}
+                        onChange={(e) => setTopic(e.target.value)}
                       />
                     </div>
                   </div>
@@ -280,13 +352,26 @@ export default function CreateContent() {
                 </form>
               </CardContent>
               
-              <CardFooter className="flex justify-center border-t pt-6 text-sm text-gray-500">
-                <p>
-                  Lembrete: Você tem 1 geração restante no plano gratuito.{" "}
-                  <a href="/pricing" className="text-purple-600 hover:underline">
-                    Faça upgrade para mais
-                  </a>
-                </p>
+              <CardFooter className="flex justify-center border-t pt-6">
+                <div className="space-y-3 text-center">
+                  <p className="text-sm text-gray-500">
+                    Lembrete: Você tem 27 gerações restantes no seu plano Creator.
+                  </p>
+                  <div className="flex items-center justify-center gap-8 text-sm">
+                    <div className="flex items-center">
+                      <CheckCircle2 className="h-4 w-4 text-green-500 mr-2" />
+                      <span>Legendas automáticas</span>
+                    </div>
+                    <div className="flex items-center">
+                      <CheckCircle2 className="h-4 w-4 text-green-500 mr-2" />
+                      <span>Roteiros otimizados</span>
+                    </div>
+                    <div className="flex items-center">
+                      <CheckCircle2 className="h-4 w-4 text-green-500 mr-2" />
+                      <span>Hashtags sugeridas</span>
+                    </div>
+                  </div>
+                </div>
               </CardFooter>
             </Card>
           ) : (

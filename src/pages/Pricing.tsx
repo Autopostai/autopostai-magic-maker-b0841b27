@@ -1,160 +1,195 @@
 
+import { useState } from "react";
 import { Navbar } from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Check } from "lucide-react";
+import { CheckCircle2 } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export default function Pricing() {
+  const [billingCycle, setBillingCycle] = useState<"monthly" | "annual">("annual");
+
+  const plans = [
+    {
+      name: "Free",
+      description: "Perfeito para experimentar a plataforma",
+      price: billingCycle === "annual" ? "R$0" : "R$0",
+      features: [
+        "3 gerações de conteúdo por mês",
+        "Posts únicos",
+        "Acesso básico ao editor visual",
+        "Sem marca d'água",
+        "Suporte por e-mail"
+      ],
+      limitations: [
+        "Sem carrosséis",
+        "Sem geração de vídeo/reels",
+        "Sem transcrição automática"
+      ],
+      cta: "Começar Grátis",
+      popular: false,
+      link: "/register"
+    },
+    {
+      name: "Creator",
+      description: "Para criadores de conteúdo independentes",
+      price: billingCycle === "annual" ? "R$39,90" : "R$49,90",
+      period: billingCycle === "annual" ? "/mês" : "/mês",
+      features: [
+        "30 gerações de conteúdo por mês",
+        "Posts únicos e carrosséis",
+        "Editor visual completo",
+        "Transcrição automática (limite de 10 min)",
+        "Geração de roteiros",
+        "Biblioteca de templates",
+        "Geração de hashtags otimizados",
+        "Suporte prioritário"
+      ],
+      cta: "Assinar Creator",
+      popular: true,
+      save: billingCycle === "annual" ? "Economize 20%" : null,
+      link: "/register?plan=creator"
+    },
+    {
+      name: "Pro",
+      description: "Para agências e times de marketing",
+      price: billingCycle === "annual" ? "R$99,90" : "R$129,90",
+      period: billingCycle === "annual" ? "/mês" : "/mês",
+      features: [
+        "Gerações ilimitadas",
+        "Todos os tipos de conteúdo",
+        "Geração em lote",
+        "Transcrição automática ilimitada",
+        "Integração com redes sociais",
+        "Agendamento de publicações",
+        "Análise de desempenho",
+        "Geração de imagens com IA",
+        "Personalização avançada de marca",
+        "Multi-usuários (até 5)",
+        "Suporte VIP"
+      ],
+      cta: "Assinar Pro",
+      popular: false,
+      save: billingCycle === "annual" ? "Economize 20%" : null,
+      link: "/register?plan=pro"
+    }
+  ];
+
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-b from-purple-50 to-blue-50">
+    <div className="min-h-screen bg-gradient-to-b from-purple-50 to-blue-50">
       <Navbar />
       <div className="container mx-auto px-4 py-16">
-        <div className="text-center max-w-3xl mx-auto mb-12">
-          <h1 className="text-4xl font-bold mb-4">Planos Simples e Acessíveis</h1>
-          <p className="text-lg text-gray-700">
-            Escolha o plano que melhor se adapta às suas necessidades de criação de conteúdo
+        <div className="text-center mb-16">
+          <h1 className="text-4xl font-bold mb-4">Planos que cabem no seu bolso</h1>
+          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+            Crie conteúdo para todas as redes sociais em menos de 30 segundos, com IA avançada e ferramentas intuitivas.
           </p>
+          
+          <div className="flex items-center justify-center mt-8 bg-white rounded-lg p-1 w-fit mx-auto border">
+            <button
+              className={`px-5 py-2 rounded-md transition-all ${
+                billingCycle === "annual" ? "bg-primary text-white" : "bg-transparent text-gray-500"
+              }`}
+              onClick={() => setBillingCycle("annual")}
+            >
+              Anual (20% off)
+            </button>
+            <button
+              className={`px-5 py-2 rounded-md transition-all ${
+                billingCycle === "monthly" ? "bg-primary text-white" : "bg-transparent text-gray-500"
+              }`}
+              onClick={() => setBillingCycle("monthly")}
+            >
+              Mensal
+            </button>
+          </div>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-          {/* Plano Gratuito */}
-          <Card className="border-none shadow-md hover:shadow-xl transition-shadow">
-            <CardHeader>
-              <CardTitle>Gratuito</CardTitle>
-              <div className="text-3xl font-bold">R$0</div>
-              <CardDescription>Para experimentar</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <ul className="space-y-2">
-                <li className="flex items-center">
-                  <Check className="w-5 h-5 text-green-500 mr-2" />
-                  <span>2 conteúdos por semana</span>
-                </li>
-                <li className="flex items-center">
-                  <Check className="w-5 h-5 text-green-500 mr-2" />
-                  <span>2 templates disponíveis</span>
-                </li>
-                <li className="flex items-center">
-                  <Check className="w-5 h-5 text-green-500 mr-2" />
-                  <span>Marca d'água</span>
-                </li>
-              </ul>
-            </CardContent>
-            <CardFooter>
-              <Button className="w-full">Começar Grátis</Button>
-            </CardFooter>
-          </Card>
-          
-          {/* Plano Básico */}
-          <Card className="border-none shadow-md hover:shadow-xl transition-shadow relative bg-gradient-to-b from-purple-600 to-blue-600 text-white">
-            <div className="absolute top-0 right-0 bg-yellow-400 text-xs font-bold px-2 py-1 rounded-bl-lg rounded-tr-lg text-gray-800">
-              POPULAR
-            </div>
-            <CardHeader>
-              <CardTitle>Básico</CardTitle>
-              <div className="text-3xl font-bold">R$19/mês</div>
-              <CardDescription className="text-purple-100">Para criadores iniciantes</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <ul className="space-y-2">
-                <li className="flex items-center">
-                  <Check className="w-5 h-5 text-yellow-400 mr-2" />
-                  <span>20 conteúdos por mês</span>
-                </li>
-                <li className="flex items-center">
-                  <Check className="w-5 h-5 text-yellow-400 mr-2" />
-                  <span>Sem marca d'água</span>
-                </li>
-                <li className="flex items-center">
-                  <Check className="w-5 h-5 text-yellow-400 mr-2" />
-                  <span>Todos os templates</span>
-                </li>
-                <li className="flex items-center">
-                  <Check className="w-5 h-5 text-yellow-400 mr-2" />
-                  <span>Exportação para Canva</span>
-                </li>
-              </ul>
-            </CardContent>
-            <CardFooter>
-              <Button className="w-full bg-white text-purple-600 hover:bg-gray-100">
-                Assinar Agora
-              </Button>
-            </CardFooter>
-          </Card>
-          
-          {/* Plano Profissional */}
-          <Card className="border-none shadow-md hover:shadow-xl transition-shadow">
-            <CardHeader>
-              <CardTitle>Profissional</CardTitle>
-              <div className="text-3xl font-bold">R$39/mês</div>
-              <CardDescription>Para profissionais e empresas</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <ul className="space-y-2">
-                <li className="flex items-center">
-                  <Check className="w-5 h-5 text-green-500 mr-2" />
-                  <span>Conteúdo ilimitado</span>
-                </li>
-                <li className="flex items-center">
-                  <Check className="w-5 h-5 text-green-500 mr-2" />
-                  <span>Roteiros com voz IA</span>
-                </li>
-                <li className="flex items-center">
-                  <Check className="w-5 h-5 text-green-500 mr-2" />
-                  <span>Banco de imagens/ícones</span>
-                </li>
-                <li className="flex items-center">
-                  <Check className="w-5 h-5 text-green-500 mr-2" />
-                  <span>Integrações com redes</span>
-                </li>
-                <li className="flex items-center">
-                  <Check className="w-5 h-5 text-green-500 mr-2" />
-                  <span>Atendimento prioritário</span>
-                </li>
-              </ul>
-            </CardContent>
-            <CardFooter>
-              <Button className="w-full">Assinar Agora</Button>
-            </CardFooter>
-          </Card>
+        <div className="grid md:grid-cols-3 gap-8">
+          {plans.map((plan) => (
+            <Card key={plan.name} className={`overflow-hidden ${plan.popular ? 'border-primary border-2 relative' : ''}`}>
+              {plan.popular && (
+                <div className="absolute top-0 right-0 bg-primary text-white text-xs font-bold px-3 py-1 rounded-bl">
+                  Mais popular
+                </div>
+              )}
+              <CardHeader className={`${plan.popular ? 'bg-primary/5' : ''}`}>
+                <CardTitle>{plan.name}</CardTitle>
+                <CardDescription className="pt-2">{plan.description}</CardDescription>
+              </CardHeader>
+              <CardContent className="pt-6">
+                <div className="text-center mb-6">
+                  <div className="flex items-end justify-center">
+                    <span className="text-3xl font-bold">{plan.price}</span>
+                    <span className="text-gray-500 ml-1">{plan.period}</span>
+                  </div>
+                  {plan.save && (
+                    <span className="text-green-600 text-sm font-medium mt-1 block">
+                      {plan.save}
+                    </span>
+                  )}
+                </div>
+                
+                <div className="space-y-3">
+                  {plan.features.map((feature) => (
+                    <div key={feature} className="flex items-start">
+                      <CheckCircle2 className="h-5 w-5 text-green-500 mr-2 shrink-0 mt-0.5" />
+                      <span className="text-sm">{feature}</span>
+                    </div>
+                  ))}
+                  
+                  {plan.limitations && (
+                    <>
+                      <div className="border-t border-gray-200 my-4"></div>
+                      {plan.limitations.map((limitation) => (
+                        <div key={limitation} className="flex items-start text-gray-400">
+                          <span className="h-5 w-5 text-gray-300 mr-2 flex items-center justify-center text-lg">-</span>
+                          <span className="text-sm">{limitation}</span>
+                        </div>
+                      ))}
+                    </>
+                  )}
+                </div>
+              </CardContent>
+              <CardFooter>
+                <Button 
+                  variant={plan.popular ? "default" : "outline"} 
+                  className="w-full"
+                  asChild
+                >
+                  <Link to={plan.link}>{plan.cta}</Link>
+                </Button>
+              </CardFooter>
+            </Card>
+          ))}
         </div>
         
-        <div className="mt-16 bg-white rounded-xl p-8 shadow-md max-w-4xl mx-auto">
-          <h2 className="text-2xl font-bold mb-6 text-center">Perguntas Frequentes</h2>
+        <div className="mt-16 text-center">
+          <h2 className="text-2xl font-bold mb-6">Por que escolher nossa plataforma?</h2>
           
-          <div className="space-y-6">
-            <div>
-              <h3 className="text-lg font-semibold mb-2">Como funciona o limite de conteúdo?</h3>
-              <p className="text-gray-700">
-                No plano gratuito, você pode criar até 2 conteúdos por semana. No plano Básico, até 20 por mês. 
-                No plano Profissional, conteúdo ilimitado.
-              </p>
+          <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+            <div className="p-6 rounded-lg bg-white shadow-sm">
+              <h3 className="text-lg font-bold mb-2">Economize tempo</h3>
+              <p className="text-gray-600">Crie conteúdo para todas as suas redes sociais em menos de 30 segundos.</p>
             </div>
             
-            <div>
-              <h3 className="text-lg font-semibold mb-2">Posso cancelar a qualquer momento?</h3>
-              <p className="text-gray-700">
-                Sim, você pode cancelar sua assinatura a qualquer momento. Não há taxas de cancelamento 
-                e você pode continuar usando o serviço até o final do período pago.
-              </p>
+            <div className="p-6 rounded-lg bg-white shadow-sm">
+              <h3 className="text-lg font-bold mb-2">IA especializada</h3>
+              <p className="text-gray-600">Nossa IA é treinada especificamente para marketing e redes sociais.</p>
             </div>
             
-            <div>
-              <h3 className="text-lg font-semibold mb-2">O que é a marca d'água?</h3>
-              <p className="text-gray-700">
-                No plano gratuito, os conteúdos gerados incluem uma pequena marca "Criado com AutoPostAI" 
-                no canto inferior. Essa marca é removida nos planos pagos.
-              </p>
-            </div>
-            
-            <div>
-              <h3 className="text-lg font-semibold mb-2">Como funciona a exportação para Canva?</h3>
-              <p className="text-gray-700">
-                Nos planos pagos, você pode exportar seus carrosséis diretamente para o Canva, 
-                onde poderá fazer edições adicionais usando todas as ferramentas disponíveis na plataforma.
-              </p>
+            <div className="p-6 rounded-lg bg-white shadow-sm">
+              <h3 className="text-lg font-bold mb-2">Tudo em um só lugar</h3>
+              <p className="text-gray-600">Crie, edite, agende e analise seu conteúdo em uma única plataforma.</p>
             </div>
           </div>
+        </div>
+        
+        <div className="mt-16 text-center">
+          <p className="text-gray-600 mb-4">Ainda não está convencido?</p>
+          <Button asChild>
+            <Link to="/register">Experimente grátis por 7 dias</Link>
+          </Button>
         </div>
       </div>
     </div>
