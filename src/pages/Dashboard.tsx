@@ -9,7 +9,8 @@ import { Separator } from "@/components/ui/separator";
 import { Link } from "react-router-dom";
 import { 
   Layout, Film, MessageSquare, Plus, Search, Filter, Calendar, Clock,
-  Copy, Download, Share2, Edit, Trash, Image, Instagram, Facebook, TikTok
+  Copy, Download, Share2, Edit, Trash, Image, Instagram, Facebook, 
+  MessageCircle, Smartphone
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -152,7 +153,7 @@ export default function Dashboard() {
       case "facebook":
         return <Facebook className="h-4 w-4 text-blue-600" />;
       case "tiktok":
-        return <TikTok className="h-4 w-4" />;
+        return <Smartphone className="h-4 w-4" />;
       case "all":
         return <Share2 className="h-4 w-4 text-purple-600" />;
       default:
