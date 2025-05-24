@@ -1,5 +1,6 @@
 
 import { Navbar } from "@/components/Navbar";
+import { HowItWorks } from "@/components/HowItWorks";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { CheckCircle2, ArrowRight, Clock, SquarePlay, Film, Layout, MessageSquare } from "lucide-react";
@@ -28,6 +29,9 @@ export default function Index() {
           </div>
         </div>
       </section>
+      
+      {/* How It Works Section */}
+      <HowItWorks />
       
       {/* Features Section */}
       <section className="bg-white py-20">
@@ -79,56 +83,6 @@ export default function Index() {
                 Economize horas do seu dia com nossa IA especializada em marketing digital.
               </p>
             </div>
-          </div>
-        </div>
-      </section>
-      
-      {/* How it Works */}
-      <section className="py-20">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold mb-4">Como funciona</h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Três passos simples para criar conteúdo profissional
-            </p>
-          </div>
-          
-          <div className="grid md:grid-cols-3 gap-12">
-            <div className="text-center">
-              <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mb-6 mx-auto">
-                <span className="text-2xl font-bold text-purple-600">1</span>
-              </div>
-              <h3 className="text-xl font-bold mb-3">Escolha o formato</h3>
-              <p className="text-gray-600">
-                Selecione entre posts, carrosséis, vídeos curtos ou roteiros para o tipo de conteúdo que deseja criar.
-              </p>
-            </div>
-            
-            <div className="text-center">
-              <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mb-6 mx-auto">
-                <span className="text-2xl font-bold text-purple-600">2</span>
-              </div>
-              <h3 className="text-xl font-bold mb-3">Defina os parâmetros</h3>
-              <p className="text-gray-600">
-                Informe seu nicho, estilo e tópico, ou deixe nossa IA sugerir o melhor conteúdo para seu público.
-              </p>
-            </div>
-            
-            <div className="text-center">
-              <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mb-6 mx-auto">
-                <span className="text-2xl font-bold text-purple-600">3</span>
-              </div>
-              <h3 className="text-xl font-bold mb-3">Personalize e exporte</h3>
-              <p className="text-gray-600">
-                Ajuste o conteúdo gerado com nosso editor visual intuitivo e exporte para uso imediato.
-              </p>
-            </div>
-          </div>
-          
-          <div className="text-center mt-12">
-            <Button size="lg" className="text-lg px-8" asChild>
-              <Link to="/register">Criar meu primeiro conteúdo <ArrowRight className="ml-2 h-5 w-5" /></Link>
-            </Button>
           </div>
         </div>
       </section>
@@ -217,7 +171,7 @@ export default function Index() {
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-4 gap-8">
             <div>
-              <h3 className="text-lg font-bold mb-4">ContentGenius</h3>
+              <h3 className="text-lg font-bold mb-4">AutoPostAI</h3>
               <p className="text-gray-400">
                 Crie conteúdo para redes sociais em segundos com a ajuda da nossa IA especializada.
               </p>
@@ -254,7 +208,7 @@ export default function Index() {
           </div>
           
           <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-            <p>&copy; 2024 ContentGenius. Todos os direitos reservados.</p>
+            <p>&copy; 2024 AutoPostAI. Todos os direitos reservados.</p>
           </div>
         </div>
       </footer>

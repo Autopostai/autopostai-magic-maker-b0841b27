@@ -6,8 +6,15 @@ import { Sparkles } from "lucide-react";
 export function Navbar() {
   const isLoggedIn = false; // Substituir por lógica de autenticação
 
+  const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
-    <nav className="border-b bg-white">
+    <nav className="border-b bg-white sticky top-0 z-50">
       <div className="container flex h-16 items-center justify-between px-4">
         <Link to="/" className="flex items-center gap-2 font-bold text-xl">
           <div className="bg-purple-100 p-1 rounded-full">
@@ -19,12 +26,33 @@ export function Navbar() {
         </Link>
 
         <div className="hidden md:flex items-center gap-6">
-          <Link to="/pricing" className="text-sm font-medium text-gray-700 hover:text-purple-600">
-            Preços
+          <button 
+            onClick={() => scrollToSection('inicio')} 
+            className="text-sm font-medium text-gray-700 hover:text-purple-600 transition-colors"
+          >
+            Início
+          </button>
+          <button 
+            onClick={() => scrollToSection('como-funciona')} 
+            className="text-sm font-medium text-gray-700 hover:text-purple-600 transition-colors"
+          >
+            Como Funciona
+          </button>
+          <button 
+            onClick={() => scrollToSection('funcionalidades')} 
+            className="text-sm font-medium text-gray-700 hover:text-purple-600 transition-colors"
+          >
+            Funcionalidades
+          </button>
+          <Link to="/pricing" className="text-sm font-medium text-gray-700 hover:text-purple-600 transition-colors">
+            Planos
           </Link>
-          <Link to="/#features" className="text-sm font-medium text-gray-700 hover:text-purple-600">
-            Recursos
-          </Link>
+          <button 
+            onClick={() => scrollToSection('depoimentos')} 
+            className="text-sm font-medium text-gray-700 hover:text-purple-600 transition-colors"
+          >
+            Depoimentos
+          </button>
           {isLoggedIn ? (
             <>
               <Link to="/dashboard">
@@ -40,7 +68,7 @@ export function Navbar() {
                 <Button variant="ghost">Entrar</Button>
               </Link>
               <Link to="/register">
-                <Button>Criar Conta</Button>
+                <Button>Comece Grátis</Button>
               </Link>
             </>
           )}
