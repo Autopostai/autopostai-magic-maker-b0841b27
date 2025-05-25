@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -8,6 +7,12 @@ import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import Dashboard from "./pages/Dashboard";
 import CreateContent from "./pages/CreateContent";
+import Content from "./pages/Content";
+import Schedule from "./pages/Schedule";
+import Analytics from "./pages/Analytics";
+import Library from "./pages/Library";
+import Settings from "./pages/Settings";
+import Support from "./pages/Support";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Pricing from "./pages/Pricing";
@@ -25,10 +30,16 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/create" element={<CreateContent />} />
+          <Route path="/content" element={<Content />} />
+          <Route path="/content/:id" element={<ViewContent />} />
+          <Route path="/schedule" element={<Schedule />} />
+          <Route path="/analytics" element={<Analytics />} />
+          <Route path="/library" element={<Library />} />
+          <Route path="/settings" element={<Settings />} />
+          <Route path="/support" element={<Support />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/pricing" element={<Pricing />} />
-          <Route path="/content/:id" element={<ViewContent />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

@@ -8,7 +8,10 @@ export function Navbar() {
   const isLoggedIn = false; // Substituir por lógica de autenticação real
   
   // Lista de rotas onde o navbar não deve aparecer (usuário logado)
-  const hiddenRoutes = ['/dashboard', '/create', '/content', '/schedule', '/analytics', '/library', '/settings'];
+  const hiddenRoutes = [
+    '/dashboard', '/create', '/content', '/schedule', '/analytics', 
+    '/library', '/settings', '/support'
+  ];
   const shouldHideNavbar = hiddenRoutes.some(route => location.pathname.startsWith(route));
 
   if (shouldHideNavbar) {
