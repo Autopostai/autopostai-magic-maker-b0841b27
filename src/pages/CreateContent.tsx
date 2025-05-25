@@ -28,7 +28,7 @@ export default function CreateContent() {
   const [carouselType, setCarouselType] = useState("multi");
   const [currentStep, setCurrentStep] = useState<"generate" | "edit">("generate");
   const [generatedContent, setGeneratedContent] = useState<ContentGenerationData | null>(null);
-  const [artStyle, setArtStyle] = useState("minimalista");
+  const [artStyle, setArtStyle] = useState("educativo");
   const navigate = useNavigate();
   
   // Form inputs
@@ -227,9 +227,14 @@ export default function CreateContent() {
                                     <SelectValue placeholder="Selecione a quantidade" />
                                   </SelectTrigger>
                                   <SelectContent>
+                                    <SelectItem value="2">2 slides</SelectItem>
                                     <SelectItem value="3">3 slides</SelectItem>
+                                    <SelectItem value="4">4 slides</SelectItem>
                                     <SelectItem value="5">5 slides</SelectItem>
+                                    <SelectItem value="6">6 slides</SelectItem>
                                     <SelectItem value="7">7 slides</SelectItem>
+                                    <SelectItem value="8">8 slides</SelectItem>
+                                    <SelectItem value="9">9 slides</SelectItem>
                                     <SelectItem value="10">10 slides</SelectItem>
                                   </SelectContent>
                                 </Select>
@@ -238,19 +243,30 @@ export default function CreateContent() {
                             
                             <div className="space-y-2">
                               <Label htmlFor="artStyle">Estilo Visual</Label>
-                              <Select defaultValue="minimalista" onValueChange={setArtStyle}>
+                              <Select defaultValue="educativo" onValueChange={setArtStyle}>
                                 <SelectTrigger>
                                   <SelectValue placeholder="Selecione o estilo visual" />
                                 </SelectTrigger>
                                 <SelectContent>
-                                  <SelectItem value="minimalista">Minimalista</SelectItem>
-                                  <SelectItem value="tumblr">Tumblr</SelectItem>
-                                  <SelectItem value="informal">Informal</SelectItem>
-                                  <SelectItem value="corporativo">Corporativo</SelectItem>
-                                  <SelectItem value="moderno">Moderno e Colorido</SelectItem>
-                                  <SelectItem value="elegante">Elegante</SelectItem>
-                                  <SelectItem value="retro">Retrô</SelectItem>
-                                  <SelectItem value="custom">Criar do Zero</SelectItem>
+                                  <SelectItem value="educativo">Estilo Educativo</SelectItem>
+                                  <SelectItem value="medico">Estilo Médico/Científico</SelectItem>
+                                  <SelectItem value="empreendedor">Estilo Empreendedor</SelectItem>
+                                  <SelectItem value="estetico">Estilo Estético/Beleza</SelectItem>
+                                  <SelectItem value="divertido-pop">Estilo Divertido/Pop</SelectItem>
+                                  <SelectItem value="espiritual">Estilo Espiritual/Holístico</SelectItem>
+                                  <SelectItem value="luxo">Estilo Luxo</SelectItem>
+                                  <SelectItem value="podcast">Estilo Podcast/Youtube</SelectItem>
+                                  <SelectItem value="feminino">Estilo Feminino Suave</SelectItem>
+                                  <SelectItem value="masculino">Estilo Masculino Sólido</SelectItem>
+                                  <SelectItem value="religioso">Estilo Religioso/Inspiracional</SelectItem>
+                                  <SelectItem value="jornalistico">Estilo "Notícia" ou Jornalístico</SelectItem>
+                                  <SelectItem value="minimalista">Estilo Minimalista</SelectItem>
+                                  <SelectItem value="informal-design">Estilo Informal</SelectItem>
+                                  <SelectItem value="corporativo">Estilo Corporativo</SelectItem>
+                                  <SelectItem value="elegante">Estilo Elegante</SelectItem>
+                                  <SelectItem value="moderno">Estilo Moderno e Elegante</SelectItem>
+                                  <SelectItem value="retro">Estilo Retrô</SelectItem>
+                                  <SelectItem value="gamer">Estilo Gamer</SelectItem>
                                 </SelectContent>
                               </Select>
                             </div>
