@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -7,6 +8,7 @@ import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import Dashboard from "./pages/Dashboard";
 import CreateContent from "./pages/CreateContent";
+import CreateAI from "./pages/CreateAI";
 import Content from "./pages/Content";
 import Schedule from "./pages/Schedule";
 import Analytics from "./pages/Analytics";
@@ -33,6 +35,7 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/create" element={<CreateContent />} />
+          <Route path="/create/ai" element={<CreateAI />} />
           <Route path="/create/platforms" element={<SelectPlatforms />} />
           <Route path="/create/method" element={<CreateMethod />} />
           <Route path="/create/templates" element={<TemplateGallery />} />
