@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Navbar } from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
@@ -7,11 +6,13 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Image, Video, FileText, Loader2, CheckCircle2, Film, MessageSquare } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
 import { VisualEditor } from "@/components/VisualEditor";
 import { toast } from "sonner";
 import { generateContent, AIContentGeneratorParams } from "@/services/aiService";
+import { Link, useNavigate } from "react-router-dom";
 
 export type ContentGenerationData = {
   title?: string;
@@ -28,6 +29,7 @@ export default function CreateContent() {
   const [currentStep, setCurrentStep] = useState<"generate" | "edit">("generate");
   const [generatedContent, setGeneratedContent] = useState<ContentGenerationData | null>(null);
   const [artStyle, setArtStyle] = useState("minimalista");
+  const navigate = useNavigate();
   
   // Form inputs
   const [niche, setNiche] = useState("");
@@ -41,7 +43,11 @@ export default function CreateContent() {
   // Upload states
   const [uploadedVideo, setUploadedVideo] = useState<File | null>(null);
   const [videoUrl, setVideoUrl] = useState("");
-  
+
+  const handleSchedulePost = () => {
+    navigate('/create/platforms');
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -105,11 +111,21 @@ export default function CreateContent() {
       <Navbar />
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-6xl mx-auto">
-          <h1 className="text-3xl font-bold mb-6 text-center">
-            {currentStep === "generate" 
-              ? "Criar Novo Conteúdo em Segundos" 
-              : "Personalizar Conteúdo"}
-          </h1>
+          <div className="flex justify-between items-center mb-6">
+            <div>
+              <h1 className="text-3xl font-bold">
+                {currentStep === "generate" 
+                  ? "Criar Novo Conteúdo em Segundos" 
+                  : "Personalizar Conteúdo"}
+              </h1>
+            </div>
+            
+            {currentStep === "generate" && (
+              <Button onClick={handleSchedulePost} size="lg" variant="outline">
+                Agendar Post
+              </Button>
+            )}
+          </div>
           
           {currentStep === "generate" ? (
             <Card>
@@ -171,7 +187,7 @@ export default function CreateContent() {
                         <TabsList className="grid grid-cols-4">
                           <TabsTrigger value="carrossel" className="flex items-center gap-2">
                             <Image className="h-4 w-4" />
-                            Carrossel
+                            Carrossel/Post
                           </TabsTrigger>
                           <TabsTrigger value="video" className="flex items-center gap-2">
                             <Video className="h-4 w-4" />
@@ -190,16 +206,17 @@ export default function CreateContent() {
                         <TabsContent value="carrossel" className="pt-4">
                           <div className="space-y-4">
                             <div className="space-y-2">
-                              <Label htmlFor="carouselType">Tipo de Publicação</Label>
-                              <Select defaultValue="multi" onValueChange={setCarouselType}>
-                                <SelectTrigger>
-                                  <SelectValue placeholder="Selecione o tipo" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                  <SelectItem value="multi">Carrossel (Múltiplos Slides)</SelectItem>
-                                  <SelectItem value="single">Post Único</SelectItem>
-                                </SelectContent>
-                              </Select>
+                              <Label>Formato da Publicação</Label>
+                              <RadioGroup defaultValue="multi" onValueChange={setCarouselType}>
+                                <div className="flex items-center space-x-2">
+                                  <RadioGroupItem value="multi" id="multi" />
+                                  <Label htmlFor="multi">Carrossel (múltiplas imagens com sequência)</Label>
+                                </div>
+                                <div className="flex items-center space-x-2">
+                                  <RadioGroupItem value="single" id="single" />
+                                  <Label htmlFor="single">Post de Imagem Única</Label>
+                                </div>
+                              </RadioGroup>
                             </div>
                             
                             {carouselType === "multi" && (

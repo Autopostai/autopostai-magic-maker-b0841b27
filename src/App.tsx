@@ -17,6 +17,9 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Pricing from "./pages/Pricing";
 import ViewContent from "./pages/ViewContent";
+import SelectPlatforms from "./pages/SelectPlatforms";
+import CreateMethod from "./pages/CreateMethod";
+import TemplateGallery from "./pages/TemplateGallery";
 
 const queryClient = new QueryClient();
 
@@ -30,6 +33,9 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/create" element={<CreateContent />} />
+          <Route path="/create/platforms" element={<SelectPlatforms />} />
+          <Route path="/create/method" element={<CreateMethod />} />
+          <Route path="/create/templates" element={<TemplateGallery />} />
           <Route path="/content" element={<Content />} />
           <Route path="/content/:id" element={<ViewContent />} />
           <Route path="/schedule" element={<Schedule />} />
