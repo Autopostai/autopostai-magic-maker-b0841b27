@@ -1,475 +1,240 @@
 
 import { useState } from "react";
-import { Navbar } from "@/components/Navbar";
+import { DashboardLayout } from "@/components/DashboardLayout";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Input } from "@/components/ui/input";
-import { Separator } from "@/components/ui/separator";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Link } from "react-router-dom";
 import { 
-  Layout, Film, MessageSquare, Plus, Search, Filter, Calendar, Clock,
-  Copy, Download, Share2, Edit, Trash, Image, Instagram, Facebook, 
-  MessageCircle, Smartphone
+  Plus, TrendingUp, Users, Eye, Heart, MessageCircle,
+  FileText, Image, Video, Clock, Calendar, BarChart3
 } from "lucide-react";
-import { toast } from "sonner";
-
-type ContentItem = {
-  id: string;
-  title: string;
-  type: "post" | "carousel" | "video" | "script";
-  createdAt: string;
-  thumbnail: string;
-  status: "draft" | "published" | "scheduled";
-  platform?: "instagram" | "facebook" | "tiktok" | "all";
-  stats?: {
-    likes?: number;
-    comments?: number;
-    shares?: number;
-    views?: number;
-  };
-  scheduledDate?: string;
-};
 
 export default function Dashboard() {
-  const [activeTab, setActiveTab] = useState("all");
-  const [searchQuery, setSearchQuery] = useState("");
+  const stats = [
+    {
+      title: "Conteúdos Criados",
+      value: "127",
+      change: "+12%",
+      icon: FileText,
+      color: "text-blue-600"
+    },
+    {
+      title: "Engajamento Total",
+      value: "45.2K",
+      change: "+23%",
+      icon: Heart,
+      color: "text-red-600"
+    },
+    {
+      title: "Visualizações",
+      value: "892K",
+      change: "+18%",
+      icon: Eye,
+      color: "text-green-600"
+    },
+    {
+      title: "Seguidores Ganhos",
+      value: "2.4K",
+      change: "+31%",
+      icon: Users,
+      color: "text-purple-600"
+    }
+  ];
 
-  // Dados simulados
-  const contentItems: ContentItem[] = [
+  const recentContent = [
     {
       id: "1",
       title: "5 Dicas para Melhorar sua Saúde Mental",
       type: "carousel",
       createdAt: "2024-05-15T14:30:00",
-      thumbnail: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
       status: "published",
-      platform: "instagram",
-      stats: {
-        likes: 247,
-        comments: 32,
-        shares: 18
-      }
+      engagement: 247
     },
     {
       id: "2",
       title: "Como fazer um bolo de chocolate perfeito",
       type: "video",
       createdAt: "2024-05-18T10:15:00",
-      thumbnail: "https://images.unsplash.com/photo-1606787366850-de6330128bfc?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
       status: "published",
-      platform: "tiktok",
-      stats: {
-        views: 1240,
-        likes: 356,
-        comments: 45,
-        shares: 28
-      }
+      engagement: 356
     },
     {
       id: "3",
       title: "10 Exercícios para fazer em casa",
-      type: "carousel",
-      createdAt: "2024-05-20T08:45:00",
-      thumbnail: "https://images.unsplash.com/photo-1541534741688-6078c6bfb5c5?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
-      status: "draft"
-    },
-    {
-      id: "4",
-      title: "Dicas para escalar seu negócio em 2024",
       type: "post",
-      createdAt: "2024-05-21T16:20:00",
-      thumbnail: "https://images.unsplash.com/photo-1553484771-047a44eee27c?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
-      status: "scheduled",
-      platform: "facebook",
-      scheduledDate: "2024-05-25T09:00:00"
-    },
-    {
-      id: "5",
-      title: "Como fazer uma pesquisa de mercado efetiva",
-      type: "script",
-      createdAt: "2024-05-19T11:30:00",
-      thumbnail: "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
-      status: "draft"
+      createdAt: "2024-05-20T08:45:00",
+      status: "draft",
+      engagement: 0
     }
   ];
 
-  const filteredContent = contentItems.filter(item => {
-    // Filtro por tipo de conteúdo (tab)
-    if (activeTab !== "all" && item.type !== activeTab) {
-      return false;
-    }
-    
-    // Filtro por busca
-    if (searchQuery && !item.title.toLowerCase().includes(searchQuery.toLowerCase())) {
-      return false;
-    }
-    
-    return true;
-  });
-
-  const handleDelete = (id: string) => {
-    toast("Conteúdo excluído", {
-      description: "O item foi excluído com sucesso."
-    });
-  };
-
-  const handleDuplicate = (id: string) => {
-    toast("Conteúdo duplicado", {
-      description: "Uma cópia foi criada e adicionada aos seus rascunhos."
-    });
-  };
-
-  const getStatusBadgeColor = (status: ContentItem["status"]) => {
-    switch (status) {
-      case "draft":
-        return "bg-gray-200 text-gray-800";
-      case "published":
-        return "bg-green-100 text-green-800";
-      case "scheduled":
-        return "bg-blue-100 text-blue-800";
-      default:
-        return "bg-gray-200";
-    }
-  };
-  
-  const getStatusText = (status: ContentItem["status"]) => {
-    switch (status) {
-      case "draft":
-        return "Rascunho";
-      case "published":
-        return "Publicado";
-      case "scheduled":
-        return "Agendado";
-      default:
-        return status;
-    }
-  };
-
-  const getPlatformIcon = (platform?: ContentItem["platform"]) => {
-    switch (platform) {
-      case "instagram":
-        return <Instagram className="h-4 w-4 text-pink-600" />;
-      case "facebook":
-        return <Facebook className="h-4 w-4 text-blue-600" />;
-      case "tiktok":
-        return <Smartphone className="h-4 w-4" />;
-      case "all":
-        return <Share2 className="h-4 w-4 text-purple-600" />;
-      default:
-        return null;
-    }
-  };
-
-  const getTypeIcon = (type: ContentItem["type"]) => {
+  const getTypeIcon = (type: string) => {
     switch (type) {
       case "post":
-        return <Image className="h-5 w-5 text-orange-500" />;
+        return <Image className="h-4 w-4 text-orange-500" />;
       case "carousel":
-        return <Layout className="h-5 w-5 text-blue-500" />;
+        return <FileText className="h-4 w-4 text-blue-500" />;
       case "video":
-        return <Film className="h-5 w-5 text-red-500" />;
-      case "script":
-        return <MessageSquare className="h-5 w-5 text-green-500" />;
+        return <Video className="h-4 w-4 text-red-500" />;
       default:
-        return null;
+        return <FileText className="h-4 w-4" />;
     }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-purple-50 to-blue-50">
-      <Navbar />
-      
-      <div className="container mx-auto px-4 py-8">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
+    <DashboardLayout>
+      <div className="space-y-6">
+        {/* Header */}
+        <div className="flex justify-between items-start">
           <div>
-            <h1 className="text-3xl font-bold">Meus Conteúdos</h1>
-            <p className="text-gray-600">Gerencie todos os seus conteúdos em um só lugar</p>
+            <h1 className="text-3xl font-bold">Dashboard</h1>
+            <p className="text-gray-600">Bem-vindo de volta! Aqui está um resumo da sua atividade.</p>
           </div>
           
-          <div className="mt-4 md:mt-0 space-x-2">
-            <Button asChild variant="outline">
-              <Link to="/create">
-                <Plus className="h-4 w-4 mr-2" />
-                Novo Conteúdo
-              </Link>
-            </Button>
-            
-            <Button>
+          <Button asChild>
+            <Link to="/create">
               <Plus className="h-4 w-4 mr-2" />
-              Criar em Lote
-            </Button>
-          </div>
+              Criar Conteúdo
+            </Link>
+          </Button>
         </div>
-        
-        <div className="bg-white rounded-xl shadow-sm overflow-hidden mb-8">
-          <div className="p-4 border-b">
-            <div className="flex flex-col md:flex-row gap-4">
-              <div className="relative flex-grow">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
-                <Input 
-                  placeholder="Buscar por título, tipo, status..." 
-                  className="pl-10"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                />
-              </div>
-              
-              <Button variant="outline">
-                <Filter className="h-4 w-4 mr-2" />
-                Filtros
-              </Button>
-            </div>
-          </div>
-          
-          <Tabs defaultValue="all" onValueChange={setActiveTab}>
-            <div className="p-4 border-b">
-              <TabsList className="grid grid-cols-5">
-                <TabsTrigger value="all">Todos</TabsTrigger>
-                <TabsTrigger value="post">Posts</TabsTrigger>
-                <TabsTrigger value="carousel">Carrosséis</TabsTrigger>
-                <TabsTrigger value="video">Vídeos</TabsTrigger>
-                <TabsTrigger value="script">Roteiros</TabsTrigger>
-              </TabsList>
-            </div>
-            
-            <TabsContent value="all" className="m-0">
-              <div className="p-4">
-                {filteredContent.length > 0 ? (
-                  <div className="space-y-4">
-                    {filteredContent.map((item) => (
-                      <Card key={item.id} className="overflow-hidden">
-                        <div className="flex flex-col md:flex-row">
-                          <div className="w-full md:w-48 h-32 bg-gray-200 relative overflow-hidden">
-                            <img 
-                              src={item.thumbnail} 
-                              alt={item.title}
-                              className="w-full h-full object-cover" 
-                            />
-                            <div className="absolute top-2 left-2">
-                              <div className="bg-black/50 text-white p-1 rounded">
-                                {getTypeIcon(item.type)}
-                              </div>
-                            </div>
-                            {item.platform && (
-                              <div className="absolute top-2 right-2">
-                                <div className="bg-white rounded-full p-1">
-                                  {getPlatformIcon(item.platform)}
-                                </div>
-                              </div>
-                            )}
-                          </div>
-                          
-                          <div className="flex-grow p-4">
-                            <div className="flex justify-between items-start">
-                              <div>
-                                <h3 className="font-medium truncate">{item.title}</h3>
-                                <div className="flex items-center gap-2 text-sm text-gray-500 mt-1">
-                                  <span className={`px-2 py-0.5 rounded-full text-xs ${getStatusBadgeColor(item.status)}`}>
-                                    {getStatusText(item.status)}
-                                  </span>
-                                  <span>•</span>
-                                  <div className="flex items-center">
-                                    <Clock className="h-3.5 w-3.5 mr-1" />
-                                    {new Date(item.createdAt).toLocaleDateString()}
-                                  </div>
-                                  {item.scheduledDate && (
-                                    <>
-                                      <span>•</span>
-                                      <div className="flex items-center">
-                                        <Calendar className="h-3.5 w-3.5 mr-1" />
-                                        {new Date(item.scheduledDate).toLocaleDateString()}
-                                      </div>
-                                    </>
-                                  )}
-                                </div>
-                              </div>
-                              
-                              <div className="flex space-x-2">
-                                <Button size="sm" variant="ghost" className="h-8 w-8 p-0">
-                                  <Link to={`/content/${item.id}`}>
-                                    <Edit className="h-4 w-4 text-gray-500" />
-                                  </Link>
-                                </Button>
-                                <Button size="sm" variant="ghost" className="h-8 w-8 p-0" onClick={() => handleDuplicate(item.id)}>
-                                  <Copy className="h-4 w-4 text-gray-500" />
-                                </Button>
-                                <Button size="sm" variant="ghost" className="h-8 w-8 p-0" onClick={() => handleDelete(item.id)}>
-                                  <Trash className="h-4 w-4 text-gray-500" />
-                                </Button>
-                              </div>
-                            </div>
-                            
-                            {item.stats && (
-                              <div className="mt-3 flex gap-x-4 text-sm">
-                                {item.stats.views !== undefined && (
-                                  <div className="flex items-center gap-1 text-gray-500">
-                                    <span className="font-medium">{item.stats.views.toLocaleString()}</span>
-                                    <span>visualizações</span>
-                                  </div>
-                                )}
-                                {item.stats.likes !== undefined && (
-                                  <div className="flex items-center gap-1 text-gray-500">
-                                    <span className="font-medium">{item.stats.likes.toLocaleString()}</span>
-                                    <span>likes</span>
-                                  </div>
-                                )}
-                                {item.stats.comments !== undefined && (
-                                  <div className="flex items-center gap-1 text-gray-500">
-                                    <span className="font-medium">{item.stats.comments.toLocaleString()}</span>
-                                    <span>comentários</span>
-                                  </div>
-                                )}
-                              </div>
-                            )}
-                            
-                            <div className="mt-3 flex gap-2">
-                              <Button size="sm" variant="outline" asChild>
-                                <Link to={`/content/${item.id}`}>
-                                  Ver / Editar
-                                </Link>
-                              </Button>
-                              <Button size="sm" variant="ghost">
-                                <Download className="h-4 w-4 mr-1" />
-                                Exportar
-                              </Button>
-                              {item.status !== "published" && (
-                                <Button size="sm" variant="ghost">
-                                  <Share2 className="h-4 w-4 mr-1" />
-                                  Publicar
-                                </Button>
-                              )}
-                            </div>
-                          </div>
-                        </div>
-                      </Card>
-                    ))}
-                  </div>
-                ) : (
-                  <div className="text-center py-12">
-                    <p className="text-gray-500">Nenhum conteúdo encontrado.</p>
-                    <Button variant="outline" className="mt-4" asChild>
-                      <Link to="/create">
-                        <Plus className="h-4 w-4 mr-2" />
-                        Criar Novo Conteúdo
-                      </Link>
-                    </Button>
-                  </div>
-                )}
-              </div>
-            </TabsContent>
-            
-            <TabsContent value="post" className="m-0">
-              {/* Conteúdo filtrado será mostrado automaticamente com base na activeTab */}
-              <div className="p-4">
-                {filteredContent.length === 0 && (
-                  <div className="text-center py-12">
-                    <p className="text-gray-500">Nenhum post encontrado.</p>
-                    <Button variant="outline" className="mt-4" asChild>
-                      <Link to="/create">
-                        <Plus className="h-4 w-4 mr-2" />
-                        Criar Novo Post
-                      </Link>
-                    </Button>
-                  </div>
-                )}
-              </div>
-            </TabsContent>
-            
-            <TabsContent value="carousel" className="m-0">
-              {/* Conteúdo filtrado será mostrado automaticamente */}
-              <div className="p-4">
-                {filteredContent.length === 0 && (
-                  <div className="text-center py-12">
-                    <p className="text-gray-500">Nenhum carrossel encontrado.</p>
-                    <Button variant="outline" className="mt-4" asChild>
-                      <Link to="/create">
-                        <Plus className="h-4 w-4 mr-2" />
-                        Criar Novo Carrossel
-                      </Link>
-                    </Button>
-                  </div>
-                )}
-              </div>
-            </TabsContent>
-            
-            <TabsContent value="video" className="m-0">
-              {/* Conteúdo filtrado será mostrado automaticamente */}
-              <div className="p-4">
-                {filteredContent.length === 0 && (
-                  <div className="text-center py-12">
-                    <p className="text-gray-500">Nenhum vídeo encontrado.</p>
-                    <Button variant="outline" className="mt-4" asChild>
-                      <Link to="/create">
-                        <Plus className="h-4 w-4 mr-2" />
-                        Criar Novo Vídeo
-                      </Link>
-                    </Button>
-                  </div>
-                )}
-              </div>
-            </TabsContent>
-            
-            <TabsContent value="script" className="m-0">
-              {/* Conteúdo filtrado será mostrado automaticamente */}
-              <div className="p-4">
-                {filteredContent.length === 0 && (
-                  <div className="text-center py-12">
-                    <p className="text-gray-500">Nenhum roteiro encontrado.</p>
-                    <Button variant="outline" className="mt-4" asChild>
-                      <Link to="/create">
-                        <Plus className="h-4 w-4 mr-2" />
-                        Criar Novo Roteiro
-                      </Link>
-                    </Button>
-                  </div>
-                )}
-              </div>
-            </TabsContent>
-          </Tabs>
-        </div>
-        
-        {/* Usage Stats Card */}
-        <div className="bg-white rounded-xl shadow-sm p-6">
-          <h2 className="text-lg font-bold mb-4">Estatísticas de Uso</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <Card>
+
+        {/* Stats Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {stats.map((stat) => (
+            <Card key={stat.title}>
               <CardContent className="p-6">
-                <div className="text-3xl font-bold text-purple-600">27/30</div>
-                <div className="text-sm text-gray-500">Gerações utilizadas este mês</div>
-                <div className="mt-2 h-2 bg-gray-200 rounded-full overflow-hidden">
-                  <div className="h-full bg-purple-600 rounded-full" style={{ width: "90%" }}></div>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-medium text-gray-600">{stat.title}</p>
+                    <p className="text-2xl font-bold">{stat.value}</p>
+                    <p className="text-xs text-green-600">{stat.change} vs mês anterior</p>
+                  </div>
+                  <stat.icon className={`h-8 w-8 ${stat.color}`} />
                 </div>
               </CardContent>
             </Card>
-            
+          ))}
+        </div>
+
+        {/* Main Content Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Recent Content */}
+          <Card className="lg:col-span-2">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Clock className="h-5 w-5" />
+                Conteúdos Recentes
+              </CardTitle>
+              <CardDescription>Seus últimos conteúdos criados</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                {recentContent.map((content) => (
+                  <div key={content.id} className="flex items-center justify-between p-4 border rounded-lg">
+                    <div className="flex items-center gap-3">
+                      {getTypeIcon(content.type)}
+                      <div>
+                        <p className="font-medium">{content.title}</p>
+                        <p className="text-sm text-gray-500">
+                          {new Date(content.createdAt).toLocaleDateString()}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className={`px-2 py-1 rounded-full text-xs ${
+                        content.status === 'published' 
+                          ? 'bg-green-100 text-green-800' 
+                          : 'bg-gray-100 text-gray-800'
+                      }`}>
+                        {content.status === 'published' ? 'Publicado' : 'Rascunho'}
+                      </span>
+                      {content.engagement > 0 && (
+                        <span className="text-sm text-gray-600">
+                          {content.engagement} interações
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div className="mt-4">
+                <Button variant="outline" className="w-full" asChild>
+                  <Link to="/content">Ver Todos os Conteúdos</Link>
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Quick Actions */}
+          <div className="space-y-6">
             <Card>
-              <CardContent className="p-6">
-                <div className="text-3xl font-bold text-green-600">18</div>
-                <div className="text-sm text-gray-500">Conteúdos publicados</div>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Plus className="h-5 w-5" />
+                  Ações Rápidas
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                <Button className="w-full justify-start" asChild>
+                  <Link to="/create?type=post">
+                    <Image className="h-4 w-4 mr-2" />
+                    Criar Post
+                  </Link>
+                </Button>
+                <Button className="w-full justify-start" variant="outline" asChild>
+                  <Link to="/create?type=carousel">
+                    <FileText className="h-4 w-4 mr-2" />
+                    Criar Carrossel
+                  </Link>
+                </Button>
+                <Button className="w-full justify-start" variant="outline" asChild>
+                  <Link to="/create?type=video">
+                    <Video className="h-4 w-4 mr-2" />
+                    Criar Vídeo
+                  </Link>
+                </Button>
+                <Button className="w-full justify-start" variant="outline" asChild>
+                  <Link to="/schedule">
+                    <Calendar className="h-4 w-4 mr-2" />
+                    Agendar Posts
+                  </Link>
+                </Button>
               </CardContent>
             </Card>
-            
+
             <Card>
-              <CardContent className="p-6">
-                <div className="text-3xl font-bold text-blue-600">3</div>
-                <div className="text-sm text-gray-500">Dias restantes do período</div>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <BarChart3 className="h-5 w-5" />
+                  Uso do Plano
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3">
+                  <div>
+                    <div className="flex justify-between text-sm">
+                      <span>Gerações utilizadas</span>
+                      <span>27/30</span>
+                    </div>
+                    <div className="mt-1 h-2 bg-gray-200 rounded-full overflow-hidden">
+                      <div className="h-full bg-purple-600 rounded-full" style={{ width: "90%" }}></div>
+                    </div>
+                  </div>
+                  <div className="text-xs text-gray-500">
+                    Renova em 30/05/2024
+                  </div>
+                  <Button size="sm" variant="outline" className="w-full" asChild>
+                    <Link to="/pricing">
+                      Fazer Upgrade
+                    </Link>
+                  </Button>
+                </div>
               </CardContent>
             </Card>
-          </div>
-          
-          <div className="mt-4 text-center">
-            <p className="text-sm text-gray-500 mb-2">
-              Você está no plano <strong>Creator</strong>. Renova em 30/05/2024.
-            </p>
-            <Button variant="outline" size="sm" asChild>
-              <Link to="/pricing">
-                Fazer upgrade
-              </Link>
-            </Button>
           </div>
         </div>
       </div>
-    </div>
+    </DashboardLayout>
   );
 }

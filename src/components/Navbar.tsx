@@ -1,10 +1,19 @@
 
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Sparkles } from "lucide-react";
 
 export function Navbar() {
-  const isLoggedIn = false; // Substituir por lógica de autenticação
+  const location = useLocation();
+  const isLoggedIn = false; // Substituir por lógica de autenticação real
+  
+  // Lista de rotas onde o navbar não deve aparecer (usuário logado)
+  const hiddenRoutes = ['/dashboard', '/create', '/content', '/schedule', '/analytics', '/library', '/settings'];
+  const shouldHideNavbar = hiddenRoutes.some(route => location.pathname.startsWith(route));
+
+  if (shouldHideNavbar) {
+    return null;
+  }
 
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
