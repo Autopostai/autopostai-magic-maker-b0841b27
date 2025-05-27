@@ -22,6 +22,10 @@ import ViewContent from "./pages/ViewContent";
 import SelectPlatforms from "./pages/SelectPlatforms";
 import CreateMethod from "./pages/CreateMethod";
 import TemplateGallery from "./pages/TemplateGallery";
+import VideoSummarizer from "./pages/VideoSummarizer";
+import TrendDetector from "./pages/TrendDetector";
+import BioOptimizer from "./pages/BioOptimizer";
+import ContentGenerator from "./pages/ContentGenerator";
 
 const queryClient = new QueryClient();
 

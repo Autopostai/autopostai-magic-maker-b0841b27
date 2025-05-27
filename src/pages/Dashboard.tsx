@@ -6,7 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Link } from "react-router-dom";
 import { 
   Plus, TrendingUp, Users, Eye, Heart, MessageCircle,
-  FileText, Image, Video, Clock, Calendar, BarChart3
+  FileText, Image, Video, Clock, Calendar, BarChart3, BookOpen
 } from "lucide-react";
 
 export default function Dashboard() {
