@@ -48,6 +48,12 @@ export default function Index() {
               <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-4">
                 <Layout className="h-6 w-6 text-purple-600" />
               </div>
+              <div className="h-32 bg-gradient-to-br from-purple-100 to-purple-200 rounded-lg mb-4 flex items-center justify-center">
+                <div className="bg-white p-3 rounded-lg shadow-sm">
+                  <div className="w-16 h-10 bg-purple-300 rounded mb-2"></div>
+                  <div className="w-12 h-2 bg-gray-300 rounded"></div>
+                </div>
+              </div>
               <h3 className="text-xl font-bold mb-2">Posts & Carrosséis</h3>
               <p className="text-gray-600">
                 Crie posts únicos e carrosséis envolventes para Instagram, Facebook e LinkedIn em segundos.
@@ -57,6 +63,16 @@ export default function Index() {
             <div className="bg-blue-50 p-6 rounded-xl">
               <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
                 <Film className="h-6 w-6 text-blue-600" />
+              </div>
+              <div className="h-32 bg-gradient-to-br from-blue-100 to-blue-200 rounded-lg mb-4 flex items-center justify-center">
+                <div className="bg-white p-3 rounded-lg shadow-sm relative">
+                  <div className="w-16 h-10 bg-blue-300 rounded"></div>
+                  <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                    <div className="w-4 h-4 bg-white rounded-full flex items-center justify-center">
+                      <div className="w-2 h-2 bg-blue-600 rounded-r"></div>
+                    </div>
+                  </div>
+                </div>
               </div>
               <h3 className="text-xl font-bold mb-2">Reels & Shorts</h3>
               <p className="text-gray-600">
@@ -68,6 +84,16 @@ export default function Index() {
               <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mb-4">
                 <MessageSquare className="h-6 w-6 text-green-600" />
               </div>
+              <div className="h-32 bg-gradient-to-br from-green-100 to-green-200 rounded-lg mb-4 flex items-center justify-center">
+                <div className="bg-white p-3 rounded-lg shadow-sm">
+                  <div className="space-y-1">
+                    <div className="w-14 h-1 bg-green-400 rounded"></div>
+                    <div className="w-16 h-1 bg-gray-300 rounded"></div>
+                    <div className="w-12 h-1 bg-gray-300 rounded"></div>
+                    <div className="w-10 h-1 bg-green-400 rounded"></div>
+                  </div>
+                </div>
+              </div>
               <h3 className="text-xl font-bold mb-2">Roteiros & Legendas</h3>
               <p className="text-gray-600">
                 Gere roteiros persuasivos e legendas otimizadas para maximizar o engajamento.
@@ -78,6 +104,18 @@ export default function Index() {
               <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center mb-4">
                 <Clock className="h-6 w-6 text-orange-600" />
               </div>
+              <div className="h-32 bg-gradient-to-br from-orange-100 to-orange-200 rounded-lg mb-4 flex items-center justify-center">
+                <div className="bg-white p-3 rounded-lg shadow-sm">
+                  <div className="flex items-center space-x-1">
+                    <Clock className="h-4 w-4 text-orange-500" />
+                    <span className="text-xs font-bold text-orange-600">30s</span>
+                  </div>
+                  <div className="mt-2 space-y-1">
+                    <div className="w-12 h-1 bg-orange-400 rounded"></div>
+                    <div className="w-14 h-1 bg-orange-300 rounded"></div>
+                  </div>
+                </div>
+              </div>
               <h3 className="text-xl font-bold mb-2">Em menos de 30s</h3>
               <p className="text-gray-600">
                 Economize horas do seu dia com nossa IA especializada em marketing digital.
@@ -87,11 +125,11 @@ export default function Index() {
         </div>
       </section>
       
-      {/* AI-Powered Tools Section */}
+      {/* Additional Tools Section */}
       <section className="bg-gray-50 py-20">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold mb-4">Ferramentas Inteligentes com IA</h2>
+            <h2 className="text-3xl font-bold mb-4">FERRAMENTAS ADICIONAIS</h2>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
               Descubra todas as funcionalidades avançadas do AutoPost AI para turbinar sua estratégia de conteúdo
             </p>
@@ -101,6 +139,19 @@ export default function Index() {
             <div className="bg-white p-6 rounded-xl shadow-lg">
               <div className="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center mb-4">
                 <PlayCircle className="h-6 w-6 text-red-600" />
+              </div>
+              <div className="h-32 bg-gradient-to-br from-red-50 to-red-100 rounded-lg mb-4 flex items-center justify-center">
+                <div className="bg-white p-3 rounded-lg shadow-sm w-20">
+                  <div className="w-full h-12 bg-red-200 rounded mb-2 relative">
+                    <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                      <PlayCircle className="h-4 w-4 text-red-600" />
+                    </div>
+                  </div>
+                  <div className="space-y-1">
+                    <div className="w-full h-1 bg-gray-300 rounded"></div>
+                    <div className="w-3/4 h-1 bg-gray-300 rounded"></div>
+                  </div>
+                </div>
               </div>
               <h3 className="text-xl font-bold mb-2">Resumir Vídeo</h3>
               <p className="text-gray-600 mb-4">
@@ -115,6 +166,17 @@ export default function Index() {
               <div className="w-12 h-12 bg-pink-100 rounded-lg flex items-center justify-center mb-4">
                 <TrendingUp className="h-6 w-6 text-pink-600" />
               </div>
+              <div className="h-32 bg-gradient-to-br from-pink-50 to-pink-100 rounded-lg mb-4 flex items-center justify-center">
+                <div className="bg-white p-3 rounded-lg shadow-sm">
+                  <div className="flex items-end space-x-1 h-16">
+                    <div className="w-2 h-8 bg-pink-400 rounded-t"></div>
+                    <div className="w-2 h-12 bg-pink-500 rounded-t"></div>
+                    <div className="w-2 h-16 bg-pink-600 rounded-t"></div>
+                    <div className="w-2 h-10 bg-pink-400 rounded-t"></div>
+                  </div>
+                  <TrendingUp className="h-3 w-3 text-pink-600 mt-1" />
+                </div>
+              </div>
               <h3 className="text-xl font-bold mb-2">Detector de Tendências</h3>
               <p className="text-gray-600 mb-4">
                 Monitore tendências em tempo real e descubra o que está viral no seu nicho.
@@ -127,6 +189,21 @@ export default function Index() {
             <div className="bg-white p-6 rounded-xl shadow-lg">
               <div className="w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center mb-4">
                 <Users className="h-6 w-6 text-indigo-600" />
+              </div>
+              <div className="h-32 bg-gradient-to-br from-indigo-50 to-indigo-100 rounded-lg mb-4 flex items-center justify-center">
+                <div className="bg-white p-3 rounded-lg shadow-sm">
+                  <div className="flex items-center space-x-2 mb-2">
+                    <div className="w-6 h-6 bg-indigo-300 rounded-full"></div>
+                    <div>
+                      <div className="w-8 h-1 bg-indigo-400 rounded mb-1"></div>
+                      <div className="w-6 h-1 bg-gray-300 rounded"></div>
+                    </div>
+                  </div>
+                  <div className="space-y-1">
+                    <div className="w-full h-1 bg-gray-300 rounded"></div>
+                    <div className="w-3/4 h-1 bg-gray-300 rounded"></div>
+                  </div>
+                </div>
               </div>
               <h3 className="text-xl font-bold mb-2">Otimizador de Bio</h3>
               <p className="text-gray-600 mb-4">
@@ -141,6 +218,18 @@ export default function Index() {
               <div className="w-12 h-12 bg-emerald-100 rounded-lg flex items-center justify-center mb-4">
                 <BookOpen className="h-6 w-6 text-emerald-600" />
               </div>
+              <div className="h-32 bg-gradient-to-br from-emerald-50 to-emerald-100 rounded-lg mb-4 flex items-center justify-center">
+                <div className="bg-white p-3 rounded-lg shadow-sm">
+                  <div className="space-y-2">
+                    <div className="w-16 h-8 bg-emerald-300 rounded border-l-2 border-emerald-500"></div>
+                    <div className="space-y-1">
+                      <div className="w-12 h-1 bg-gray-400 rounded"></div>
+                      <div className="w-14 h-1 bg-gray-300 rounded"></div>
+                      <div className="w-10 h-1 bg-gray-300 rounded"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
               <h3 className="text-xl font-bold mb-2">Gerador de eBook/PDF</h3>
               <p className="text-gray-600 mb-4">
                 Crie eBooks, PDFs e apresentações profissionais com design aplicado automaticamente.
@@ -154,6 +243,19 @@ export default function Index() {
               <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
                 <Calendar className="h-6 w-6 text-blue-600" />
               </div>
+              <div className="h-32 bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg mb-4 flex items-center justify-center">
+                <div className="bg-white p-3 rounded-lg shadow-sm">
+                  <div className="grid grid-cols-3 gap-1">
+                    {[...Array(9)].map((_, i) => (
+                      <div key={i} className={`w-3 h-3 rounded ${i === 4 ? 'bg-blue-500' : 'bg-gray-200'}`}></div>
+                    ))}
+                  </div>
+                  <div className="mt-2 flex items-center space-x-1">
+                    <Clock className="h-2 w-2 text-blue-500" />
+                    <div className="w-8 h-1 bg-blue-400 rounded"></div>
+                  </div>
+                </div>
+              </div>
               <h3 className="text-xl font-bold mb-2">Agendamento</h3>
               <p className="text-gray-600 mb-4">
                 Agende seus posts para múltiplas plataformas e mantenha sua presença online consistente.
@@ -166,6 +268,17 @@ export default function Index() {
             <div className="bg-white p-6 rounded-xl shadow-lg">
               <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-4">
                 <BarChart3 className="h-6 w-6 text-purple-600" />
+              </div>
+              <div className="h-32 bg-gradient-to-br from-purple-50 to-purple-100 rounded-lg mb-4 flex items-center justify-center">
+                <div className="bg-white p-3 rounded-lg shadow-sm">
+                  <div className="flex items-end space-x-1 h-12">
+                    <div className="w-3 h-6 bg-purple-400 rounded-t"></div>
+                    <div className="w-3 h-8 bg-purple-500 rounded-t"></div>
+                    <div className="w-3 h-12 bg-purple-600 rounded-t"></div>
+                    <div className="w-3 h-4 bg-purple-400 rounded-t"></div>
+                  </div>
+                  <div className="mt-1 text-xs text-purple-600 font-bold">89%</div>
+                </div>
               </div>
               <h3 className="text-xl font-bold mb-2">Analytics Avançado</h3>
               <p className="text-gray-600 mb-4">

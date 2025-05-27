@@ -5,15 +5,14 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Image, Video, FileText, Loader2, CheckCircle2, Film, MessageSquare } from "lucide-react";
+import { Loader2, CheckCircle2 } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
 import { VisualEditor } from "@/components/VisualEditor";
 import { toast } from "sonner";
 import { generateContent, AIContentGeneratorParams } from "@/services/aiService";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 export type ContentGenerationData = {
   title?: string;
@@ -25,54 +24,26 @@ export type ContentGenerationData = {
 
 export default function CreateContent() {
   const [loading, setLoading] = useState(false);
-  const [contentType, setContentType] = useState<AIContentGeneratorParams["contentType"]>("carrossel");
-  const [carouselType, setCarouselType] = useState("multi");
+  const [searchParams] = useSearchParams();
   const [currentStep, setCurrentStep] = useState<"generate" | "edit">("generate");
   const [generatedContent, setGeneratedContent] = useState<ContentGenerationData | null>(null);
-  const [artStyle, setArtStyle] = useState("educativo");
-  const [reelsMethod, setReelsMethod] = useState("edit"); // "edit" or "generate"
   const navigate = useNavigate();
   
-  // Form inputs
-  const [niche, setNiche] = useState("");
-  const [style, setStyle] = useState("educativo");
-  const [target, setTarget] = useState("");
-  const [topic, setTopic] = useState("");
-  const [slideCount, setSlideCount] = useState("5");
-  const [videoDuration, setVideoDuration] = useState("30");
-  const [captionLength, setCaptionLength] = useState("medium");
+  // Get content type from URL params
+  const contentTypeFromUrl = searchParams.get('type') || 'carrossel';
+  const methodFromUrl = searchParams.get('method') || 'ai';
   
-  // Upload states
-  const [uploadedVideo, setUploadedVideo] = useState<File | null>(null);
-  const [videoUrl, setVideoUrl] = useState("");
-
-  const handleCreateContent = () => {
-    // Redirecionar para a página de seleção de método
-    const queryParams = new URLSearchParams({
-      niche: niche || '',
-      style: style || '',
-      target: target || '',
-      topic: topic || '',
-      contentType: contentType || '',
-      ...(contentType === 'carrossel' && {
-        carouselType,
-        slideCount,
-        artStyle
-      }),
-      ...(contentType === 'video' && {
-        videoDuration
-      }),
-      ...(contentType === 'legenda' && {
-        captionLength
-      }),
-      ...(contentType === 'reels' && {
-        reelsMethod,
-        videoDuration
-      })
-    });
-    
-    navigate(`/create/method?${queryParams.toString()}`);
-  };
+  // Form inputs
+  const [niche, setNiche] = useState(searchParams.get('niche') || "");
+  const [style, setStyle] = useState(searchParams.get('style') || "educativo");
+  const [target, setTarget] = useState(searchParams.get('target') || "");
+  const [topic, setTopic] = useState(searchParams.get('topic') || "");
+  const [slideCount, setSlideCount] = useState(searchParams.get('slideCount') || "5");
+  const [videoDuration, setVideoDuration] = useState(searchParams.get('videoDuration') || "30");
+  const [captionLength, setCaptionLength] = useState(searchParams.get('captionLength') || "medium");
+  const [carouselType, setCarouselType] = useState(searchParams.get('carouselType') || "multi");
+  const [artStyle, setArtStyle] = useState(searchParams.get('artStyle') || "educativo");
+  const [language, setLanguage] = useState("pt");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -81,7 +52,7 @@ export default function CreateContent() {
     try {
       // Configurar parâmetros para a API
       const params: AIContentGeneratorParams = {
-        contentType,
+        contentType: contentTypeFromUrl as any,
         niche,
         style,
         target,
@@ -89,12 +60,12 @@ export default function CreateContent() {
       };
       
       // Adicionar parâmetros específicos do tipo de conteúdo
-      if (contentType === "carrossel") {
+      if (contentTypeFromUrl === "carrossel") {
         params.carouselType = carouselType as any;
         params.slides = parseInt(slideCount);
-      } else if (contentType === "video") {
+      } else if (contentTypeFromUrl === "video") {
         params.duration = parseInt(videoDuration);
-      } else if (contentType === "legenda") {
+      } else if (contentTypeFromUrl === "legenda") {
         params.length = captionLength as any;
       }
       
@@ -122,14 +93,15 @@ export default function CreateContent() {
     setCurrentStep("generate");
   };
 
-  const handleVideoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      setUploadedVideo(file);
-      toast.success("Vídeo carregado", {
-        description: "Seu vídeo foi carregado e está pronto para processamento."
-      });
-    }
+  const getContentTypeTitle = (type: string) => {
+    const titles: Record<string, string> = {
+      'carrossel': 'Carrossel',
+      'post': 'Post Único',
+      'video': 'Roteiro para Vídeo',
+      'reels': 'Reels/Shorts',
+      'legenda': 'Legenda'
+    };
+    return titles[type] || type;
   };
 
   return (
@@ -139,9 +111,14 @@ export default function CreateContent() {
           <div>
             <h1 className="text-3xl font-bold">
               {currentStep === "generate" 
-                ? "Criar Novo Conteúdo em Segundos" 
+                ? `Criar ${getContentTypeTitle(contentTypeFromUrl)} com IA` 
                 : "Personalizar Conteúdo"}
             </h1>
+            <p className="text-gray-600">
+              {currentStep === "generate" 
+                ? "Defina os parâmetros para que a IA gere seu conteúdo personalizado"
+                : "Use o editor para personalizar seu conteúdo antes de exportar"}
+            </p>
           </div>
         </div>
         
@@ -157,14 +134,36 @@ export default function CreateContent() {
             <CardContent>
               <form onSubmit={handleSubmit}>
                 <div className="space-y-6">
-                  <div className="space-y-2">
-                    <Label htmlFor="niche">Nicho</Label>
-                    <Input 
-                      id="niche" 
-                      placeholder="Ex: Psicologia, Marketing, Finanças, Moda..." 
-                      value={niche}
-                      onChange={(e) => setNiche(e.target.value)}
-                    />
+                  <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+                    <div className="space-y-2">
+                      <Label htmlFor="language">Idioma do Conteúdo</Label>
+                      <Select 
+                        defaultValue={language} 
+                        onValueChange={setLanguage}
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Selecione o idioma" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="pt">Português</SelectItem>
+                          <SelectItem value="en">Inglês</SelectItem>
+                          <SelectItem value="es">Espanhol</SelectItem>
+                          <SelectItem value="fr">Francês</SelectItem>
+                          <SelectItem value="de">Alemão</SelectItem>
+                          <SelectItem value="it">Italiano</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="niche">Nicho</Label>
+                      <Input 
+                        id="niche" 
+                        placeholder="Ex: Psicologia, Marketing, Finanças, Moda..." 
+                        value={niche}
+                        onChange={(e) => setNiche(e.target.value)}
+                      />
+                    </div>
                   </div>
                   
                   <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
@@ -198,221 +197,113 @@ export default function CreateContent() {
                       />
                     </div>
                   </div>
-                  
-                  <div className="space-y-2">
-                    <Label>Tipo de Conteúdo</Label>
-                    <Tabs defaultValue="carrossel" onValueChange={(v) => setContentType(v as AIContentGeneratorParams["contentType"])} className="w-full">
-                      <TabsList className="grid grid-cols-4">
-                        <TabsTrigger value="carrossel" className="flex items-center gap-2">
-                          <Image className="h-4 w-4" />
-                          Carrossel/Post
-                        </TabsTrigger>
-                        <TabsTrigger value="video" className="flex items-center gap-2">
-                          <Video className="h-4 w-4" />
-                          Roteiro para Vídeo
-                        </TabsTrigger>
-                        <TabsTrigger value="reels" className="flex items-center gap-2">
-                          <Film className="h-4 w-4" />
-                          Reels/Shorts
-                        </TabsTrigger>
-                        <TabsTrigger value="legenda" className="flex items-center gap-2">
-                          <FileText className="h-4 w-4" />
-                          Legenda
-                        </TabsTrigger>
-                      </TabsList>
-                      
-                      <TabsContent value="carrossel" className="pt-4">
-                        <div className="space-y-4">
-                          <div className="space-y-2">
-                            <Label>Formato da Publicação</Label>
-                            <RadioGroup defaultValue="multi" onValueChange={setCarouselType}>
-                              <div className="flex items-center space-x-2">
-                                <RadioGroupItem value="multi" id="multi" />
-                                <Label htmlFor="multi">Carrossel (múltiplas imagens com sequência)</Label>
-                              </div>
-                              <div className="flex items-center space-x-2">
-                                <RadioGroupItem value="single" id="single" />
-                                <Label htmlFor="single">Post de Imagem Única</Label>
-                              </div>
-                            </RadioGroup>
-                          </div>
-                          
-                          {carouselType === "multi" && (
-                            <div className="space-y-2">
-                              <Label htmlFor="slides">Quantidade de Slides</Label>
-                              <Select defaultValue="5" onValueChange={setSlideCount}>
-                                <SelectTrigger>
-                                  <SelectValue placeholder="Selecione a quantidade" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                  <SelectItem value="2">2 slides</SelectItem>
-                                  <SelectItem value="3">3 slides</SelectItem>
-                                  <SelectItem value="4">4 slides</SelectItem>
-                                  <SelectItem value="5">5 slides</SelectItem>
-                                  <SelectItem value="6">6 slides</SelectItem>
-                                  <SelectItem value="7">7 slides</SelectItem>
-                                  <SelectItem value="8">8 slides</SelectItem>
-                                  <SelectItem value="9">9 slides</SelectItem>
-                                  <SelectItem value="10">10 slides</SelectItem>
-                                </SelectContent>
-                              </Select>
-                            </div>
-                          )}
-                          
-                          <div className="space-y-2">
-                            <Label htmlFor="artStyle">Estilo Visual</Label>
-                            <Select defaultValue="educativo" onValueChange={setArtStyle}>
-                              <SelectTrigger>
-                                <SelectValue placeholder="Selecione o estilo visual" />
-                              </SelectTrigger>
-                              <SelectContent>
-                                <SelectItem value="todos">TODOS OS EFEITOS VISUAIS</SelectItem>
-                                <SelectItem value="educativo">Estilo Educativo</SelectItem>
-                                <SelectItem value="medico">Estilo Médico/Científico</SelectItem>
-                                <SelectItem value="empreendedor">Estilo Empreendedor</SelectItem>
-                                <SelectItem value="estetico">Estilo Estético/Beleza</SelectItem>
-                                <SelectItem value="divertido-pop">Estilo Divertido/Pop</SelectItem>
-                                <SelectItem value="espiritual">Estilo Espiritual/Holístico</SelectItem>
-                                <SelectItem value="luxo">Estilo Luxo</SelectItem>
-                                <SelectItem value="podcast">Estilo Podcast/Youtube</SelectItem>
-                                <SelectItem value="feminino">Estilo Feminino Suave</SelectItem>
-                                <SelectItem value="masculino">Estilo Masculino Sólido</SelectItem>
-                                <SelectItem value="religioso">Estilo Religioso/Inspiracional</SelectItem>
-                                <SelectItem value="jornalistico">Estilo "Notícia" ou Jornalístico</SelectItem>
-                                <SelectItem value="minimalista">Estilo Minimalista</SelectItem>
-                                <SelectItem value="informal-design">Estilo Informal</SelectItem>
-                                <SelectItem value="corporativo">Estilo Corporativo</SelectItem>
-                                <SelectItem value="elegante">Estilo Elegante</SelectItem>
-                                <SelectItem value="moderno">Estilo Moderno e Elegante</SelectItem>
-                                <SelectItem value="retro">Estilo Retrô</SelectItem>
-                                <SelectItem value="gamer">Estilo Gamer</SelectItem>
-                              </SelectContent>
-                            </Select>
-                          </div>
-                        </div>
-                      </TabsContent>
-                      
-                      <TabsContent value="video" className="pt-4">
-                        <div className="space-y-4">
-                          <div className="space-y-2">
-                            <Label htmlFor="duration">Duração do Vídeo</Label>
-                            <Select defaultValue="30" onValueChange={setVideoDuration}>
-                              <SelectTrigger>
-                                <SelectValue placeholder="Selecione a duração" />
-                              </SelectTrigger>
-                              <SelectContent>
-                                <SelectItem value="15">15 segundos</SelectItem>
-                                <SelectItem value="30">30 segundos</SelectItem>
-                                <SelectItem value="60">60 segundos</SelectItem>
-                                <SelectItem value="90">90 segundos</SelectItem>
-                              </SelectContent>
-                            </Select>
-                          </div>
-                          <div className="space-y-2">
-                            <Label htmlFor="scriptType">Tipo de Roteiro</Label>
-                            <Textarea 
-                              id="scriptType" 
-                              placeholder="Descreva o tipo de roteiro que você deseja. Ex: Um roteiro informativo sobre os benefícios da meditação"
-                              className="min-h-[80px]"
-                              value={topic}
-                              onChange={(e) => setTopic(e.target.value)}
-                            />
-                          </div>
-                        </div>
-                      </TabsContent>
-                      
-                      <TabsContent value="reels" className="pt-4">
-                        <div className="space-y-4">
-                          <div className="space-y-2">
-                            <Label>Método de Criação</Label>
-                            <RadioGroup defaultValue="edit" onValueChange={setReelsMethod}>
-                              <div className="flex items-center space-x-2">
-                                <RadioGroupItem value="edit" id="edit" />
-                                <Label htmlFor="edit">Escolher um vídeo para que a IA edite</Label>
-                              </div>
-                              <div className="flex items-center space-x-2">
-                                <RadioGroupItem value="generate" id="generate" />
-                                <Label htmlFor="generate">Gerar vídeo com inteligência artificial</Label>
-                              </div>
-                            </RadioGroup>
-                          </div>
 
-                          {reelsMethod === "edit" && (
-                            <div className="space-y-4">
-                              <div className="space-y-2">
-                                <Label htmlFor="videoUpload">Upload de Vídeo</Label>
-                                <Input 
-                                  id="videoUpload" 
-                                  type="file" 
-                                  accept="video/*" 
-                                  onChange={handleVideoUpload}
-                                />
-                                {uploadedVideo && (
-                                  <p className="text-sm text-green-600 mt-1">
-                                    ✓ Vídeo selecionado: {uploadedVideo.name}
-                                  </p>
-                                )}
-                              </div>
-                              <div className="space-y-2">
-                                <Label htmlFor="videoUrl">Ou URL do YouTube</Label>
-                                <Input 
-                                  id="videoUrl" 
-                                  placeholder="Cole o link do YouTube aqui..." 
-                                  value={videoUrl}
-                                  onChange={(e) => setVideoUrl(e.target.value)}
-                                />
-                              </div>
-                            </div>
-                          )}
-
-                          {reelsMethod === "generate" && (
-                            <div className="space-y-4">
-                              <div className="space-y-2">
-                                <Label htmlFor="duration">Duração do Vídeo</Label>
-                                <Select defaultValue="30" onValueChange={setVideoDuration}>
-                                  <SelectTrigger>
-                                    <SelectValue placeholder="Selecione a duração" />
-                                  </SelectTrigger>
-                                  <SelectContent>
-                                    <SelectItem value="15">15 segundos</SelectItem>
-                                    <SelectItem value="30">30 segundos</SelectItem>
-                                    <SelectItem value="60">60 segundos</SelectItem>
-                                    <SelectItem value="90">90 segundos</SelectItem>
-                                  </SelectContent>
-                                </Select>
-                              </div>
-                              <div className="space-y-2">
-                                <Label htmlFor="reelsDescription">Descrição do Conteúdo</Label>
-                                <Textarea 
-                                  id="reelsDescription" 
-                                  placeholder="Descreva o que você quer que apareça no vídeo. Ex: Uma pessoa explicando os benefícios da meditação em um ambiente calmo"
-                                  className="min-h-[80px]"
-                                  value={topic}
-                                  onChange={(e) => setTopic(e.target.value)}
-                                />
-                              </div>
-                            </div>
-                          )}
-                        </div>
-                      </TabsContent>
+                  {/* Configurações específicas por tipo de conteúdo */}
+                  {contentTypeFromUrl === "carrossel" && (
+                    <div className="space-y-4">
+                      <div className="space-y-2">
+                        <Label>Formato da Publicação</Label>
+                        <RadioGroup defaultValue="multi" onValueChange={setCarouselType}>
+                          <div className="flex items-center space-x-2">
+                            <RadioGroupItem value="multi" id="multi" />
+                            <Label htmlFor="multi">Carrossel (múltiplas imagens com sequência)</Label>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <RadioGroupItem value="single" id="single" />
+                            <Label htmlFor="single">Post de Imagem Única</Label>
+                          </div>
+                        </RadioGroup>
+                      </div>
                       
-                      <TabsContent value="legenda" className="pt-4">
+                      {carouselType === "multi" && (
                         <div className="space-y-2">
-                          <Label htmlFor="length">Tamanho da Legenda</Label>
-                          <Select defaultValue="medium" onValueChange={setCaptionLength}>
+                          <Label htmlFor="slides">Quantidade de Slides</Label>
+                          <Select defaultValue="5" onValueChange={setSlideCount}>
                             <SelectTrigger>
-                              <SelectValue placeholder="Selecione o tamanho" />
+                              <SelectValue placeholder="Selecione a quantidade" />
                             </SelectTrigger>
                             <SelectContent>
-                              <SelectItem value="short">Curta</SelectItem>
-                              <SelectItem value="medium">Média</SelectItem>
-                              <SelectItem value="long">Longa</SelectItem>
+                              <SelectItem value="2">2 slides</SelectItem>
+                              <SelectItem value="3">3 slides</SelectItem>
+                              <SelectItem value="4">4 slides</SelectItem>
+                              <SelectItem value="5">5 slides</SelectItem>
+                              <SelectItem value="6">6 slides</SelectItem>
+                              <SelectItem value="7">7 slides</SelectItem>
+                              <SelectItem value="8">8 slides</SelectItem>
+                              <SelectItem value="9">9 slides</SelectItem>
+                              <SelectItem value="10">10 slides</SelectItem>
                             </SelectContent>
                           </Select>
                         </div>
-                      </TabsContent>
-                    </Tabs>
-                  </div>
+                      )}
+                      
+                      <div className="space-y-2">
+                        <Label htmlFor="artStyle">Estilo Visual</Label>
+                        <Select defaultValue="educativo" onValueChange={setArtStyle}>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Selecione o estilo visual" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="todos">TODOS OS EFEITOS VISUAIS</SelectItem>
+                            <SelectItem value="educativo">Estilo Educativo</SelectItem>
+                            <SelectItem value="medico">Estilo Médico/Científico</SelectItem>
+                            <SelectItem value="empreendedor">Estilo Empreendedor</SelectItem>
+                            <SelectItem value="estetico">Estilo Estético/Beleza</SelectItem>
+                            <SelectItem value="divertido-pop">Estilo Divertido/Pop</SelectItem>
+                            <SelectItem value="espiritual">Estilo Espiritual/Holístico</SelectItem>
+                            <SelectItem value="luxo">Estilo Luxo</SelectItem>
+                            <SelectItem value="podcast">Estilo Podcast/Youtube</SelectItem>
+                            <SelectItem value="feminino">Estilo Feminino Suave</SelectItem>
+                            <SelectItem value="masculino">Estilo Masculino Sólido</SelectItem>
+                            <SelectItem value="religioso">Estilo Religioso/Inspiracional</SelectItem>
+                            <SelectItem value="jornalistico">Estilo "Notícia" ou Jornalístico</SelectItem>
+                            <SelectItem value="minimalista">Estilo Minimalista</SelectItem>
+                            <SelectItem value="informal-design">Estilo Informal</SelectItem>
+                            <SelectItem value="corporativo">Estilo Corporativo</SelectItem>
+                            <SelectItem value="elegante">Estilo Elegante</SelectItem>
+                            <SelectItem value="moderno">Estilo Moderno e Elegante</SelectItem>
+                            <SelectItem value="retro">Estilo Retrô</SelectItem>
+                            <SelectItem value="gamer">Estilo Gamer</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </div>
+                  )}
+
+                  {contentTypeFromUrl === "video" && (
+                    <div className="space-y-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="duration">Duração do Vídeo</Label>
+                        <Select defaultValue="30" onValueChange={setVideoDuration}>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Selecione a duração" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="15">15 segundos</SelectItem>
+                            <SelectItem value="30">30 segundos</SelectItem>
+                            <SelectItem value="60">60 segundos</SelectItem>
+                            <SelectItem value="90">90 segundos</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </div>
+                  )}
+
+                  {contentTypeFromUrl === "legenda" && (
+                    <div className="space-y-2">
+                      <Label htmlFor="length">Tamanho da Legenda</Label>
+                      <Select defaultValue="medium" onValueChange={setCaptionLength}>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Selecione o tamanho" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="short">Curta</SelectItem>
+                          <SelectItem value="medium">Média</SelectItem>
+                          <SelectItem value="long">Longa</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  )}
                   
                   <div className="space-y-2">
                     <Label htmlFor="topic">Tópico Específico (opcional)</Label>
@@ -427,8 +318,15 @@ export default function CreateContent() {
                 </div>
                 
                 <div className="mt-8 flex justify-center">
-                  <Button type="button" size="lg" onClick={handleCreateContent}>
-                    Continuar para Seleção de Método
+                  <Button type="submit" size="lg" disabled={loading}>
+                    {loading ? (
+                      <>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        Gerando Conteúdo...
+                      </>
+                    ) : (
+                      "Gerar Conteúdo com IA"
+                    )}
                   </Button>
                 </div>
               </form>
@@ -472,7 +370,7 @@ export default function CreateContent() {
             
             <VisualEditor 
               content={generatedContent} 
-              contentType={contentType}
+              contentType={contentTypeFromUrl as any}
               artStyle={artStyle} 
               carouselType={carouselType} 
             />

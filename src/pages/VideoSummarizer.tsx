@@ -7,20 +7,25 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { ArrowLeft, Upload, Youtube, Loader2, Play, Pause } from "lucide-react";
-import { Link } from "react-router-dom";
+import { ArrowLeft, Upload, Globe, Loader2, Play, Pause, FileText, Image, Film, MessageSquare } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { Slider } from "@/components/ui/slider";
+import { Textarea } from "@/components/ui/textarea";
 
 export default function VideoSummarizer() {
   const [loading, setLoading] = useState(false);
-  const [youtubeUrl, setYoutubeUrl] = useState("");
+  const [videoUrl, setVideoUrl] = useState("");
   const [uploadedVideo, setUploadedVideo] = useState<File | null>(null);
   const [startTime, setStartTime] = useState([0]);
   const [endTime, setEndTime] = useState([30]);
   const [outputFormat, setOutputFormat] = useState("carrossel");
-  const [videoDuration, setVideoDuration] = useState(120); // duração simulada em segundos
+  const [videoDuration, setVideoDuration] = useState(120);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [summary, setSummary] = useState("");
+  const [showSummary, setShowSummary] = useState(false);
+  const [showContentOptions, setShowContentOptions] = useState(false);
+  const navigate = useNavigate();
 
   const handleVideoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -30,18 +35,17 @@ export default function VideoSummarizer() {
     }
   };
 
-  const handleYoutubeSubmit = () => {
-    if (!youtubeUrl) {
-      toast.error("Por favor, insira um link do YouTube válido");
+  const handleUrlSubmit = () => {
+    if (!videoUrl) {
+      toast.error("Por favor, insira um link de vídeo válido");
       return;
     }
     
-    // Simular carregamento do vídeo do YouTube
     setLoading(true);
     setTimeout(() => {
       setLoading(false);
-      setVideoDuration(300); // 5 minutos simulados
-      toast.success("Vídeo do YouTube carregado!");
+      setVideoDuration(300);
+      toast.success("Vídeo carregado!");
     }, 2000);
   };
 
@@ -51,8 +55,8 @@ export default function VideoSummarizer() {
     return `${mins}:${secs.toString().padStart(2, '0')}`;
   };
 
-  const handleSummarize = async () => {
-    if (!youtubeUrl && !uploadedVideo) {
+  const handleGenerateSummary = async () => {
+    if (!videoUrl && !uploadedVideo) {
       toast.error("Por favor, adicione um vídeo primeiro");
       return;
     }
@@ -60,27 +64,51 @@ export default function VideoSummarizer() {
     setLoading(true);
     
     try {
-      // Simular processamento do resumo
       await new Promise(resolve => setTimeout(resolve, 3000));
       
-      toast.success("Resumo gerado com sucesso!", {
-        description: "Seu conteúdo foi criado e está pronto para edição."
-      });
+      const mockSummary = `Resumo do vídeo (${formatTime(startTime[0])} - ${formatTime(endTime[0])}):
+
+Este vídeo aborda conceitos fundamentais sobre produtividade e gestão de tempo. Os principais pontos discutidos incluem:
+
+1. **Técnica Pomodoro**: Método de trabalho em blocos de 25 minutos com pausas de 5 minutos
+2. **Priorização de tarefas**: Como identificar e focar nas atividades mais importantes
+3. **Eliminação de distrações**: Estratégias para manter o foco durante o trabalho
+4. **Planejamento semanal**: Importância de organizar as tarefas com antecedência
+5. **Avaliação de resultados**: Como medir e melhorar a produtividade ao longo do tempo
+
+O vídeo apresenta exemplos práticos e ferramentas que podem ser implementadas imediatamente para melhorar a eficiência no trabalho e nos estudos.`;
+
+      setSummary(mockSummary);
+      setShowSummary(true);
       
-      // Aqui redirecionaria para o editor com o conteúdo gerado
+      toast.success("Resumo gerado com sucesso!");
     } catch (error) {
-      toast.error("Erro ao processar vídeo", {
-        description: "Tente novamente com outro vídeo."
-      });
+      toast.error("Erro ao processar vídeo");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleCreateContent = (contentType: string) => {
+    setShowContentOptions(false);
+    
+    // Navegar para a página de criação apropriada com o resumo como contexto
+    const queryParams = new URLSearchParams({
+      source: 'video-summary',
+      summary: summary,
+      contentType: contentType
+    });
+    
+    if (contentType === 'post' || contentType === 'carrossel') {
+      navigate(`/create/method?${queryParams.toString()}`);
+    } else {
+      navigate(`/create/content?${queryParams.toString()}`);
     }
   };
 
   return (
     <DashboardLayout>
       <div className="space-y-6 max-w-4xl mx-auto">
-        {/* Header */}
         <div className="flex items-center gap-4">
           <Button variant="outline" size="sm" asChild>
             <Link to="/dashboard">
@@ -96,11 +124,11 @@ export default function VideoSummarizer() {
           </div>
         </div>
 
-        <Tabs defaultValue="youtube" className="w-full">
+        <Tabs defaultValue="url" className="w-full">
           <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="youtube" className="flex items-center gap-2">
-              <Youtube className="h-4 w-4" />
-              YouTube
+            <TabsTrigger value="url" className="flex items-center gap-2">
+              <Globe className="h-4 w-4" />
+              URL do Vídeo
             </TabsTrigger>
             <TabsTrigger value="upload" className="flex items-center gap-2">
               <Upload className="h-4 w-4" />
@@ -108,31 +136,31 @@ export default function VideoSummarizer() {
             </TabsTrigger>
           </TabsList>
           
-          <TabsContent value="youtube" className="space-y-6">
+          <TabsContent value="url" className="space-y-6">
             <Card>
               <CardHeader>
-                <CardTitle>Vídeo do YouTube</CardTitle>
+                <CardTitle>URL do Vídeo</CardTitle>
                 <CardDescription>
-                  Cole o link do YouTube e selecione o trecho que deseja resumir
+                  Cole o link do YouTube, TikTok, Instagram ou outra plataforma
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="youtube-url">Link do YouTube</Label>
+                  <Label htmlFor="video-url">Link do Vídeo</Label>
                   <div className="flex gap-2">
                     <Input
-                      id="youtube-url"
-                      placeholder="https://www.youtube.com/watch?v=..."
-                      value={youtubeUrl}
-                      onChange={(e) => setYoutubeUrl(e.target.value)}
+                      id="video-url"
+                      placeholder="https://www.youtube.com/watch?v=... ou https://www.tiktok.com/..."
+                      value={videoUrl}
+                      onChange={(e) => setVideoUrl(e.target.value)}
                     />
-                    <Button onClick={handleYoutubeSubmit} disabled={loading}>
+                    <Button onClick={handleUrlSubmit} disabled={loading}>
                       {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : "Carregar"}
                     </Button>
                   </div>
                 </div>
 
-                {youtubeUrl && !loading && (
+                {videoUrl && !loading && (
                   <div className="space-y-4 mt-6">
                     <div className="bg-gray-100 p-4 rounded-lg">
                       <div className="flex items-center justify-between mb-2">
@@ -146,13 +174,13 @@ export default function VideoSummarizer() {
                         </Button>
                       </div>
                       <div className="h-48 bg-gray-200 rounded flex items-center justify-center">
-                        <Youtube className="h-12 w-12 text-gray-400" />
+                        <Globe className="h-12 w-12 text-gray-400" />
                       </div>
                     </div>
 
                     <div className="space-y-4">
                       <div className="space-y-2">
-                        <Label>Selecionar Trecho</Label>
+                        <Label>Selecionar Trecho (opcional)</Label>
                         <div className="space-y-2">
                           <div className="flex justify-between text-sm text-gray-600">
                             <span>Início: {formatTime(startTime[0])}</span>
@@ -255,46 +283,114 @@ export default function VideoSummarizer() {
           </TabsContent>
         </Tabs>
 
-        {/* Configurações de Output */}
+        {/* Gerar Resumo */}
         <Card>
           <CardHeader>
-            <CardTitle>Formato de Saída</CardTitle>
+            <CardTitle>Resumo em Texto</CardTitle>
             <CardDescription>
-              Escolha como você quer que o conteúdo seja gerado
+              Gere um resumo em texto do vídeo antes de criar conteúdo
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="space-y-2">
-              <Label>Tipo de Conteúdo</Label>
-              <Select value={outputFormat} onValueChange={setOutputFormat}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Selecione o formato" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="post">Post Único</SelectItem>
-                  <SelectItem value="carrossel">Carrossel</SelectItem>
-                  <SelectItem value="reels">Reels/Shorts Editado</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
             <Button 
-              onClick={handleSummarize}
+              onClick={handleGenerateSummary}
               size="lg"
               className="w-full"
-              disabled={loading || (!youtubeUrl && !uploadedVideo)}
+              disabled={loading || (!videoUrl && !uploadedVideo)}
             >
               {loading ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Processando Vídeo...
+                  Gerando Resumo...
                 </>
               ) : (
-                "Gerar Resumo com IA"
+                "Gerar Resumo em Texto"
               )}
             </Button>
+
+            {showSummary && (
+              <div className="space-y-4">
+                <div className="border rounded-lg p-4 bg-gray-50">
+                  <Label className="text-sm font-medium text-gray-700 mb-2 block">Resumo Gerado:</Label>
+                  <Textarea 
+                    value={summary}
+                    onChange={(e) => setSummary(e.target.value)}
+                    className="min-h-[200px] bg-white"
+                    placeholder="O resumo aparecerá aqui..."
+                  />
+                </div>
+
+                <Button 
+                  onClick={() => setShowContentOptions(true)}
+                  size="lg"
+                  className="w-full"
+                >
+                  Criar Conteúdo a partir do Resumo
+                </Button>
+              </div>
+            )}
           </CardContent>
         </Card>
+
+        {/* Opções de Criação de Conteúdo */}
+        {showContentOptions && (
+          <Card>
+            <CardHeader>
+              <CardTitle>Criar Conteúdo para Redes Sociais</CardTitle>
+              <CardDescription>
+                Escolha o tipo de conteúdo que deseja criar com base no resumo
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <Button
+                  variant="outline"
+                  className="h-auto p-4 flex flex-col items-center space-y-2"
+                  onClick={() => handleCreateContent('legenda')}
+                >
+                  <MessageSquare className="h-8 w-8 text-green-600" />
+                  <span className="font-medium">Criar Legenda</span>
+                </Button>
+
+                <Button
+                  variant="outline"
+                  className="h-auto p-4 flex flex-col items-center space-y-2"
+                  onClick={() => handleCreateContent('post')}
+                >
+                  <Image className="h-8 w-8 text-blue-600" />
+                  <span className="font-medium">Post Único</span>
+                </Button>
+
+                <Button
+                  variant="outline"
+                  className="h-auto p-4 flex flex-col items-center space-y-2"
+                  onClick={() => handleCreateContent('carrossel')}
+                >
+                  <FileText className="h-8 w-8 text-purple-600" />
+                  <span className="font-medium">Carrossel</span>
+                </Button>
+
+                <Button
+                  variant="outline"
+                  className="h-auto p-4 flex flex-col items-center space-y-2"
+                  onClick={() => handleCreateContent('video')}
+                >
+                  <MessageSquare className="h-8 w-8 text-orange-600" />
+                  <span className="font-medium">Roteiro de Vídeo</span>
+                </Button>
+
+                <Button
+                  variant="outline"
+                  className="h-auto p-4 flex flex-col items-center space-y-2"
+                  onClick={() => handleCreateContent('reels')}
+                >
+                  <Film className="h-8 w-8 text-red-600" />
+                  <span className="font-medium">Reels/Short</span>
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        )}
       </div>
     </DashboardLayout>
   );

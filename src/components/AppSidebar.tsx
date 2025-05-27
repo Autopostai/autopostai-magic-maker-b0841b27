@@ -176,10 +176,10 @@ export function AppSidebar() {
         </SidebarGroup>
 
         <SidebarGroup>
-          <SidebarGroupLabel>Ferramentas IA</SidebarGroupLabel>
+          <SidebarGroupLabel>Conteúdos</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {aiToolsItems.map((item) => (
+              {contentItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild isActive={isActive(item.url)}>
                     <Link to={item.url}>
@@ -194,10 +194,10 @@ export function AppSidebar() {
         </SidebarGroup>
 
         <SidebarGroup>
-          <SidebarGroupLabel>Conteúdos</SidebarGroupLabel>
+          <SidebarGroupLabel>Ferramentas IA</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {contentItems.map((item) => (
+              {aiToolsItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild isActive={isActive(item.url)}>
                     <Link to={item.url}>

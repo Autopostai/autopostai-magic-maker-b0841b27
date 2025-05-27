@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -26,6 +27,9 @@ import VideoSummarizer from "./pages/VideoSummarizer";
 import TrendDetector from "./pages/TrendDetector";
 import BioOptimizer from "./pages/BioOptimizer";
 import ContentGenerator from "./pages/ContentGenerator";
+import MockupGallery from "./pages/MockupGallery";
+import MockupPreview from "./pages/MockupPreview";
+import MockupEditor from "./pages/MockupEditor";
 
 const queryClient = new QueryClient();
 
@@ -44,6 +48,9 @@ const App = () => (
           <Route path="/create/platforms" element={<SelectPlatforms />} />
           <Route path="/create/method" element={<CreateMethod />} />
           <Route path="/create/templates" element={<TemplateGallery />} />
+          <Route path="/mockup/gallery" element={<MockupGallery />} />
+          <Route path="/mockup/preview/:id" element={<MockupPreview />} />
+          <Route path="/mockup/editor/:id" element={<MockupEditor />} />
           <Route path="/video-summarizer" element={<VideoSummarizer />} />
           <Route path="/trend-detector" element={<TrendDetector />} />
           <Route path="/bio-optimizer" element={<BioOptimizer />} />

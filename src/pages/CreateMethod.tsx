@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { DashboardLayout } from "@/components/DashboardLayout";
 import { Button } from "@/components/ui/button";
@@ -24,7 +25,7 @@ export default function CreateMethod() {
       if (selectedMethod === 'ai') {
         navigate(`/create/content?${query}`);
       } else {
-        navigate(`/create/templates?${query}`);
+        navigate(`/mockup/gallery?${query}`);
       }
     }
   };
