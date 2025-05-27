@@ -195,6 +195,30 @@ export default function Dashboard() {
                   </Link>
                 </Button>
                 <Button className="w-full justify-start" variant="outline" asChild>
+                  <Link to="/video-summarizer">
+                    <Video className="h-4 w-4 mr-2" />
+                    Resumir Vídeo
+                  </Link>
+                </Button>
+                <Button className="w-full justify-start" variant="outline" asChild>
+                  <Link to="/trend-detector">
+                    <TrendingUp className="h-4 w-4 mr-2" />
+                    Detector de Tendências
+                  </Link>
+                </Button>
+                <Button className="w-full justify-start" variant="outline" asChild>
+                  <Link to="/bio-optimizer">
+                    <Users className="h-4 w-4 mr-2" />
+                    Otimizar Bio
+                  </Link>
+                </Button>
+                <Button className="w-full justify-start" variant="outline" asChild>
+                  <Link to="/content-generator">
+                    <BookOpen className="h-4 w-4 mr-2" />
+                    Gerar eBook/PDF
+                  </Link>
+                </Button>
+                <Button className="w-full justify-start" variant="outline" asChild>
                   <Link to="/schedule">
                     <Calendar className="h-4 w-4 mr-2" />
                     Agendar Posts

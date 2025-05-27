@@ -39,6 +39,10 @@ const App = () => (
           <Route path="/create/platforms" element={<SelectPlatforms />} />
           <Route path="/create/method" element={<CreateMethod />} />
           <Route path="/create/templates" element={<TemplateGallery />} />
+          <Route path="/video-summarizer" element={<VideoSummarizer />} />
+          <Route path="/trend-detector" element={<TrendDetector />} />
+          <Route path="/bio-optimizer" element={<BioOptimizer />} />
+          <Route path="/content-generator" element={<ContentGenerator />} />
           <Route path="/content" element={<Content />} />
           <Route path="/content/:id" element={<ViewContent />} />
           <Route path="/schedule" element={<Schedule />} />
