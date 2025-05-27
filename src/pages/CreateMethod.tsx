@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { DashboardLayout } from "@/components/DashboardLayout";
 import { Button } from "@/components/ui/button";
@@ -12,7 +11,7 @@ export default function CreateMethod() {
   const navigate = useNavigate();
   
   const platforms = searchParams.get('platforms')?.split(',') || [];
-  const contentType = searchParams.get('type') || 'carrossel';
+  const contentType = searchParams.get('type') || 'post';
 
   const handleContinue = () => {
     if (selectedMethod && platforms.length > 0) {
@@ -23,7 +22,7 @@ export default function CreateMethod() {
       });
       
       if (selectedMethod === 'ai') {
-        navigate(`/create/ai?${query}`);
+        navigate(`/create/content?${query}`);
       } else {
         navigate(`/create/templates?${query}`);
       }

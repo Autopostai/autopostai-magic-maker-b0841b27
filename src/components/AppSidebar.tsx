@@ -13,7 +13,10 @@ import {
   Users,
   CreditCard,
   HelpCircle,
-  LogOut
+  LogOut,
+  TrendingUp,
+  BookOpen,
+  PlayCircle
 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import {
@@ -72,9 +75,32 @@ const contentItems = [
   },
 ];
 
+const aiToolsItems = [
+  {
+    title: "Resumir Vídeo",
+    url: "/video-summarizer",
+    icon: PlayCircle,
+  },
+  {
+    title: "Detector de Tendências",
+    url: "/trend-detector",
+    icon: TrendingUp,
+  },
+  {
+    title: "Otimizar Bio",
+    url: "/bio-optimizer",
+    icon: Users,
+  },
+  {
+    title: "Gerar eBook/PDF",
+    url: "/content-generator",
+    icon: BookOpen,
+  },
+];
+
 const toolsItems = [
   {
-    title: "Agendamentos",
+    title: "Agendar Posts",
     url: "/schedule",
     icon: Clock,
   },
@@ -136,6 +162,24 @@ export function AppSidebar() {
           <SidebarGroupContent>
             <SidebarMenu>
               {menuItems.map((item) => (
+                <SidebarMenuItem key={item.title}>
+                  <SidebarMenuButton asChild isActive={isActive(item.url)}>
+                    <Link to={item.url}>
+                      <item.icon className="h-4 w-4" />
+                      <span>{item.title}</span>
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+
+        <SidebarGroup>
+          <SidebarGroupLabel>Ferramentas IA</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {aiToolsItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild isActive={isActive(item.url)}>
                     <Link to={item.url}>

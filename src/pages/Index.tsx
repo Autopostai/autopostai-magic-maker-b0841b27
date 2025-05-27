@@ -3,7 +3,7 @@ import { Navbar } from "@/components/Navbar";
 import { HowItWorks } from "@/components/HowItWorks";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { CheckCircle2, ArrowRight, Clock, SquarePlay, Film, Layout, MessageSquare } from "lucide-react";
+import { CheckCircle2, ArrowRight, Clock, SquarePlay, Film, Layout, MessageSquare, TrendingUp, Users, BookOpen, PlayCircle, Calendar, BarChart3 } from "lucide-react";
 
 export default function Index() {
   return (
@@ -33,7 +33,7 @@ export default function Index() {
       {/* How It Works Section */}
       <HowItWorks />
       
-      {/* Features Section */}
+      {/* Main Features Section */}
       <section className="bg-white py-20">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
@@ -87,7 +87,99 @@ export default function Index() {
         </div>
       </section>
       
-      {/* Testimonials or Use Cases */}
+      {/* AI-Powered Tools Section */}
+      <section className="bg-gray-50 py-20">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl font-bold mb-4">Ferramentas Inteligentes com IA</h2>
+            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+              Descubra todas as funcionalidades avançadas do AutoPost AI para turbinar sua estratégia de conteúdo
+            </p>
+          </div>
+          
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="bg-white p-6 rounded-xl shadow-lg">
+              <div className="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center mb-4">
+                <PlayCircle className="h-6 w-6 text-red-600" />
+              </div>
+              <h3 className="text-xl font-bold mb-2">Resumir Vídeo</h3>
+              <p className="text-gray-600 mb-4">
+                Transforme vídeos do YouTube ou da sua galeria em posts, carrosséis ou shorts automaticamente.
+              </p>
+              <Button variant="outline" className="w-full" asChild>
+                <Link to="/video-summarizer">Experimentar</Link>
+              </Button>
+            </div>
+            
+            <div className="bg-white p-6 rounded-xl shadow-lg">
+              <div className="w-12 h-12 bg-pink-100 rounded-lg flex items-center justify-center mb-4">
+                <TrendingUp className="h-6 w-6 text-pink-600" />
+              </div>
+              <h3 className="text-xl font-bold mb-2">Detector de Tendências</h3>
+              <p className="text-gray-600 mb-4">
+                Monitore tendências em tempo real e descubra o que está viral no seu nicho.
+              </p>
+              <Button variant="outline" className="w-full" asChild>
+                <Link to="/trend-detector">Explorar</Link>
+              </Button>
+            </div>
+            
+            <div className="bg-white p-6 rounded-xl shadow-lg">
+              <div className="w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center mb-4">
+                <Users className="h-6 w-6 text-indigo-600" />
+              </div>
+              <h3 className="text-xl font-bold mb-2">Otimizador de Bio</h3>
+              <p className="text-gray-600 mb-4">
+                Crie bios otimizadas para Instagram, LinkedIn, TikTok e outras plataformas.
+              </p>
+              <Button variant="outline" className="w-full" asChild>
+                <Link to="/bio-optimizer">Otimizar</Link>
+              </Button>
+            </div>
+            
+            <div className="bg-white p-6 rounded-xl shadow-lg">
+              <div className="w-12 h-12 bg-emerald-100 rounded-lg flex items-center justify-center mb-4">
+                <BookOpen className="h-6 w-6 text-emerald-600" />
+              </div>
+              <h3 className="text-xl font-bold mb-2">Gerador de eBook/PDF</h3>
+              <p className="text-gray-600 mb-4">
+                Crie eBooks, PDFs e apresentações profissionais com design aplicado automaticamente.
+              </p>
+              <Button variant="outline" className="w-full" asChild>
+                <Link to="/content-generator">Gerar</Link>
+              </Button>
+            </div>
+            
+            <div className="bg-white p-6 rounded-xl shadow-lg">
+              <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
+                <Calendar className="h-6 w-6 text-blue-600" />
+              </div>
+              <h3 className="text-xl font-bold mb-2">Agendamento</h3>
+              <p className="text-gray-600 mb-4">
+                Agende seus posts para múltiplas plataformas e mantenha sua presença online consistente.
+              </p>
+              <Button variant="outline" className="w-full" asChild>
+                <Link to="/schedule">Agendar</Link>
+              </Button>
+            </div>
+            
+            <div className="bg-white p-6 rounded-xl shadow-lg">
+              <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-4">
+                <BarChart3 className="h-6 w-6 text-purple-600" />
+              </div>
+              <h3 className="text-xl font-bold mb-2">Analytics Avançado</h3>
+              <p className="text-gray-600 mb-4">
+                Monitore performance, engajamento e métricas detalhadas de todos os seus conteúdos.
+              </p>
+              <Button variant="outline" className="w-full" asChild>
+                <Link to="/analytics">Analisar</Link>
+              </Button>
+            </div>
+          </div>
+        </div>
+      </section>
+      
+      {/* Testimonials Section */}
       <section className="bg-white py-20">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
@@ -188,12 +280,12 @@ export default function Index() {
             </div>
             
             <div>
-              <h3 className="text-lg font-bold mb-4">Empresa</h3>
+              <h3 className="text-lg font-bold mb-4">Ferramentas IA</h3>
               <ul className="space-y-2 text-gray-400">
-                <li><a href="#" className="hover:text-white">Sobre nós</a></li>
-                <li><a href="#" className="hover:text-white">Blog</a></li>
-                <li><a href="#" className="hover:text-white">Contato</a></li>
-                <li><a href="#" className="hover:text-white">Afiliados</a></li>
+                <li><Link to="/video-summarizer" className="hover:text-white">Resumir Vídeo</Link></li>
+                <li><Link to="/trend-detector" className="hover:text-white">Detector de Tendências</Link></li>
+                <li><Link to="/bio-optimizer" className="hover:text-white">Otimizar Bio</Link></li>
+                <li><Link to="/content-generator" className="hover:text-white">Gerar eBook/PDF</Link></li>
               </ul>
             </div>
             
