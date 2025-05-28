@@ -46,7 +46,7 @@ export default function CreateContentType() {
       color: "bg-green-50 border-green-200",
       iconColor: "text-green-600",
       iconBg: "bg-green-100",
-      route: "/create/ai"
+      route: "/create/script"
     },
     {
       id: "caption",
@@ -56,7 +56,7 @@ export default function CreateContentType() {
       color: "bg-yellow-50 border-yellow-200",
       iconColor: "text-yellow-600",
       iconBg: "bg-yellow-100",
-      route: "/create/ai"
+      route: "/create/caption"
     },
     {
       id: "ebook",

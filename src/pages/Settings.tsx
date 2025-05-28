@@ -1,4 +1,3 @@
-
 import { DashboardLayout } from "@/components/DashboardLayout";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -7,9 +6,13 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { User, Bell, Shield, CreditCard, Trash2 } from "lucide-react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { User, Bell, Shield, CreditCard, Trash2, Globe } from "lucide-react";
+import { useState } from "react";
 
 export default function Settings() {
+  const [selectedLanguage, setSelectedLanguage] = useState("pt");
+
   return (
     <DashboardLayout>
       <div className="space-y-6">
@@ -23,6 +26,10 @@ export default function Settings() {
             <TabsTrigger value="profile" className="flex items-center gap-2">
               <User className="h-4 w-4" />
               Perfil
+            </TabsTrigger>
+            <TabsTrigger value="language" className="flex items-center gap-2">
+              <Globe className="h-4 w-4" />
+              Idiomas
             </TabsTrigger>
             <TabsTrigger value="notifications" className="flex items-center gap-2">
               <Bell className="h-4 w-4" />
@@ -66,6 +73,76 @@ export default function Settings() {
                   <Input id="bio" placeholder="Conte um pouco sobre você" />
                 </div>
                 <Button>Salvar Alterações</Button>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="language">
+            <Card>
+              <CardHeader>
+                <CardTitle>Configurações de Idioma</CardTitle>
+                <CardDescription>
+                  Defina o idioma padrão para geração de conteúdo e interface do sistema.
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <div className="space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="defaultLanguage">Idioma Padrão para Geração de Conteúdo</Label>
+                    <Select value={selectedLanguage} onValueChange={setSelectedLanguage}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Selecione o idioma" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="pt">🇧🇷 Português (Brasil)</SelectItem>
+                        <SelectItem value="en">🇺🇸 English (US)</SelectItem>
+                        <SelectItem value="es">🇪🇸 Español</SelectItem>
+                        <SelectItem value="fr">🇫🇷 Français</SelectItem>
+                        <SelectItem value="de">🇩🇪 Deutsch</SelectItem>
+                        <SelectItem value="it">🇮🇹 Italiano</SelectItem>
+                        <SelectItem value="ja">🇯🇵 日本語</SelectItem>
+                        <SelectItem value="ko">🇰🇷 한국어</SelectItem>
+                        <SelectItem value="zh">🇨🇳 中文</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <p className="text-sm text-gray-500">
+                      Este será o idioma usado por padrão na geração de conteúdos pela IA.
+                    </p>
+                  </div>
+
+                  <Separator />
+
+                  <div className="space-y-2">
+                    <Label htmlFor="interfaceLanguage">Idioma da Interface</Label>
+                    <Select defaultValue="pt">
+                      <SelectTrigger>
+                        <SelectValue placeholder="Selecione o idioma" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="pt">🇧🇷 Português (Brasil)</SelectItem>
+                        <SelectItem value="en">🇺🇸 English (US)</SelectItem>
+                        <SelectItem value="es">🇪🇸 Español</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <p className="text-sm text-gray-500">
+                      Define o idioma dos menus, botões e textos da interface.
+                    </p>
+                  </div>
+
+                  <Separator />
+
+                  <div className="flex items-center justify-between">
+                    <div className="space-y-0.5">
+                      <div className="text-base">Detecção Automática</div>
+                      <div className="text-sm text-gray-500">
+                        Detectar automaticamente o idioma baseado na localização
+                      </div>
+                    </div>
+                    <Switch />
+                  </div>
+                </div>
+
+                <Button>Salvar Configurações de Idioma</Button>
               </CardContent>
             </Card>
           </TabsContent>

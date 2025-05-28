@@ -10,6 +10,8 @@ import Dashboard from "./pages/Dashboard";
 import CreateContent from "./pages/CreateContent";
 import CreateContentType from "./pages/CreateContentType";
 import CreateAI from "./pages/CreateAI";
+import CreateScript from "./pages/CreateScript";
+import CreateCaption from "./pages/CreateCaption";
 import Content from "./pages/Content";
 import Schedule from "./pages/Schedule";
 import Analytics from "./pages/Analytics";
@@ -45,6 +47,8 @@ const App = () => (
           <Route path="/create" element={<CreateContentType />} />
           <Route path="/create/content" element={<CreateContent />} />
           <Route path="/create/ai" element={<CreateAI />} />
+          <Route path="/create/script" element={<CreateScript />} />
+          <Route path="/create/caption" element={<CreateCaption />} />
           <Route path="/create/platforms" element={<SelectPlatforms />} />
           <Route path="/create/method" element={<CreateMethod />} />
           <Route path="/create/templates" element={<TemplateGallery />} />
