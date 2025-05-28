@@ -1,4 +1,3 @@
-
 import { DashboardLayout } from "@/components/DashboardLayout";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -17,7 +16,7 @@ export default function CreateContentType() {
       color: "bg-blue-50 border-blue-200",
       iconColor: "text-blue-600",
       iconBg: "bg-blue-100",
-      route: "/create/platforms"
+      route: "/create/method"
     },
     {
       id: "carousel",
@@ -27,7 +26,7 @@ export default function CreateContentType() {
       color: "bg-purple-50 border-purple-200",
       iconColor: "text-purple-600", 
       iconBg: "bg-purple-100",
-      route: "/create/platforms"
+      route: "/create/method"
     },
     {
       id: "reels",

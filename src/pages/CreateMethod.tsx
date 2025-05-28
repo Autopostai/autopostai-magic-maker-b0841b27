@@ -7,17 +7,23 @@ import { ArrowLeft, ArrowRight, Sparkles, Image } from "lucide-react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 
 export default function CreateMethod() {
-  const [selectedMethod, setSelectedMethod] = useState<"ai" | "template" | null>(null);
+  const [selectedMethod, setSelectedMethod] = useState<"ai" | "mockup" | null>(null);
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   
-  const platforms = searchParams.get('platforms')?.split(',') || [];
   const contentType = searchParams.get('type') || 'post';
 
+  const getContentTypeTitle = (type: string) => {
+    const titles: Record<string, string> = {
+      'post': 'Post Único',
+      'carousel': 'Carrossel'
+    };
+    return titles[type] || type;
+  };
+
   const handleContinue = () => {
-    if (selectedMethod && platforms.length > 0) {
+    if (selectedMethod) {
       const query = new URLSearchParams({
-        platforms: platforms.join(','),
         type: contentType,
         method: selectedMethod
       });
@@ -36,7 +42,7 @@ export default function CreateMethod() {
         {/* Header */}
         <div className="flex items-center gap-4">
           <Button variant="outline" size="sm" asChild>
-            <Link to="/create/platforms">
+            <Link to="/create">
               <ArrowLeft className="h-4 w-4 mr-2" />
               Voltar
             </Link>
@@ -50,10 +56,7 @@ export default function CreateMethod() {
         {/* Selected Info */}
         <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
           <p className="text-sm text-blue-800">
-            <span className="font-medium">Plataformas selecionadas:</span> {platforms.join(', ')}
-          </p>
-          <p className="text-sm text-blue-800">
-            <span className="font-medium">Tipo de conteúdo:</span> {contentType}
+            <span className="font-medium">Tipo de conteúdo:</span> {getContentTypeTitle(contentType)}
           </p>
         </div>
 
@@ -88,14 +91,14 @@ export default function CreateMethod() {
             </CardContent>
           </Card>
 
-          {/* Template Creation */}
+          {/* Mockup Creation */}
           <Card 
             className={`cursor-pointer transition-all duration-200 ${
-              selectedMethod === 'template' 
+              selectedMethod === 'mockup' 
                 ? 'border-purple-500 bg-purple-50' 
                 : 'hover:border-gray-300'
             }`}
-            onClick={() => setSelectedMethod('template')}
+            onClick={() => setSelectedMethod('mockup')}
           >
             <CardHeader className="text-center">
               <div className="mx-auto mb-4 w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center">
