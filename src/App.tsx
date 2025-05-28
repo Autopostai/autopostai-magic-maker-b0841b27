@@ -32,6 +32,7 @@ import ContentGenerator from "./pages/ContentGenerator";
 import MockupGallery from "./pages/MockupGallery";
 import MockupPreview from "./pages/MockupPreview";
 import MockupEditor from "./pages/MockupEditor";
+import ConnectPlatforms from "./pages/ConnectPlatforms";
 
 const queryClient = new QueryClient();
 
@@ -52,6 +53,7 @@ const App = () => (
           <Route path="/create/platforms" element={<SelectPlatforms />} />
           <Route path="/create/method" element={<CreateMethod />} />
           <Route path="/create/templates" element={<TemplateGallery />} />
+          <Route path="/connect-platforms" element={<ConnectPlatforms />} />
           <Route path="/mockup/gallery" element={<MockupGallery />} />
           <Route path="/mockup/preview/:id" element={<MockupPreview />} />
           <Route path="/mockup/editor/:id" element={<MockupEditor />} />

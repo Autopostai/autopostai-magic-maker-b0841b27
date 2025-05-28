@@ -82,7 +82,7 @@ export default function Schedule() {
           </div>
           
           <Button asChild>
-            <Link to="/create">
+            <Link to="/create/platforms">
               <Plus className="h-4 w-4 mr-2" />
               Agendar Post
             </Link>
@@ -160,7 +160,7 @@ export default function Schedule() {
                         Comece agendando seus primeiros posts para manter sua presença online ativa.
                       </p>
                       <Button asChild>
-                        <Link to="/create">
+                        <Link to="/create/platforms">
                           <Plus className="h-4 w-4 mr-2" />
                           Agendar Primeiro Post
                         </Link>

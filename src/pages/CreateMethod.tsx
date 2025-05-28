@@ -16,7 +16,9 @@ export default function CreateMethod() {
   const getContentTypeTitle = (type: string) => {
     const titles: Record<string, string> = {
       'post': 'Post Único',
-      'carousel': 'Carrossel'
+      'carousel': 'Carrossel',
+      'thumbnail': 'Thumbnail YouTube',
+      'ads': 'Criativo para Anúncios'
     };
     return titles[type] || type;
   };

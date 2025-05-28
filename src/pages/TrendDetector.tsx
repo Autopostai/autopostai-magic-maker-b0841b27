@@ -4,6 +4,8 @@ import { DashboardLayout } from "@/components/DashboardLayout";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { ArrowLeft, TrendingUp, Bell, Eye, Share2, Heart } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -23,6 +25,7 @@ type Trend = {
 
 export default function TrendDetector() {
   const [selectedNiche, setSelectedNiche] = useState("");
+  const [customNiche, setCustomNiche] = useState("");
   const [trends, setTrends] = useState<Trend[]>([]);
   const [loading, setLoading] = useState(false);
 
@@ -36,7 +39,8 @@ export default function TrendDetector() {
     "beleza",
     "empreendedorismo",
     "educação",
-    "lifestyle"
+    "lifestyle",
+    "outro"
   ];
 
   const mockTrends: Trend[] = [
@@ -76,7 +80,9 @@ export default function TrendDetector() {
   ];
 
   const fetchTrends = async () => {
-    if (!selectedNiche) {
+    const nicheToUse = selectedNiche === "outro" ? customNiche : selectedNiche;
+    
+    if (!nicheToUse) {
       toast.error("Selecione um nicho primeiro");
       return;
     }
@@ -87,7 +93,7 @@ export default function TrendDetector() {
       // Simular busca por tendências
       await new Promise(resolve => setTimeout(resolve, 2000));
       setTrends(mockTrends);
-      toast.success("Tendências atualizadas!");
+      toast.success(`Tendências atualizadas para ${nicheToUse}!`);
     } catch (error) {
       toast.error("Erro ao buscar tendências");
     } finally {
@@ -137,20 +143,36 @@ export default function TrendDetector() {
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="flex gap-4">
-              <Select value={selectedNiche} onValueChange={setSelectedNiche}>
-                <SelectTrigger className="flex-1">
-                  <SelectValue placeholder="Escolha seu nicho" />
-                </SelectTrigger>
-                <SelectContent>
-                  {niches.map((niche) => (
-                    <SelectItem key={niche} value={niche}>
-                      {niche.charAt(0).toUpperCase() + niche.slice(1)}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <Button onClick={fetchTrends} disabled={loading}>
+            <div className="space-y-4">
+              <div>
+                <Label htmlFor="niche">Nicho</Label>
+                <Select value={selectedNiche} onValueChange={setSelectedNiche}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Escolha seu nicho" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {niches.map((niche) => (
+                      <SelectItem key={niche} value={niche}>
+                        {niche === "outro" ? "Outro" : niche.charAt(0).toUpperCase() + niche.slice(1)}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              
+              {selectedNiche === "outro" && (
+                <div>
+                  <Label htmlFor="customNiche">Especifique seu nicho</Label>
+                  <Input
+                    id="customNiche"
+                    placeholder="Digite seu nicho específico..."
+                    value={customNiche}
+                    onChange={(e) => setCustomNiche(e.target.value)}
+                  />
+                </div>
+              )}
+              
+              <Button onClick={fetchTrends} disabled={loading} className="w-full">
                 {loading ? "Buscando..." : "Buscar Tendências"}
               </Button>
             </div>

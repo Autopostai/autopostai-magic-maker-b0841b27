@@ -16,7 +16,9 @@ import {
   LogOut,
   TrendingUp,
   BookOpen,
-  PlayCircle
+  PlayCircle,
+  Youtube,
+  Megaphone
 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import {
@@ -64,6 +66,16 @@ const contentItems = [
     icon: FileText,
   },
   {
+    title: "Thumbnails",
+    url: "/content?type=thumbnail",
+    icon: Youtube,
+  },
+  {
+    title: "Criativos",
+    url: "/content?type=ads",
+    icon: Megaphone,
+  },
+  {
     title: "Vídeos",
     url: "/content?type=video",
     icon: Video,
@@ -101,7 +113,7 @@ const aiToolsItems = [
 const toolsItems = [
   {
     title: "Agendar Posts",
-    url: "/schedule",
+    url: "/create/platforms",
     icon: Clock,
   },
   {

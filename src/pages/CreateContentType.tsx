@@ -1,7 +1,8 @@
+
 import { DashboardLayout } from "@/components/DashboardLayout";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowLeft, Image, FileText, Film, MessageSquare, BookOpen } from "lucide-react";
+import { ArrowLeft, Image, FileText, Film, MessageSquare, BookOpen, Youtube, Megaphone } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 
 export default function CreateContentType() {
@@ -29,13 +30,33 @@ export default function CreateContentType() {
       route: "/create/method"
     },
     {
+      id: "thumbnail",
+      title: "Thumbnail YouTube",
+      description: "Crie thumbnails atrativas para seus vídeos",
+      icon: Youtube,
+      color: "bg-red-50 border-red-200",
+      iconColor: "text-red-600",
+      iconBg: "bg-red-100",
+      route: "/create/method"
+    },
+    {
+      id: "ads",
+      title: "Criativos para Anúncios",
+      description: "Crie peças publicitárias para suas campanhas",
+      icon: Megaphone,
+      color: "bg-orange-50 border-orange-200",
+      iconColor: "text-orange-600",
+      iconBg: "bg-orange-100",
+      route: "/create/method"
+    },
+    {
       id: "reels",
       title: "Reels/Shorts",
       description: "Crie vídeos curtos para Instagram e TikTok",
       icon: Film,
-      color: "bg-red-50 border-red-200",
-      iconColor: "text-red-600",
-      iconBg: "bg-red-100",
+      color: "bg-pink-50 border-pink-200",
+      iconColor: "text-pink-600",
+      iconBg: "bg-pink-100",
       route: "/create/ai"
     },
     {
@@ -71,7 +92,7 @@ export default function CreateContentType() {
   ];
 
   const handleContentTypeSelect = (contentType: any) => {
-    if (contentType.id === "post" || contentType.id === "carousel") {
+    if (["post", "carousel", "thumbnail", "ads"].includes(contentType.id)) {
       navigate(`${contentType.route}?type=${contentType.id}`);
     } else {
       navigate(contentType.route);
@@ -125,7 +146,7 @@ export default function CreateContentType() {
         <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mt-8">
           <h3 className="font-semibold text-blue-900 mb-2">💡 Dica:</h3>
           <p className="text-blue-800 text-sm">
-            Para Posts e Carrosséis, você poderá escolher entre criar com IA ou usar nossos templates personalizáveis. 
+            Para Posts, Carrosséis, Thumbnails e Criativos, você poderá escolher entre criar com IA ou usar nossos templates personalizáveis. 
             Os outros tipos de conteúdo são gerados automaticamente pela nossa inteligência artificial.
           </p>
         </div>
