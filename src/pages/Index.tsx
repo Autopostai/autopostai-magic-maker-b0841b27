@@ -2,7 +2,7 @@
 import { useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowRight, Play, CheckCircle, Star, Users, TrendingUp, Clock, Sparkles, Brain, BarChart3, Calendar, FileText, MessageSquare, Video, Image, Zap, Target, Globe, Heart, BookOpen, Mic } from "lucide-react";
+import { ArrowRight, Play, CheckCircle, Star, Users, TrendingUp, Clock, Sparkles, Brain, BarChart3, Calendar, FileText, MessageSquare, Video, Image, Zap, Target, Globe, Heart, BookOpen, Mic, Shield, Rocket, Lock } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Navbar } from "@/components/Navbar";
 
@@ -25,59 +25,135 @@ export default function Index() {
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-blue-50">
       <Navbar />
       
-      {/* Hero Section */}
+      {/* Hero Section with Dra. Ana */}
       <section className="pt-32 pb-20 px-4">
-        <div className="max-w-7xl mx-auto text-center">
-          <div className="inline-flex items-center px-4 py-2 bg-purple-100 rounded-full text-purple-700 text-sm font-medium mb-8">
-            <Sparkles className="h-4 w-4 mr-2" />
-            Nova Era da Criação de Conteúdo
-          </div>
-          
-          <h1 className="text-5xl md:text-7xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent mb-8">
-            Crie Conteúdo
-            <br />
-            com IA em Segundos
-          </h1>
-          
-          <p className="text-xl text-gray-600 mb-12 max-w-3xl mx-auto">
-            A plataforma mais completa para criadores digitais. Gere posts, carrosséis, vídeos, roteiros e muito mais 
-            com inteligência artificial avançada.
-          </p>
-          
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16">
-            <Button asChild size="lg" className="bg-purple-600 hover:bg-purple-700 text-white px-8 py-4 text-lg">
-              <Link to="/register">
-                Começar Gratuitamente
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Link>
-            </Button>
-            <Button variant="outline" size="lg" className="px-8 py-4 text-lg">
-              <Link to="/pricing">Ver Planos</Link>
-            </Button>
+        <div className="max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            {/* Left Side - Content */}
+            <div className="text-center lg:text-left">
+              <div className="inline-flex items-center px-4 py-2 bg-purple-100 rounded-full text-purple-700 text-sm font-medium mb-8">
+                <Sparkles className="h-4 w-4 mr-2" />
+                Seu Social Media Online. Tudo o que você precisa em uma única plataforma.
+              </div>
+              
+              <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent mb-8">
+                Crie Conteúdo
+                <br />
+                com IA em 30 Segundos
+              </h1>
+              
+              <p className="text-xl text-gray-600 mb-12 max-w-2xl mx-auto lg:mx-0">
+                A plataforma mais completa para criadores digitais. Crie posts, carrosséis, vídeos, roteiros, bios e muito mais com inteligência artificial — em minutos.
+              </p>
+              
+              <p className="text-lg text-gray-500 mb-8 max-w-2xl mx-auto lg:mx-0">
+                Comece gratuitamente hoje mesmo. Use recursos essenciais com limitações e experimente o poder da IA.
+              </p>
+              
+              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start items-center mb-12">
+                <Button asChild size="lg" className="bg-purple-600 hover:bg-purple-700 text-white px-8 py-4 text-lg">
+                  <Link to="/register">
+                    Comece Grátis
+                    <ArrowRight className="ml-2 h-5 w-5" />
+                  </Link>
+                </Button>
+                <Button variant="outline" size="lg" className="px-8 py-4 text-lg">
+                  <Link to="/pricing">Ver Planos</Link>
+                </Button>
+              </div>
+            </div>
+
+            {/* Right Side - Dra. Ana Character */}
+            <div className="flex justify-center lg:justify-end">
+              <div className="relative">
+                {/* Dra. Ana Illustration */}
+                <div className="w-80 h-96 bg-gradient-to-b from-blue-100 to-purple-100 rounded-3xl flex items-end justify-center overflow-hidden relative">
+                  {/* Background elements */}
+                  <div className="absolute top-6 left-6 w-12 h-12 bg-purple-200 rounded-full opacity-50"></div>
+                  <div className="absolute top-16 right-8 w-8 h-8 bg-blue-200 rounded-full opacity-50"></div>
+                  <div className="absolute bottom-20 left-4 w-6 h-6 bg-pink-200 rounded-full opacity-50"></div>
+                  
+                  {/* Dra. Ana Character - represented as styled elements */}
+                  <div className="relative z-10 mb-8">
+                    {/* Head */}
+                    <div className="w-24 h-28 bg-gradient-to-b from-yellow-100 to-yellow-200 rounded-full mx-auto mb-2 relative">
+                      {/* Hair */}
+                      <div className="absolute -top-2 -left-2 w-28 h-20 bg-gradient-to-b from-yellow-600 to-yellow-500 rounded-full"></div>
+                      {/* Face */}
+                      <div className="absolute top-6 left-1/2 transform -translate-x-1/2">
+                        {/* Eyes */}
+                        <div className="flex gap-3 mb-2">
+                          <div className="w-2 h-2 bg-blue-800 rounded-full"></div>
+                          <div className="w-2 h-2 bg-blue-800 rounded-full"></div>
+                        </div>
+                        {/* Smile */}
+                        <div className="w-4 h-2 border-b-2 border-pink-600 rounded-full"></div>
+                      </div>
+                    </div>
+                    
+                    {/* Body - Lab Coat */}
+                    <div className="w-32 h-40 bg-white rounded-t-3xl mx-auto relative shadow-lg">
+                      {/* Stethoscope */}
+                      <div className="absolute top-4 left-1/2 transform -translate-x-1/2 w-1 h-8 bg-gray-700"></div>
+                      <div className="absolute top-12 left-1/2 transform -translate-x-1/2 w-6 h-6 border-2 border-gray-700 rounded-full"></div>
+                      
+                      {/* Arms pointing */}
+                      <div className="absolute top-8 -right-6 w-12 h-3 bg-yellow-200 rounded-full transform rotate-12"></div>
+                      <div className="absolute top-12 -right-8 w-3 h-3 bg-yellow-200 rounded-full"></div>
+                    </div>
+                  </div>
+                  
+                  {/* Floating elements around Dra. Ana */}
+                  <div className="absolute top-12 right-12 animate-bounce">
+                    <div className="w-8 h-8 bg-purple-200 rounded-lg flex items-center justify-center">
+                      <Sparkles className="w-4 h-4 text-purple-600" />
+                    </div>
+                  </div>
+                  <div className="absolute bottom-32 left-8 animate-pulse">
+                    <div className="w-6 h-6 bg-blue-200 rounded-lg flex items-center justify-center">
+                      <BarChart3 className="w-3 h-3 text-blue-600" />
+                    </div>
+                  </div>
+                </div>
+                
+                {/* Speech Bubble */}
+                <div className="absolute -left-16 top-8 bg-white rounded-xl p-4 shadow-lg max-w-48">
+                  <p className="text-sm text-gray-700 font-medium">
+                    "2 minutos por dia e tenho conteúdo para a semana toda!"
+                  </p>
+                  <div className="absolute bottom-0 right-8 w-0 h-0 border-l-4 border-l-transparent border-r-4 border-r-transparent border-t-4 border-t-white transform translate-y-full"></div>
+                </div>
+              </div>
+            </div>
           </div>
 
-          {/* Video Demo */}
-          <div className="relative max-w-4xl mx-auto">
-            <div className="relative bg-gray-900 rounded-2xl overflow-hidden shadow-2xl">
-              <video
-                ref={videoRef}
-                className="w-full h-auto"
-                poster="/placeholder.svg"
-                preload="metadata"
-              >
-                <source src="/demo-video.mp4" type="video/mp4" />
-                Seu navegador não suporta o elemento de vídeo.
-              </video>
-              
-              <div className="absolute inset-0 flex items-center justify-center bg-black/20">
-                <Button
-                  onClick={handlePlayVideo}
-                  size="lg"
-                  className="bg-white/10 backdrop-blur-sm hover:bg-white/20 text-white border border-white/20"
+          {/* Video Demo Section */}
+          <div className="mt-16">
+            <div className="text-center mb-8">
+              <h3 className="text-2xl font-bold mb-4">👉 Ver Demo da Plataforma</h3>
+            </div>
+            <div className="relative max-w-4xl mx-auto">
+              <div className="relative bg-gray-900 rounded-2xl overflow-hidden shadow-2xl">
+                <video
+                  ref={videoRef}
+                  className="w-full h-auto"
+                  poster="/placeholder.svg"
+                  preload="metadata"
                 >
-                  <Play className="h-6 w-6 mr-2" />
-                  {isPlaying ? 'Pausar' : 'Ver Demo'}
-                </Button>
+                  <source src="/demo-video.mp4" type="video/mp4" />
+                  Seu navegador não suporta o elemento de vídeo.
+                </video>
+                
+                <div className="absolute inset-0 flex items-center justify-center bg-black/20">
+                  <Button
+                    onClick={handlePlayVideo}
+                    size="lg"
+                    className="bg-white/10 backdrop-blur-sm hover:bg-white/20 text-white border border-white/20"
+                  >
+                    <Play className="h-6 w-6 mr-2" />
+                    {isPlaying ? 'Pausar' : 'Ver Demo'}
+                  </Button>
+                </div>
               </div>
             </div>
           </div>
@@ -113,11 +189,8 @@ export default function Index() {
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-gray-900 mb-4">
-              Todas as Ferramentas que Você Precisa
+              🚀 Tudo que você pode fazer com o AutoPost AI
             </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Uma plataforma completa para criação, edição, agendamento e análise de conteúdo para redes sociais.
-            </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -125,11 +198,11 @@ export default function Index() {
             <Card className="border-0 shadow-lg hover:shadow-xl transition-shadow">
               <CardHeader>
                 <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-4">
-                  <Sparkles className="h-6 w-6 text-purple-600" />
+                  <Brain className="h-6 w-6 text-purple-600" />
                 </div>
-                <CardTitle>Geração com IA</CardTitle>
+                <CardTitle>🧠 Geração de Conteúdo com IA</CardTitle>
                 <CardDescription>
-                  Crie posts, carrosséis, legendas e roteiros com inteligência artificial avançada.
+                  Crie posts, legendas, carrosséis e roteiros em segundos com IA avançada.
                 </CardDescription>
               </CardHeader>
             </Card>
@@ -140,9 +213,9 @@ export default function Index() {
                 <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
                   <Image className="h-6 w-6 text-blue-600" />
                 </div>
-                <CardTitle>Templates Profissionais</CardTitle>
+                <CardTitle>🎨 Templates e Mockups Otimizados</CardTitle>
                 <CardDescription>
-                  Mockups personalizáveis com designs otimizados para cada rede social.
+                  Modelos prontos para todas as redes sociais — personalizáveis e profissionais.
                 </CardDescription>
               </CardHeader>
             </Card>
@@ -153,9 +226,9 @@ export default function Index() {
                 <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mb-4">
                   <Calendar className="h-6 w-6 text-green-600" />
                 </div>
-                <CardTitle>Agendamento Inteligente</CardTitle>
+                <CardTitle>📅 Agendamento Inteligente + Cross-posting</CardTitle>
                 <CardDescription>
-                  Programe suas postagens para múltiplas plataformas no melhor horário.
+                  Agende postagens para múltiplas plataformas com um clique e nos horários ideais.
                 </CardDescription>
               </CardHeader>
             </Card>
@@ -166,9 +239,9 @@ export default function Index() {
                 <div className="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center mb-4">
                   <BarChart3 className="h-6 w-6 text-yellow-600" />
                 </div>
-                <CardTitle>Analytics Avançados</CardTitle>
+                <CardTitle>📊 Analytics Avançado</CardTitle>
                 <CardDescription>
-                  Monitore o desempenho do seu conteúdo e otimize sua estratégia.
+                  Entenda o que funciona com relatórios completos e sugestões de melhoria.
                 </CardDescription>
               </CardHeader>
             </Card>
@@ -179,22 +252,9 @@ export default function Index() {
                 <div className="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center mb-4">
                   <FileText className="h-6 w-6 text-red-600" />
                 </div>
-                <CardTitle>Biblioteca Organizada</CardTitle>
+                <CardTitle>🗂️ Biblioteca de Conteúdo</CardTitle>
                 <CardDescription>
-                  Organize e reutilize todo seu conteúdo em um só lugar.
-                </CardDescription>
-              </CardHeader>
-            </Card>
-
-            {/* Múltiplas Plataformas */}
-            <Card className="border-0 shadow-lg hover:shadow-xl transition-shadow">
-              <CardHeader>
-                <div className="w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center mb-4">
-                  <Globe className="h-6 w-6 text-indigo-600" />
-                </div>
-                <CardTitle>Múltiplas Plataformas</CardTitle>
-                <CardDescription>
-                  Publique simultaneamente no Instagram, Facebook, LinkedIn e mais.
+                  Salve, edite, organize e reutilize tudo em um só lugar.
                 </CardDescription>
               </CardHeader>
             </Card>
@@ -202,137 +262,104 @@ export default function Index() {
         </div>
       </section>
 
-      {/* FERRAMENTAS ADICIONAIS */}
+      {/* FERRAMENTAS EXCLUSIVAS DE IA */}
       <section className="py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-gray-900 mb-4">
-              FERRAMENTAS ADICIONAIS
+              🛠️ Ferramentas Exclusivas de IA
             </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Funcionalidades avançadas para potencializar sua presença digital e otimizar sua estratégia de conteúdo.
-            </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {/* Resumir Vídeo */}
-            <Card className="border-0 shadow-lg hover:shadow-xl transition-shadow">
-              <CardHeader className="text-center">
-                <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Video className="h-8 w-8 text-red-600" />
-                </div>
-                <CardTitle>Resumir Vídeo</CardTitle>
-                <CardDescription>
-                  Extraia insights e resumos de vídeos do YouTube ou uploads da galeria
-                </CardDescription>
-                {/* Mockup */}
-                <div className="mt-4 p-4 bg-gradient-to-br from-red-50 to-red-100 rounded-lg">
-                  <div className="bg-white p-3 rounded shadow-sm">
-                    <div className="w-full h-20 bg-red-200 rounded mb-2 flex items-center justify-center">
-                      <Play className="h-6 w-6 text-red-600" />
-                    </div>
-                    <div className="space-y-1">
-                      <div className="h-2 bg-gray-200 rounded w-full"></div>
-                      <div className="h-2 bg-gray-200 rounded w-3/4"></div>
-                      <div className="h-2 bg-gray-200 rounded w-1/2"></div>
-                    </div>
-                  </div>
-                </div>
-              </CardHeader>
-            </Card>
-
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {/* Detector de Tendências */}
             <Card className="border-0 shadow-lg hover:shadow-xl transition-shadow">
               <CardHeader className="text-center">
-                <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <TrendingUp className="h-8 w-8 text-blue-600" />
+                <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <TrendingUp className="h-8 w-8 text-red-600" />
                 </div>
-                <CardTitle>Detector de Tendências</CardTitle>
+                <CardTitle>🔥 Detector de Tendências em Tempo Real</CardTitle>
                 <CardDescription>
-                  Descubra tendências em tempo real para criar conteúdo viral
+                  Veja o que está bombando no seu nicho — direto de TikTok, Reels, Shorts, Twitter e Google Trends.
                 </CardDescription>
-                {/* Mockup */}
-                <div className="mt-4 p-4 bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg">
-                  <div className="bg-white p-3 rounded shadow-sm">
-                    <div className="flex items-center space-x-2 mb-3">
-                      <div className="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
-                      <span className="text-xs font-medium">Trending Now</span>
-                    </div>
-                    <div className="space-y-2">
-                      <div className="flex justify-between items-center">
-                        <div className="h-2 bg-blue-200 rounded w-2/3"></div>
-                        <span className="text-xs text-green-600">↗ 245%</span>
-                      </div>
-                      <div className="flex justify-between items-center">
-                        <div className="h-2 bg-blue-200 rounded w-1/2"></div>
-                        <span className="text-xs text-green-600">↗ 189%</span>
-                      </div>
-                      <div className="flex justify-between items-center">
-                        <div className="h-2 bg-blue-200 rounded w-3/4"></div>
-                        <span className="text-xs text-green-600">↗ 156%</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
               </CardHeader>
             </Card>
 
-            {/* Otimizador de Bio */}
+            {/* Shorts e Reels */}
+            <Card className="border-0 shadow-lg hover:shadow-xl transition-shadow">
+              <CardHeader className="text-center">
+                <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Video className="h-8 w-8 text-blue-600" />
+                </div>
+                <CardTitle>🎬 Shorts e Reels Editados por IA</CardTitle>
+                <CardDescription>
+                  Suba um vídeo, e a IA adiciona trilha sonora, legenda automática e ajuste de cor.
+                </CardDescription>
+              </CardHeader>
+            </Card>
+
+            {/* Roteiros */}
             <Card className="border-0 shadow-lg hover:shadow-xl transition-shadow">
               <CardHeader className="text-center">
                 <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Target className="h-8 w-8 text-green-600" />
+                  <FileText className="h-8 w-8 text-green-600" />
                 </div>
-                <CardTitle>Otimizador de Bio</CardTitle>
+                <CardTitle>📝 Roteiros Instantâneos para Vídeos</CardTitle>
                 <CardDescription>
-                  Crie bios otimizadas para diferentes plataformas sociais
+                  Defina tema e nicho, e receba roteiros prontos com gancho, conteúdo e chamada final.
                 </CardDescription>
-                {/* Mockup */}
-                <div className="mt-4 p-4 bg-gradient-to-br from-green-50 to-green-100 rounded-lg">
-                  <div className="bg-white p-3 rounded shadow-sm">
-                    <div className="flex items-center space-x-2 mb-3">
-                      <div className="w-8 h-8 bg-green-200 rounded-full"></div>
-                      <div className="flex-1">
-                        <div className="h-2 bg-gray-200 rounded mb-1"></div>
-                        <div className="h-1 bg-gray-200 rounded w-2/3"></div>
-                      </div>
-                    </div>
-                    <div className="space-y-1">
-                      <div className="h-1 bg-green-200 rounded w-full"></div>
-                      <div className="h-1 bg-green-200 rounded w-3/4"></div>
-                      <div className="h-1 bg-green-200 rounded w-1/2"></div>
-                    </div>
-                  </div>
-                </div>
               </CardHeader>
             </Card>
 
-            {/* Gerador de eBook/PDF */}
+            {/* E-books */}
             <Card className="border-0 shadow-lg hover:shadow-xl transition-shadow">
               <CardHeader className="text-center">
                 <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
                   <BookOpen className="h-8 w-8 text-purple-600" />
                 </div>
-                <CardTitle>Gerador de eBook/PDF</CardTitle>
+                <CardTitle>📘 Gerador de E-books, PDFs e Apresentações</CardTitle>
                 <CardDescription>
-                  Crie materiais educativos completos e apresentações profissionais
+                  Insira um tema e receba um material visual completo com estrutura, conteúdo e design prontos.
                 </CardDescription>
-                {/* Mockup */}
-                <div className="mt-4 p-4 bg-gradient-to-br from-purple-50 to-purple-100 rounded-lg">
-                  <div className="bg-white p-3 rounded shadow-sm">
-                    <div className="bg-purple-200 rounded mb-2 h-16 flex items-center justify-center">
-                      <FileText className="h-6 w-6 text-purple-600" />
-                    </div>
-                    <div className="space-y-1">
-                      <div className="h-2 bg-gray-200 rounded w-full"></div>
-                      <div className="h-2 bg-gray-200 rounded w-4/5"></div>
-                      <div className="h-2 bg-gray-200 rounded w-3/5"></div>
-                    </div>
-                    <div className="mt-2 text-center">
-                      <div className="h-1 bg-purple-200 rounded w-1/2 mx-auto"></div>
-                    </div>
-                  </div>
+              </CardHeader>
+            </Card>
+
+            {/* Bio Optimizer */}
+            <Card className="border-0 shadow-lg hover:shadow-xl transition-shadow">
+              <CardHeader className="text-center">
+                <div className="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Target className="h-8 w-8 text-indigo-600" />
                 </div>
+                <CardTitle>👤 Otimizador de Bio</CardTitle>
+                <CardDescription>
+                  A IA cria bios otimizadas para Instagram, TikTok, Twitter e LinkedIn com base na sua persona.
+                </CardDescription>
+              </CardHeader>
+            </Card>
+
+            {/* Thumbnails */}
+            <Card className="border-0 shadow-lg hover:shadow-xl transition-shadow">
+              <CardHeader className="text-center">
+                <div className="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Image className="h-8 w-8 text-orange-600" />
+                </div>
+                <CardTitle>🖼️ Criador de Thumbnails para YouTube</CardTitle>
+                <CardDescription>
+                  Use um prompt ou imagens para gerar thumbnails profissionais que aumentam os cliques.
+                </CardDescription>
+              </CardHeader>
+            </Card>
+
+            {/* Resumo de Vídeos */}
+            <Card className="border-0 shadow-lg hover:shadow-xl transition-shadow">
+              <CardHeader className="text-center">
+                <div className="w-16 h-16 bg-pink-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Play className="h-8 w-8 text-pink-600" />
+                </div>
+                <CardTitle>📽️ Resumo Inteligente de Vídeos</CardTitle>
+                <CardDescription>
+                  Cole um link de vídeo ou envie o seu → receba o resumo + sugestões de conteúdo.
+                </CardDescription>
               </CardHeader>
             </Card>
           </div>
@@ -344,11 +371,8 @@ export default function Index() {
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-gray-900 mb-4">
-              Mais de 10.000 Criadores Confiam em Nós
+              🌟 Avaliações de Quem Já Usa
             </h2>
-            <p className="text-xl text-gray-600">
-              Veja o que nossos usuários estão dizendo sobre a plataforma
-            </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -360,15 +384,15 @@ export default function Index() {
                   ))}
                 </div>
                 <p className="text-gray-600 mb-4">
-                  "Revolucionou minha criação de conteúdo. Agora consigo produzir 10x mais em metade do tempo!"
+                  "Economizei horas de trabalho! O AutoPost AI virou meu braço direito."
                 </p>
                 <div className="flex items-center">
                   <div className="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center mr-3">
                     <Users className="h-5 w-5 text-purple-600" />
                   </div>
                   <div>
-                    <div className="font-semibold">Maria Silva</div>
-                    <div className="text-sm text-gray-500">Influenciadora Digital</div>
+                    <div className="font-semibold">Juliana M.</div>
+                    <div className="text-sm text-gray-500">Social Media</div>
                   </div>
                 </div>
               </CardContent>
@@ -382,15 +406,15 @@ export default function Index() {
                   ))}
                 </div>
                 <p className="text-gray-600 mb-4">
-                  "A qualidade dos conteúdos gerados é impressionante. Meu engajamento aumentou 300%!"
+                  "Fiz meu primeiro ebook em 3 minutos. Inacreditável."
                 </p>
                 <div className="flex items-center">
                   <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center mr-3">
-                    <TrendingUp className="h-5 w-5 text-blue-600" />
+                    <BookOpen className="h-5 w-5 text-blue-600" />
                   </div>
                   <div>
-                    <div className="font-semibold">João Santos</div>
-                    <div className="text-sm text-gray-500">Empreendedor</div>
+                    <div className="font-semibold">Camila R.</div>
+                    <div className="text-sm text-gray-500">Produtora de Conteúdo</div>
                   </div>
                 </div>
               </CardContent>
@@ -404,17 +428,122 @@ export default function Index() {
                   ))}
                 </div>
                 <p className="text-gray-600 mb-4">
-                  "Essencial para quem trabalha com marketing digital. Não consigo mais viver sem!"
+                  "Usei a versão gratuita e depois não pensei duas vezes: assinei o plano completo."
                 </p>
                 <div className="flex items-center">
                   <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center mr-3">
                     <Heart className="h-5 w-5 text-green-600" />
                   </div>
                   <div>
-                    <div className="font-semibold">Ana Costa</div>
-                    <div className="text-sm text-gray-500">Marketing Manager</div>
+                    <div className="font-semibold">Rafael D.</div>
+                    <div className="text-sm text-gray-500">Coach Digital</div>
                   </div>
                 </div>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </section>
+
+      {/* Pricing Section */}
+      <section className="py-20 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">
+              💳 Planos e Preços
+            </h2>
+            <p className="text-xl text-gray-600">
+              🧪 Comece Gratuitamente Agora
+            </p>
+            <p className="text-lg text-gray-500 mt-4 max-w-3xl mx-auto">
+              Crie uma conta grátis e experimente os principais recursos da plataforma.
+              Com a versão gratuita, você poderá gerar conteúdo, explorar ferramentas e publicar — com limites de uso.
+              Liberte o poder completo da plataforma com os planos pagos.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+            {/* Plano Free */}
+            <Card className="border-2 border-gray-200 shadow-lg">
+              <CardHeader className="text-center">
+                <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Lock className="h-8 w-8 text-gray-600" />
+                </div>
+                <CardTitle className="text-2xl">Plano Free</CardTitle>
+                <div className="text-3xl font-bold text-gray-900 mt-2">Grátis</div>
+              </CardHeader>
+              <CardContent>
+                <ul className="space-y-3 text-gray-600">
+                  <li className="flex items-center">
+                    <CheckCircle className="h-5 w-5 text-green-500 mr-2" />
+                    Geração limitada de conteúdo
+                  </li>
+                  <li className="flex items-center">
+                    <CheckCircle className="h-5 w-5 text-green-500 mr-2" />
+                    Templates básicos
+                  </li>
+                  <li className="flex items-center">
+                    <CheckCircle className="h-5 w-5 text-green-500 mr-2" />
+                    1 rede social conectada
+                  </li>
+                </ul>
+              </CardContent>
+            </Card>
+
+            {/* Plano Pro */}
+            <Card className="border-2 border-purple-500 shadow-xl relative">
+              <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-purple-500 text-white px-4 py-1 rounded-full text-sm font-medium">
+                Mais Popular
+              </div>
+              <CardHeader className="text-center">
+                <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Rocket className="h-8 w-8 text-purple-600" />
+                </div>
+                <CardTitle className="text-2xl">Plano Pro</CardTitle>
+                <div className="text-3xl font-bold text-purple-600 mt-2">R$49/mês</div>
+              </CardHeader>
+              <CardContent>
+                <ul className="space-y-3 text-gray-600">
+                  <li className="flex items-center">
+                    <CheckCircle className="h-5 w-5 text-green-500 mr-2" />
+                    Conteúdo ilimitado
+                  </li>
+                  <li className="flex items-center">
+                    <CheckCircle className="h-5 w-5 text-green-500 mr-2" />
+                    Agendamento e cross-posting
+                  </li>
+                  <li className="flex items-center">
+                    <CheckCircle className="h-5 w-5 text-green-500 mr-2" />
+                    Biblioteca, análises e todas as ferramentas de IA
+                  </li>
+                </ul>
+              </CardContent>
+            </Card>
+
+            {/* Plano Agência */}
+            <Card className="border-2 border-blue-500 shadow-lg">
+              <CardHeader className="text-center">
+                <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Users className="h-8 w-8 text-blue-600" />
+                </div>
+                <CardTitle className="text-2xl">Plano Agência</CardTitle>
+                <div className="text-3xl font-bold text-blue-600 mt-2">R$129/mês</div>
+              </CardHeader>
+              <CardContent>
+                <ul className="space-y-3 text-gray-600">
+                  <li className="flex items-center">
+                    <CheckCircle className="h-5 w-5 text-green-500 mr-2" />
+                    Multiusuário
+                  </li>
+                  <li className="flex items-center">
+                    <CheckCircle className="h-5 w-5 text-green-500 mr-2" />
+                    Workspaces separados
+                  </li>
+                  <li className="flex items-center">
+                    <CheckCircle className="h-5 w-5 text-green-500 mr-2" />
+                    Suporte prioritário
+                  </li>
+                </ul>
               </CardContent>
             </Card>
           </div>
@@ -433,12 +562,12 @@ export default function Index() {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button asChild size="lg" className="bg-white text-purple-600 hover:bg-gray-100 px-8 py-4 text-lg">
               <Link to="/register">
-                Começar Agora - É Grátis
+                ➡️ Comece Grátis
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Link>
             </Button>
             <Button variant="outline" size="lg" className="border-white text-white hover:bg-white hover:text-purple-600 px-8 py-4 text-lg">
-              <Link to="/pricing">Ver Demonstração</Link>
+              <Link to="/pricing">➡️ Ver Planos</Link>
             </Button>
           </div>
         </div>
