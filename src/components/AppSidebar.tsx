@@ -1,4 +1,3 @@
-
 import { 
   Calendar, 
   Home, 
@@ -105,7 +104,7 @@ const aiToolsItems = [
     icon: Users,
   },
   {
-    title: "Gerar eBook/PDF",
+    title: "Gerar Apresentação",
     url: "/content-generator",
     icon: BookOpen,
   },
