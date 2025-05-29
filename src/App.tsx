@@ -33,6 +33,7 @@ import MockupGallery from "./pages/MockupGallery";
 import MockupPreview from "./pages/MockupPreview";
 import MockupEditor from "./pages/MockupEditor";
 import ConnectPlatforms from "./pages/ConnectPlatforms";
+import DigitalProducts from "./pages/DigitalProducts";
 
 const queryClient = new QueryClient();
 
@@ -61,6 +62,7 @@ const App = () => (
           <Route path="/trend-detector" element={<TrendDetector />} />
           <Route path="/bio-optimizer" element={<BioOptimizer />} />
           <Route path="/content-generator" element={<ContentGenerator />} />
+          <Route path="/digital-products" element={<DigitalProducts />} />
           <Route path="/content" element={<Content />} />
           <Route path="/content/:id" element={<ViewContent />} />
           <Route path="/schedule" element={<Schedule />} />

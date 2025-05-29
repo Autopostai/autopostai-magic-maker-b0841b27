@@ -1,4 +1,3 @@
-
 import { useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -44,10 +43,6 @@ export default function Index() {
               
               <p className="text-xl text-gray-600 mb-12 max-w-2xl mx-auto lg:mx-0">
                 A plataforma mais completa para criadores digitais. Crie posts, carrosséis, vídeos, roteiros, bios e muito mais com inteligência artificial — em minutos.
-              </p>
-              
-              <p className="text-lg text-gray-500 mb-8 max-w-2xl mx-auto lg:mx-0">
-                Comece gratuitamente hoje mesmo. Use recursos essenciais com limitações e experimente o poder da IA.
               </p>
               
               <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start items-center mb-12">

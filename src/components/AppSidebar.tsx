@@ -18,7 +18,8 @@ import {
   BookOpen,
   PlayCircle,
   Youtube,
-  Megaphone
+  Megaphone,
+  Package
 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import {
@@ -107,6 +108,11 @@ const aiToolsItems = [
     title: "Gerar eBook/PDF",
     url: "/content-generator",
     icon: BookOpen,
+  },
+  {
+    title: "Produtos Digitais",
+    url: "/digital-products",
+    icon: Package,
   },
 ];
 
