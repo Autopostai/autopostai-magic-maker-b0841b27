@@ -53,70 +53,29 @@ export default function Index() {
                   </Link>
                 </Button>
                 <Button variant="outline" size="lg" className="px-8 py-4 text-lg">
-                  <Link to="/pricing">Ver Planos</Link>
+                  <Link to="/settings">Ver Planos</Link>
                 </Button>
               </div>
             </div>
 
-            {/* Right Side - Dra. Ana Character */}
+            {/* Right Side - Doctor Image */}
             <div className="flex justify-center lg:justify-end">
               <div className="relative">
-                {/* Dra. Ana Illustration */}
-                <div className="w-80 h-96 bg-gradient-to-b from-blue-100 to-purple-100 rounded-3xl flex items-end justify-center overflow-hidden relative">
-                  {/* Background elements */}
-                  <div className="absolute top-6 left-6 w-12 h-12 bg-purple-200 rounded-full opacity-50"></div>
-                  <div className="absolute top-16 right-8 w-8 h-8 bg-blue-200 rounded-full opacity-50"></div>
-                  <div className="absolute bottom-20 left-4 w-6 h-6 bg-pink-200 rounded-full opacity-50"></div>
+                {/* Doctor Image */}
+                <div className="relative">
+                  <img 
+                    src="/lovable-uploads/dff2e3f0-a7c9-4e72-a52b-5b2ef799e069.png" 
+                    alt="Doutora profissional sorrindo" 
+                    className="w-80 h-auto rounded-3xl shadow-2xl"
+                  />
                   
-                  {/* Dra. Ana Character - represented as styled elements */}
-                  <div className="relative z-10 mb-8">
-                    {/* Head */}
-                    <div className="w-24 h-28 bg-gradient-to-b from-yellow-100 to-yellow-200 rounded-full mx-auto mb-2 relative">
-                      {/* Hair */}
-                      <div className="absolute -top-2 -left-2 w-28 h-20 bg-gradient-to-b from-yellow-600 to-yellow-500 rounded-full"></div>
-                      {/* Face */}
-                      <div className="absolute top-6 left-1/2 transform -translate-x-1/2">
-                        {/* Eyes */}
-                        <div className="flex gap-3 mb-2">
-                          <div className="w-2 h-2 bg-blue-800 rounded-full"></div>
-                          <div className="w-2 h-2 bg-blue-800 rounded-full"></div>
-                        </div>
-                        {/* Smile */}
-                        <div className="w-4 h-2 border-b-2 border-pink-600 rounded-full"></div>
-                      </div>
-                    </div>
-                    
-                    {/* Body - Lab Coat */}
-                    <div className="w-32 h-40 bg-white rounded-t-3xl mx-auto relative shadow-lg">
-                      {/* Stethoscope */}
-                      <div className="absolute top-4 left-1/2 transform -translate-x-1/2 w-1 h-8 bg-gray-700"></div>
-                      <div className="absolute top-12 left-1/2 transform -translate-x-1/2 w-6 h-6 border-2 border-gray-700 rounded-full"></div>
-                      
-                      {/* Arms pointing */}
-                      <div className="absolute top-8 -right-6 w-12 h-3 bg-yellow-200 rounded-full transform rotate-12"></div>
-                      <div className="absolute top-12 -right-8 w-3 h-3 bg-yellow-200 rounded-full"></div>
-                    </div>
+                  {/* Speech Bubble */}
+                  <div className="absolute -left-16 top-8 bg-white rounded-xl p-4 shadow-lg max-w-48">
+                    <p className="text-sm text-gray-700 font-medium">
+                      "2 minutos por dia e tenho conteúdo para a semana toda!"
+                    </p>
+                    <div className="absolute bottom-0 right-8 w-0 h-0 border-l-4 border-l-transparent border-r-4 border-r-transparent border-t-4 border-t-white transform translate-y-full"></div>
                   </div>
-                  
-                  {/* Floating elements around Dra. Ana */}
-                  <div className="absolute top-12 right-12 animate-bounce">
-                    <div className="w-8 h-8 bg-purple-200 rounded-lg flex items-center justify-center">
-                      <Sparkles className="w-4 h-4 text-purple-600" />
-                    </div>
-                  </div>
-                  <div className="absolute bottom-32 left-8 animate-pulse">
-                    <div className="w-6 h-6 bg-blue-200 rounded-lg flex items-center justify-center">
-                      <BarChart3 className="w-3 h-3 text-blue-600" />
-                    </div>
-                  </div>
-                </div>
-                
-                {/* Speech Bubble */}
-                <div className="absolute -left-16 top-8 bg-white rounded-xl p-4 shadow-lg max-w-48">
-                  <p className="text-sm text-gray-700 font-medium">
-                    "2 minutos por dia e tenho conteúdo para a semana toda!"
-                  </p>
-                  <div className="absolute bottom-0 right-8 w-0 h-0 border-l-4 border-l-transparent border-r-4 border-r-transparent border-t-4 border-t-white transform translate-y-full"></div>
                 </div>
               </div>
             </div>

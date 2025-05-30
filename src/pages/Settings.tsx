@@ -41,7 +41,7 @@ export default function Settings() {
             </TabsTrigger>
             <TabsTrigger value="billing" className="flex items-center gap-2">
               <CreditCard className="h-4 w-4" />
-              Faturamento
+              Planos
             </TabsTrigger>
           </TabsList>
 
@@ -235,7 +235,7 @@ export default function Settings() {
           <TabsContent value="billing">
             <Card>
               <CardHeader>
-                <CardTitle>Informações de Faturamento</CardTitle>
+                <CardTitle>Planos e Assinatura</CardTitle>
                 <CardDescription>
                   Gerencie seu plano e método de pagamento.
                 </CardDescription>

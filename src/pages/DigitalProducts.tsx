@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -119,6 +118,33 @@ const steps = [
   }
 ];
 
+const designTemplates = [
+  {
+    id: "professional",
+    name: "Profissional",
+    description: "Design clean e corporativo",
+    preview: "/placeholder.svg"
+  },
+  {
+    id: "modern",
+    name: "Moderno",
+    description: "Visual contemporâneo e elegante",
+    preview: "/placeholder.svg"
+  },
+  {
+    id: "creative",
+    name: "Criativo",
+    description: "Design inovador e impactante",
+    preview: "/placeholder.svg"
+  },
+  {
+    id: "minimal",
+    name: "Minimalista",
+    description: "Simplicidade e foco no conteúdo",
+    preview: "/placeholder.svg"
+  }
+];
+
 export default function DigitalProducts() {
   const [currentStep, setCurrentStep] = useState(0);
   const [selectedNiche, setSelectedNiche] = useState("");
@@ -126,6 +152,7 @@ export default function DigitalProducts() {
   const [productTitle, setProductTitle] = useState("");
   const [productDescription, setProductDescription] = useState("");
   const [targetAudience, setTargetAudience] = useState("");
+  const [selectedDesign, setSelectedDesign] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
 
   const handleNextStep = () => {
@@ -145,6 +172,7 @@ export default function DigitalProducts() {
     // Simular geração do produto
     setTimeout(() => {
       setIsGenerating(false);
+      setCurrentStep(4); // Ir para o passo de seleção de design
       console.log("Produto gerado com sucesso!");
     }, 3000);
   };
@@ -154,6 +182,7 @@ export default function DigitalProducts() {
       case 0: return selectedNiche !== "";
       case 1: return selectedProduct !== "";
       case 2: return productTitle !== "" && productDescription !== "";
+      case 4: return selectedDesign !== "";
       default: return true;
     }
   };
@@ -331,7 +360,7 @@ export default function DigitalProducts() {
               </div>
             )}
 
-            {/* Passo 4: Gerar */}
+            {/* Passo 3: Gerar */}
             {currentStep === 3 && (
               <div className="text-center">
                 <h2 className="text-2xl font-bold mb-2">Pronto para Gerar!</h2>
@@ -366,6 +395,34 @@ export default function DigitalProducts() {
                 </Button>
               </div>
             )}
+
+            {/* Passo 4: Escolher Design */}
+            {currentStep === 4 && (
+              <div>
+                <h2 className="text-2xl font-bold mb-2">Escolha o Design</h2>
+                <p className="text-gray-600 mb-6">Selecione o modelo visual para seu produto</p>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {designTemplates.map((template) => (
+                    <Card 
+                      key={template.id}
+                      className={`cursor-pointer transition-all hover:shadow-lg ${
+                        selectedDesign === template.id ? 'ring-2 ring-purple-500 bg-purple-50' : ''
+                      }`}
+                      onClick={() => setSelectedDesign(template.id)}
+                    >
+                      <CardContent className="p-4">
+                        <div className="aspect-video bg-gray-100 rounded-lg mb-3 flex items-center justify-center">
+                          <img src={template.preview} alt={template.name} className="w-full h-full object-cover rounded-lg" />
+                        </div>
+                        <h3 className="font-bold text-lg">{template.name}</h3>
+                        <p className="text-gray-600 text-sm">{template.description}</p>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              </div>
+            )}
           </CardContent>
         </Card>
 
@@ -379,13 +436,24 @@ export default function DigitalProducts() {
             Voltar
           </Button>
           
-          <Button 
-            onClick={handleNextStep}
-            disabled={!canProceed() || currentStep === steps.length - 1}
-            className="bg-purple-600 hover:bg-purple-700"
-          >
-            Próximo
-          </Button>
+          {currentStep < 4 && (
+            <Button 
+              onClick={handleNextStep}
+              disabled={!canProceed()}
+              className="bg-purple-600 hover:bg-purple-700"
+            >
+              {currentStep === 3 ? 'Gerar' : 'Próximo'}
+            </Button>
+          )}
+
+          {currentStep === 4 && (
+            <Button 
+              disabled={!canProceed()}
+              className="bg-purple-600 hover:bg-purple-700"
+            >
+              Finalizar Produto
+            </Button>
+          )}
         </div>
       </div>
     </DashboardLayout>

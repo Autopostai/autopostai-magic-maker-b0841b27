@@ -20,7 +20,6 @@ import Settings from "./pages/Settings";
 import Support from "./pages/Support";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-import Pricing from "./pages/Pricing";
 import ViewContent from "./pages/ViewContent";
 import SelectPlatforms from "./pages/SelectPlatforms";
 import CreateMethod from "./pages/CreateMethod";
@@ -72,7 +71,6 @@ const App = () => (
           <Route path="/support" element={<Support />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/pricing" element={<Pricing />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

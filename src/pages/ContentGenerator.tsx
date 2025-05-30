@@ -94,7 +94,7 @@ export default function ContentGenerator() {
             </Link>
           </Button>
           <div>
-            <h1 className="text-3xl font-bold">Gerador de eBooks e Apresentações</h1>
+            <h1 className="text-3xl font-bold">Gerador de Apresentações</h1>
             <p className="text-gray-600">
               Crie materiais profissionais completos com IA
             </p>
