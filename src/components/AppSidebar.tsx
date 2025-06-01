@@ -1,3 +1,4 @@
+
 import { 
   Calendar, 
   Home, 
@@ -18,7 +19,9 @@ import {
   PlayCircle,
   Youtube,
   Megaphone,
-  Package
+  Package,
+  Clipboard,
+  LineChart
 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import {
@@ -46,6 +49,11 @@ const menuItems = [
     title: "Criar Conteúdo",
     url: "/create",
     icon: PlusCircle,
+  },
+  {
+    title: "Planejamento de Conteúdo",
+    url: "/content-planning",
+    icon: Clipboard,
   },
   {
     title: "Meus Conteúdos",
@@ -120,6 +128,11 @@ const toolsItems = [
     title: "Agendar Posts",
     url: "/create/platforms",
     icon: Clock,
+  },
+  {
+    title: "Métricas",
+    url: "/metrics",
+    icon: LineChart,
   },
   {
     title: "Análises",

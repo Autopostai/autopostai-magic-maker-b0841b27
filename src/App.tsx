@@ -34,6 +34,9 @@ import MockupPreview from "./pages/MockupPreview";
 import MockupEditor from "./pages/MockupEditor";
 import ConnectPlatforms from "./pages/ConnectPlatforms";
 import DigitalProducts from "./pages/DigitalProducts";
+import ContentPlanning from "./pages/ContentPlanning";
+import ContentCalendar from "./pages/ContentCalendar";
+import Metrics from "./pages/Metrics";
 
 const queryClient = new QueryClient();
 
@@ -54,6 +57,9 @@ const App = () => (
           <Route path="/create/platforms" element={<SelectPlatforms />} />
           <Route path="/create/method" element={<CreateMethod />} />
           <Route path="/create/templates" element={<TemplateGallery />} />
+          <Route path="/content-planning" element={<ContentPlanning />} />
+          <Route path="/content-calendar" element={<ContentCalendar />} />
+          <Route path="/metrics" element={<Metrics />} />
           <Route path="/connect-platforms" element={<ConnectPlatforms />} />
           <Route path="/mockup/gallery" element={<MockupGallery />} />
           <Route path="/mockup/preview/:id" element={<MockupPreview />} />
