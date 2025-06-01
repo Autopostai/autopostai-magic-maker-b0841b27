@@ -42,15 +42,15 @@ export default function Index() {
 
               <ul className="text-lg text-gray-600 mb-8 space-y-3 text-left max-w-xl mx-auto lg:mx-0">
                 <li className="flex items-center">
-                  <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
+                  <CheckCircle className="h-5 w-5 text-purple-500 mr-3" />
                   Comece grátis agora
                 </li>
                 <li className="flex items-center">
-                  <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
+                  <CheckCircle className="h-5 w-5 text-purple-500 mr-3" />
                   Geração automática de posts, carrosséis, vídeos e mais
                 </li>
                 <li className="flex items-center">
-                  <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
+                  <CheckCircle className="h-5 w-5 text-purple-500 mr-3" />
                   Use IA ou edite mockups prontos
                 </li>
               </ul>
@@ -103,11 +103,11 @@ export default function Index() {
             Veja em ação como gerar conteúdos prontos com apenas alguns cliques
           </p>
           
-          <div className="relative bg-black rounded-2xl border-2 border-green-500/30 overflow-hidden shadow-2xl">
-            <div className="aspect-video bg-gradient-to-br from-green-600/20 to-purple-600/20 flex items-center justify-center">
+          <div className="relative bg-black rounded-2xl border-2 border-purple-500/30 overflow-hidden shadow-2xl">
+            <div className="aspect-video bg-gradient-to-br from-purple-600/20 to-blue-600/20 flex items-center justify-center">
               <Button 
                 size="lg" 
-                className="bg-green-600 hover:bg-green-700 text-white rounded-full p-6"
+                className="bg-purple-600 hover:bg-purple-700 text-white rounded-full p-6"
                 onClick={handlePlayVideo}
               >
                 <Play className="h-8 w-8 mr-2" />
@@ -126,7 +126,7 @@ export default function Index() {
       </section>
 
       {/* 3. O QUE É A AUTOPOST AI */}
-      <section className="py-20 bg-green-600 text-white">
+      <section className="py-20 bg-purple-600 text-white">
         <div className="max-w-7xl mx-auto px-4">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div>
@@ -163,23 +163,23 @@ export default function Index() {
               </h2>
               <ul className="space-y-4 text-lg text-gray-600">
                 <li className="flex items-center">
-                  <CheckCircle className="h-6 w-6 text-green-500 mr-4" />
+                  <CheckCircle className="h-6 w-6 text-purple-500 mr-4" />
                   Não vende nada, mas quer melhorar seu Instagram
                 </li>
                 <li className="flex items-center">
-                  <CheckCircle className="h-6 w-6 text-green-500 mr-4" />
+                  <CheckCircle className="h-6 w-6 text-purple-500 mr-4" />
                   É criador de conteúdo
                 </li>
                 <li className="flex items-center">
-                  <CheckCircle className="h-6 w-6 text-green-500 mr-4" />
+                  <CheckCircle className="h-6 w-6 text-purple-500 mr-4" />
                   Tem um negócio local
                 </li>
                 <li className="flex items-center">
-                  <CheckCircle className="h-6 w-6 text-green-500 mr-4" />
+                  <CheckCircle className="h-6 w-6 text-purple-500 mr-4" />
                   É social media ou agência
                 </li>
                 <li className="flex items-center">
-                  <CheckCircle className="h-6 w-6 text-green-500 mr-4" />
+                  <CheckCircle className="h-6 w-6 text-purple-500 mr-4" />
                   Tem pouco tempo e precisa de agilidade
                 </li>
               </ul>
@@ -210,10 +210,10 @@ export default function Index() {
               </CardHeader>
             </Card>
 
-            <Card className="bg-white border-green-200 hover:border-green-400 transition-all shadow-lg">
+            <Card className="bg-white border-blue-200 hover:border-blue-400 transition-all shadow-lg">
               <CardHeader className="text-center">
-                <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Layers className="h-8 w-8 text-green-600" />
+                <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Layers className="h-8 w-8 text-blue-600" />
                 </div>
                 <CardTitle className="text-gray-900">Mockups Editáveis</CardTitle>
                 <CardDescription className="text-gray-600">
@@ -222,10 +222,10 @@ export default function Index() {
               </CardHeader>
             </Card>
 
-            <Card className="bg-white border-blue-200 hover:border-blue-400 transition-all shadow-lg">
+            <Card className="bg-white border-purple-200 hover:border-purple-400 transition-all shadow-lg">
               <CardHeader className="text-center">
-                <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <TrendingUp className="h-8 w-8 text-blue-600" />
+                <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <TrendingUp className="h-8 w-8 text-purple-600" />
                 </div>
                 <CardTitle className="text-gray-900">Detector de Tendências</CardTitle>
                 <CardDescription className="text-gray-600">
@@ -234,10 +234,10 @@ export default function Index() {
               </CardHeader>
             </Card>
 
-            <Card className="bg-white border-red-200 hover:border-red-400 transition-all shadow-lg">
+            <Card className="bg-white border-blue-200 hover:border-blue-400 transition-all shadow-lg">
               <CardHeader className="text-center">
-                <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Video className="h-8 w-8 text-red-600" />
+                <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Video className="h-8 w-8 text-blue-600" />
                 </div>
                 <CardTitle className="text-gray-900">Editor de Vídeos Automático</CardTitle>
                 <CardDescription className="text-gray-600">
@@ -246,10 +246,10 @@ export default function Index() {
               </CardHeader>
             </Card>
 
-            <Card className="bg-white border-yellow-200 hover:border-yellow-400 transition-all shadow-lg">
+            <Card className="bg-white border-purple-200 hover:border-purple-400 transition-all shadow-lg">
               <CardHeader className="text-center">
-                <div className="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <FileText className="h-8 w-8 text-yellow-600" />
+                <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <FileText className="h-8 w-8 text-purple-600" />
                 </div>
                 <CardTitle className="text-gray-900">Resumo Inteligente</CardTitle>
                 <CardDescription className="text-gray-600">
@@ -258,10 +258,10 @@ export default function Index() {
               </CardHeader>
             </Card>
 
-            <Card className="bg-white border-green-200 hover:border-green-400 transition-all shadow-lg">
+            <Card className="bg-white border-blue-200 hover:border-blue-400 transition-all shadow-lg">
               <CardHeader className="text-center">
-                <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Calendar className="h-8 w-8 text-green-600" />
+                <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Calendar className="h-8 w-8 text-blue-600" />
                 </div>
                 <CardTitle className="text-gray-900">Agendamento Automático</CardTitle>
                 <CardDescription className="text-gray-600">
@@ -323,16 +323,16 @@ export default function Index() {
       </section>
 
       {/* 7. GARANTIA */}
-      <section className="py-20 bg-green-600">
+      <section className="py-20 bg-purple-600">
         <div className="max-w-4xl mx-auto text-center px-4">
-          <div className="bg-white/10 border border-green-400/30 rounded-2xl p-12">
-            <div className="w-24 h-24 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-6">
+          <div className="bg-white/10 border border-purple-400/30 rounded-2xl p-12">
+            <div className="w-24 h-24 bg-purple-500/20 rounded-full flex items-center justify-center mx-auto mb-6">
               <Shield className="h-12 w-12 text-white" />
             </div>
             <h2 className="text-3xl font-bold text-white mb-4">
-              Teste grátis por 7 dias. Sem compromisso.
+              O teste grátis são 3 dias.
             </h2>
-            <Button asChild size="lg" className="bg-white text-green-600 hover:bg-gray-100 px-8 py-4 text-lg">
+            <Button asChild size="lg" className="bg-white text-purple-600 hover:bg-gray-100 px-8 py-4 text-lg">
               <Link to="/register">
                 Começar grátis
                 <ArrowRight className="ml-2 h-5 w-5" />
@@ -414,7 +414,7 @@ export default function Index() {
               },
               {
                 question: "Preciso pagar algo agora?",
-                answer: "Não! Você pode testar gratuitamente por 7 dias, sem compromisso."
+                answer: "O teste grátis são 3 dias."
               },
               {
                 question: "Posso usar sem entender de design?",
@@ -428,7 +428,7 @@ export default function Index() {
               <Card key={index} className="bg-gray-50 border-gray-200 shadow-lg">
                 <CardHeader>
                   <CardTitle className="text-gray-900 flex items-center">
-                    <CheckCircle className="h-6 w-6 text-green-500 mr-3" />
+                    <CheckCircle className="h-6 w-6 text-purple-500 mr-3" />
                     {faq.question}
                   </CardTitle>
                   <CardDescription className="text-gray-600 ml-9">
