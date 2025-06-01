@@ -25,54 +25,87 @@ export default function Index() {
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-blue-900">
       <Navbar />
       
-      {/* Hero Section */}
-      <section className="pt-32 pb-20 px-4 text-white">
+      {/* 1. HERO SECTION */}
+      <section id="inicio" className="pt-32 pb-20 px-4 text-white">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             {/* Left Side - Content */}
             <div className="text-center lg:text-left">
-              <div className="inline-flex items-center px-4 py-2 bg-purple-600/20 border border-purple-400/30 rounded-full text-purple-300 text-sm font-medium mb-8">
-                <Sparkles className="h-4 w-4 mr-2" />
-                Plataforma completa de criação de conteúdo com IA
-              </div>
-              
               <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-8">
                 Crie Conteúdo com
-                <span className="bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent"> IA em Segundos</span>
+                <span className="bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent"> IA em 30 Segundos</span>
               </h1>
               
-              <p className="text-xl text-gray-300 mb-12 max-w-2xl mx-auto lg:mx-0">
-                Transforme sua criação de conteúdo com nossa plataforma completa de IA. Posts, carrosséis, vídeos, roteiros e muito mais — tudo automatizado para você crescer nas redes sociais.
+              <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto lg:mx-0">
+                A plataforma de criação e gestão de conteúdo mais completa do MUNDO
               </p>
+
+              <ul className="text-lg text-gray-300 mb-8 space-y-3 text-left max-w-xl mx-auto lg:mx-0">
+                <li className="flex items-center">
+                  <CheckCircle className="h-5 w-5 text-green-400 mr-3" />
+                  Comece grátis agora
+                </li>
+                <li className="flex items-center">
+                  <CheckCircle className="h-5 w-5 text-green-400 mr-3" />
+                  Geração automática de posts, carrosséis, vídeos e mais
+                </li>
+                <li className="flex items-center">
+                  <CheckCircle className="h-5 w-5 text-green-400 mr-3" />
+                  Use IA ou edite mockups prontos
+                </li>
+              </ul>
+
+              {/* Formulário */}
+              <Card className="bg-white/10 backdrop-blur-sm border-purple-500/20 max-w-md mx-auto lg:mx-0 mb-8">
+                <CardContent className="p-6">
+                  <div className="space-y-4">
+                    <input 
+                      type="text" 
+                      placeholder="Nome" 
+                      className="w-full px-4 py-3 rounded-lg bg-white/20 border border-purple-300/30 text-white placeholder-gray-300 focus:outline-none focus:border-purple-400"
+                    />
+                    <input 
+                      type="email" 
+                      placeholder="E-mail" 
+                      className="w-full px-4 py-3 rounded-lg bg-white/20 border border-purple-300/30 text-white placeholder-gray-300 focus:outline-none focus:border-purple-400"
+                    />
+                    <input 
+                      type="tel" 
+                      placeholder="WhatsApp" 
+                      className="w-full px-4 py-3 rounded-lg bg-white/20 border border-purple-300/30 text-white placeholder-gray-300 focus:outline-none focus:border-purple-400"
+                    />
+                  </div>
+                </CardContent>
+              </Card>
               
               <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start items-center">
                 <Button asChild size="lg" className="bg-purple-600 hover:bg-purple-700 text-white px-8 py-4 text-lg">
                   <Link to="/register">
-                    Comece Grátis Agora
+                    Começar grátis
                     <ArrowRight className="ml-2 h-5 w-5" />
                   </Link>
                 </Button>
                 <Button variant="outline" size="lg" className="border-purple-400 text-purple-300 hover:bg-purple-600 hover:text-white px-8 py-4 text-lg">
                   <Play className="mr-2 h-5 w-5" />
-                  Ver Demonstração
+                  Ver demonstração
                 </Button>
               </div>
             </div>
 
-            {/* Right Side - Image */}
+            {/* Right Side - Dra. Ana */}
             <div className="flex justify-center lg:justify-end">
               <div className="relative">
                 <div className="relative animate-pulse" style={{ animationDuration: '3s' }}>
                   <img 
                     src="/lovable-uploads/dff2e3f0-a7c9-4e72-a52b-5b2ef799e069.png" 
-                    alt="Criadora de conteúdo" 
+                    alt="Dra. Ana" 
                     className="w-80 h-auto rounded-3xl shadow-2xl transform hover:scale-105 transition-transform duration-700"
                   />
                   
-                  {/* Speech Bubble - Reposicionado */}
-                  <div className="absolute -left-16 top-16 bg-white rounded-xl p-4 shadow-lg max-w-56 animate-bounce border border-purple-200" style={{ animationDuration: '4s' }}>
+                  {/* Speech Bubble */}
+                  <div className="absolute -left-20 top-20 bg-white rounded-xl p-4 shadow-lg max-w-64 animate-bounce border border-purple-200" style={{ animationDuration: '4s' }}>
                     <p className="text-sm text-gray-700 font-medium">
-                      "2 minutos por dia e tenho conteúdo para a semana toda!"
+                      "Em 2 minutos por dia, eu tenho conteúdo planejado para o mês inteiro."
                     </p>
                     <div className="absolute bottom-0 right-8 w-0 h-0 border-l-4 border-l-transparent border-r-4 border-r-transparent border-t-4 border-t-white transform translate-y-full"></div>
                   </div>
@@ -83,460 +116,308 @@ export default function Index() {
         </div>
       </section>
 
-      {/* Stats Section */}
-      <section className="py-20 bg-gray-800/50 backdrop-blur-sm border-t border-purple-500/20">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-            <div>
-              <div className="text-4xl font-bold text-purple-400 mb-2">10K+</div>
-              <div className="text-gray-300">Criadores Ativos</div>
-            </div>
-            <div>
-              <div className="text-4xl font-bold text-purple-400 mb-2">1M+</div>
-              <div className="text-gray-300">Conteúdos Gerados</div>
-            </div>
-            <div>
-              <div className="text-4xl font-bold text-purple-400 mb-2">99%</div>
-              <div className="text-gray-300">Satisfação</div>
-            </div>
-            <div>
-              <div className="text-4xl font-bold text-purple-400 mb-2">24/7</div>
-              <div className="text-gray-300">Suporte</div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Dashboard Overview */}
+      {/* 2. VÍDEO DE INTRODUÇÃO */}
       <section className="py-20 px-4">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-white mb-4">
-              🚀 Dashboard Completo para Criadores
-            </h2>
-            <p className="text-xl text-gray-300">
-              Gerencie todo seu conteúdo em um só lugar
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <Card className="bg-gray-800/50 border-purple-500/20 hover:border-purple-400/40 transition-all">
-              <CardHeader>
-                <div className="w-12 h-12 bg-purple-600/20 rounded-lg flex items-center justify-center mb-4">
-                  <Monitor className="h-6 w-6 text-purple-400" />
-                </div>
-                <CardTitle className="text-white">📊 Dashboard Intuitivo</CardTitle>
-                <CardDescription className="text-gray-300">
-                  Visualize suas métricas, agende conteúdos e monitore performance em tempo real.
-                </CardDescription>
-              </CardHeader>
-            </Card>
-
-            <Card className="bg-gray-800/50 border-purple-500/20 hover:border-purple-400/40 transition-all">
-              <CardHeader>
-                <div className="w-12 h-12 bg-blue-600/20 rounded-lg flex items-center justify-center mb-4">
-                  <FileText className="h-6 w-6 text-blue-400" />
-                </div>
-                <CardTitle className="text-white">📝 Meus Conteúdos</CardTitle>
-                <CardDescription className="text-gray-300">
-                  Organize todos os seus posts, carrosséis, vídeos e materiais em uma biblioteca inteligente.
-                </CardDescription>
-              </CardHeader>
-            </Card>
-
-            <Card className="bg-gray-800/50 border-purple-500/20 hover:border-purple-400/40 transition-all">
-              <CardHeader>
-                <div className="w-12 h-12 bg-green-600/20 rounded-lg flex items-center justify-center mb-4">
-                  <Calendar className="h-6 w-6 text-green-400" />
-                </div>
-                <CardTitle className="text-white">📅 Agendamento Inteligente</CardTitle>
-                <CardDescription className="text-gray-300">
-                  Programe suas publicações para múltiplas plataformas nos melhores horários.
-                </CardDescription>
-              </CardHeader>
-            </Card>
-          </div>
-        </div>
-      </section>
-
-      {/* Content Creation Tools */}
-      <section className="py-20 bg-gray-800/30 backdrop-blur-sm">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-white mb-4">
-              🎨 Criação de Conteúdo Automatizada
-            </h2>
-            <p className="text-xl text-gray-300">
-              Todas as ferramentas que você precisa em um só lugar
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <Card className="bg-gray-800/50 border-purple-500/20 hover:border-purple-400/40 transition-all">
-              <CardHeader className="text-center">
-                <div className="w-16 h-16 bg-red-600/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <MessageSquare className="h-8 w-8 text-red-400" />
-                </div>
-                <CardTitle className="text-white">📱 Posts</CardTitle>
-                <CardDescription className="text-gray-300">
-                  Crie posts envolventes para todas as redes sociais com IA.
-                </CardDescription>
-              </CardHeader>
-            </Card>
-
-            <Card className="bg-gray-800/50 border-purple-500/20 hover:border-purple-400/40 transition-all">
-              <CardHeader className="text-center">
-                <div className="w-16 h-16 bg-blue-600/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Layers className="h-8 w-8 text-blue-400" />
-                </div>
-                <CardTitle className="text-white">🎠 Carrosséis</CardTitle>
-                <CardDescription className="text-gray-300">
-                  Designs profissionais para carrosséis do Instagram e LinkedIn.
-                </CardDescription>
-              </CardHeader>
-            </Card>
-
-            <Card className="bg-gray-800/50 border-purple-500/20 hover:border-purple-400/40 transition-all">
-              <CardHeader className="text-center">
-                <div className="w-16 h-16 bg-yellow-600/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Image className="h-8 w-8 text-yellow-400" />
-                </div>
-                <CardTitle className="text-white">🖼️ Thumbnails</CardTitle>
-                <CardDescription className="text-gray-300">
-                  Thumbnails de alta conversão para YouTube e outras plataformas.
-                </CardDescription>
-              </CardHeader>
-            </Card>
-
-            <Card className="bg-gray-800/50 border-purple-500/20 hover:border-purple-400/40 transition-all">
-              <CardHeader className="text-center">
-                <div className="w-16 h-16 bg-green-600/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Video className="h-8 w-8 text-green-400" />
-                </div>
-                <CardTitle className="text-white">🎬 Vídeos & Roteiros</CardTitle>
-                <CardDescription className="text-gray-300">
-                  Roteiros completos e edição automática de vídeos curtos.
-                </CardDescription>
-              </CardHeader>
-            </Card>
-          </div>
-        </div>
-      </section>
-
-      {/* AI Tools Section */}
-      <section className="py-20">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-white mb-4">
-              🤖 Ferramentas Exclusivas de IA
-            </h2>
-            <p className="text-xl text-gray-300">
-              Tecnologia de ponta para criadores profissionais
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <Card className="bg-gray-800/50 border-purple-500/20 hover:border-purple-400/40 transition-all">
-              <CardHeader className="text-center">
-                <div className="w-16 h-16 bg-purple-600/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Play className="h-8 w-8 text-purple-400" />
-                </div>
-                <CardTitle className="text-white">📽️ Resumir Vídeo</CardTitle>
-                <CardDescription className="text-gray-300">
-                  Extraia insights e crie conteúdo a partir de qualquer vídeo automaticamente.
-                </CardDescription>
-              </CardHeader>
-            </Card>
-
-            <Card className="bg-gray-800/50 border-purple-500/20 hover:border-purple-400/40 transition-all">
-              <CardHeader className="text-center">
-                <div className="w-16 h-16 bg-orange-600/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <TrendingUp className="h-8 w-8 text-orange-400" />
-                </div>
-                <CardTitle className="text-white">🔥 Detector de Tendências</CardTitle>
-                <CardDescription className="text-gray-300">
-                  Descubra o que está bombando no seu nicho em tempo real.
-                </CardDescription>
-              </CardHeader>
-            </Card>
-
-            <Card className="bg-gray-800/50 border-purple-500/20 hover:border-purple-400/40 transition-all">
-              <CardHeader className="text-center">
-                <div className="w-16 h-16 bg-blue-600/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Target className="h-8 w-8 text-blue-400" />
-                </div>
-                <CardTitle className="text-white">👤 Otimizar Bio</CardTitle>
-                <CardDescription className="text-gray-300">
-                  Crie bios otimizadas para todas as suas redes sociais com IA.
-                </CardDescription>
-              </CardHeader>
-            </Card>
-          </div>
-        </div>
-      </section>
-
-      {/* Digital Products */}
-      <section className="py-20 bg-gray-800/30 backdrop-blur-sm">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-white mb-4">
-              📚 Produtos Digitais Completos
-            </h2>
-            <p className="text-xl text-gray-300">
-              Crie materiais profissionais em minutos
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-            <div>
-              <h3 className="text-2xl font-bold text-white mb-6">Gere Apresentações Profissionais</h3>
-              <ul className="space-y-4">
-                <li className="flex items-center text-gray-300">
-                  <CheckCircle className="h-5 w-5 text-green-400 mr-3" />
-                  <span>E-books com design profissional</span>
-                </li>
-                <li className="flex items-center text-gray-300">
-                  <CheckCircle className="h-5 w-5 text-green-400 mr-3" />
-                  <span>Apresentações de slides completas</span>
-                </li>
-                <li className="flex items-center text-gray-300">
-                  <CheckCircle className="h-5 w-5 text-green-400 mr-3" />
-                  <span>Landing pages otimizadas</span>
-                </li>
-                <li className="flex items-center text-gray-300">
-                  <CheckCircle className="h-5 w-5 text-green-400 mr-3" />
-                  <span>Materiais para cursos online</span>
-                </li>
-              </ul>
-              <Button asChild className="mt-6 bg-purple-600 hover:bg-purple-700">
-                <Link to="/content-generator">
-                  Criar Agora
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </Link>
+        <div className="max-w-4xl mx-auto text-center">
+          <h2 className="text-4xl font-bold text-white mb-6">
+            Como funciona a AutoPost AI?
+          </h2>
+          <p className="text-xl text-gray-300 mb-12">
+            Veja em ação como gerar conteúdos prontos com apenas alguns cliques
+          </p>
+          
+          <div className="relative bg-black rounded-2xl border-2 border-purple-500/30 overflow-hidden shadow-2xl">
+            <div className="aspect-video bg-gradient-to-br from-purple-600/20 to-blue-600/20 flex items-center justify-center">
+              <Button 
+                size="lg" 
+                className="bg-purple-600 hover:bg-purple-700 text-white rounded-full p-6"
+                onClick={handlePlayVideo}
+              >
+                <Play className="h-8 w-8 mr-2" />
+                Assistir Demonstração
               </Button>
             </div>
+          </div>
+          
+          <Button asChild size="lg" className="mt-8 bg-purple-600 hover:bg-purple-700 text-white px-8 py-4">
+            <Link to="/dashboard">
+              Ver demonstração
+              <ArrowRight className="ml-2 h-5 w-5" />
+            </Link>
+          </Button>
+        </div>
+      </section>
+
+      {/* 3. O QUE É A AUTOPOST AI */}
+      <section className="py-20 bg-gradient-to-r from-purple-800/50 to-blue-800/50 backdrop-blur-sm">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div>
+              <h2 className="text-4xl font-bold text-white mb-6">
+                O que é a AutoPost AI?
+              </h2>
+              <p className="text-xl text-gray-300 leading-relaxed">
+                Plataforma completa para quem quer crescer nas redes sociais sem perder tempo. 
+                Crie conteúdos de alta performance, mesmo que você não venda nada. 
+                Ideal para criadores, empreendedores e iniciantes.
+              </p>
+            </div>
             <div className="flex justify-center">
-              <div className="w-80 h-64 bg-gradient-to-br from-purple-600/20 to-blue-600/20 rounded-xl flex items-center justify-center border border-purple-500/20">
-                <BookOpen className="h-24 w-24 text-purple-400" />
+              <div className="w-96 h-64 bg-gradient-to-br from-purple-600/20 to-blue-600/20 rounded-xl flex items-center justify-center border border-purple-500/20">
+                <Monitor className="h-32 w-32 text-purple-400" />
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Analytics & Library */}
-      <section className="py-20">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-            <Card className="bg-gray-800/50 border-purple-500/20">
-              <CardHeader>
-                <div className="w-16 h-16 bg-blue-600/20 rounded-full flex items-center justify-center mb-4">
-                  <BarChart className="h-8 w-8 text-blue-400" />
-                </div>
-                <CardTitle className="text-2xl text-white">📊 Análises Detalhadas</CardTitle>
-                <CardDescription className="text-lg text-gray-300">
-                  Monitore o desempenho dos seus conteúdos com relatórios completos e insights acionáveis.
-                </CardDescription>
-              </CardHeader>
-            </Card>
-
-            <Card className="bg-gray-800/50 border-purple-500/20">
-              <CardHeader>
-                <div className="w-16 h-16 bg-green-600/20 rounded-full flex items-center justify-center mb-4">
-                  <Library className="h-8 w-8 text-green-400" />
-                </div>
-                <CardTitle className="text-2xl text-white">📚 Biblioteca Inteligente</CardTitle>
-                <CardDescription className="text-lg text-gray-300">
-                  Organize, reutilize e otimize todo seu conteúdo em uma biblioteca centralizada.
-                </CardDescription>
-              </CardHeader>
-            </Card>
+      {/* 4. FUNCIONA PRA MIM? */}
+      <section className="py-20 px-4">
+        <div className="max-w-6xl mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div className="flex justify-center">
+              <div className="w-96 h-64 bg-gradient-to-br from-purple-600/20 to-blue-600/20 rounded-xl flex items-center justify-center border border-purple-500/20">
+                <Users className="h-32 w-32 text-purple-400" />
+              </div>
+            </div>
+            <div>
+              <h2 className="text-4xl font-bold text-white mb-8">
+                Funciona pra mim?
+              </h2>
+              <ul className="space-y-4 text-lg text-gray-300">
+                <li className="flex items-center">
+                  <CheckCircle className="h-6 w-6 text-green-400 mr-4" />
+                  Não vende nada, mas quer melhorar seu Instagram
+                </li>
+                <li className="flex items-center">
+                  <CheckCircle className="h-6 w-6 text-green-400 mr-4" />
+                  É criador de conteúdo
+                </li>
+                <li className="flex items-center">
+                  <CheckCircle className="h-6 w-6 text-green-400 mr-4" />
+                  Tem um negócio local
+                </li>
+                <li className="flex items-center">
+                  <CheckCircle className="h-6 w-6 text-green-400 mr-4" />
+                  É social media ou agência
+                </li>
+                <li className="flex items-center">
+                  <CheckCircle className="h-6 w-6 text-green-400 mr-4" />
+                  Tem pouco tempo e precisa de agilidade
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Testimonials */}
-      <section className="py-20 bg-gray-800/30 backdrop-blur-sm">
+      {/* 5. OS 7 DIFERENCIAIS DA AUTOPOST AI */}
+      <section id="funcionalidades" className="py-20 bg-gray-800/30 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-white mb-4">
-              🌟 O que nossos usuários dizem
+              Os 7 Diferenciais da AutoPost AI
             </h2>
-            <div className="flex justify-center mb-8">
-              <div className="flex">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="h-8 w-8 text-yellow-400 fill-current" />
-                ))}
-              </div>
-            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <Card className="bg-gradient-to-br from-purple-600/20 to-blue-600/20 border-purple-500/20 hover:border-purple-400/40 transition-all">
+              <CardHeader className="text-center">
+                <div className="w-16 h-16 bg-purple-600/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Brain className="h-8 w-8 text-purple-400" />
+                </div>
+                <CardTitle className="text-white">Criação com IA</CardTitle>
+                <CardDescription className="text-gray-300">
+                  Posts, carrosséis, vídeos e e-books em segundos
+                </CardDescription>
+              </CardHeader>
+            </Card>
+
+            <Card className="bg-gradient-to-br from-green-600/20 to-purple-600/20 border-green-500/20 hover:border-green-400/40 transition-all">
+              <CardHeader className="text-center">
+                <div className="w-16 h-16 bg-green-600/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Layers className="h-8 w-8 text-green-400" />
+                </div>
+                <CardTitle className="text-white">Mockups Editáveis</CardTitle>
+                <CardDescription className="text-gray-300">
+                  Templates prontos para personalizar
+                </CardDescription>
+              </CardHeader>
+            </Card>
+
+            <Card className="bg-gradient-to-br from-blue-600/20 to-purple-600/20 border-blue-500/20 hover:border-blue-400/40 transition-all">
+              <CardHeader className="text-center">
+                <div className="w-16 h-16 bg-blue-600/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <TrendingUp className="h-8 w-8 text-blue-400" />
+                </div>
+                <CardTitle className="text-white">Detector de Tendências</CardTitle>
+                <CardDescription className="text-gray-300">
+                  Veja o que está bombando em seu nicho
+                </CardDescription>
+              </CardHeader>
+            </Card>
+
+            <Card className="bg-gradient-to-br from-red-600/20 to-purple-600/20 border-red-500/20 hover:border-red-400/40 transition-all">
+              <CardHeader className="text-center">
+                <div className="w-16 h-16 bg-red-600/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Video className="h-8 w-8 text-red-400" />
+                </div>
+                <CardTitle className="text-white">Editor de Vídeos Automático</CardTitle>
+                <CardDescription className="text-gray-300">
+                  Suba o vídeo, receba a versão editada
+                </CardDescription>
+              </CardHeader>
+            </Card>
+
+            <Card className="bg-gradient-to-br from-yellow-600/20 to-purple-600/20 border-yellow-500/20 hover:border-yellow-400/40 transition-all">
+              <CardHeader className="text-center">
+                <div className="w-16 h-16 bg-yellow-600/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <FileText className="h-8 w-8 text-yellow-400" />
+                </div>
+                <CardTitle className="text-white">Resumo Inteligente</CardTitle>
+                <CardDescription className="text-gray-300">
+                  Receba o resumo e crie conteúdo com 1 clique
+                </CardDescription>
+              </CardHeader>
+            </Card>
+
+            <Card className="bg-gradient-to-br from-green-600/20 to-blue-600/20 border-green-500/20 hover:border-green-400/40 transition-all">
+              <CardHeader className="text-center">
+                <div className="w-16 h-16 bg-green-600/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Calendar className="h-8 w-8 text-green-400" />
+                </div>
+                <CardTitle className="text-white">Agendamento Automático</CardTitle>
+                <CardDescription className="text-gray-300">
+                  Publique automaticamente em todas as plataformas
+                </CardDescription>
+              </CardHeader>
+            </Card>
+
+            <Card className="bg-gradient-to-br from-purple-600/20 to-pink-600/20 border-purple-500/20 hover:border-purple-400/40 transition-all">
+              <CardHeader className="text-center">
+                <div className="w-16 h-16 bg-purple-600/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <BarChart className="h-8 w-8 text-purple-400" />
+                </div>
+                <CardTitle className="text-white">Dashboard e Desempenho</CardTitle>
+                <CardDescription className="text-gray-300">
+                  Veja o que está funcionando e otimize
+                </CardDescription>
+              </CardHeader>
+            </Card>
+          </div>
+        </div>
+      </section>
+
+      {/* 6. DEPOIMENTOS REAIS */}
+      <section id="depoimentos" className="py-20">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold text-white mb-4">
+              Veja como a AutoPost AI tem transformado o conteúdo de nossos usuários
+            </h2>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
-              { name: "Ana Silva", role: "Criadora de Conteúdo", avatar: "A" },
-              { name: "Carlos Santos", role: "Social Media", avatar: "C" },
-              { name: "Maria Oliveira", role: "Influenciadora", avatar: "M" },
-              { name: "João Costa", role: "Empreendedor", avatar: "J" },
-              { name: "Priscila Lima", role: "Coach", avatar: "P" },
-              { name: "Rafael Mendes", role: "Consultor", avatar: "R" },
-              { name: "Fernanda Rocha", role: "Designer", avatar: "F" },
-              { name: "Lucas Ferreira", role: "YouTuber", avatar: "L" }
-            ].map((person, index) => (
-              <div key={index} className="text-center">
-                <div className="w-20 h-20 bg-gradient-to-br from-purple-500 to-blue-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <span className="text-white font-bold text-xl">{person.avatar}</span>
-                </div>
-                <h4 className="text-white font-semibold">{person.name}</h4>
-                <p className="text-gray-400 text-sm">{person.role}</p>
-              </div>
+              "Eu nunca soube o que postar. Agora tenho conteúdo para o mês todo.",
+              "Uso 10 minutos por semana e meu engajamento triplicou.",
+              "A IA escreve melhor que eu! Economizo horas todo dia.",
+              "Minha agenda nunca mais ficou vazia. Obrigada AutoPost!",
+              "Criei 50 posts em uma tarde. Impossível sem a plataforma.",
+              "Finalmente consigo ser consistente nas redes sociais.",
+              "Meus clientes ficaram impressionados com a qualidade.",
+              "De 100 para 5000 seguidores em 3 meses usando AutoPost."
+            ].map((testimonial, index) => (
+              <Card key={index} className="bg-gray-800/50 border-purple-500/20">
+                <CardContent className="p-6">
+                  <div className="flex justify-center mb-4">
+                    {[...Array(5)].map((_, i) => (
+                      <Star key={i} className="h-5 w-5 text-yellow-400 fill-current" />
+                    ))}
+                  </div>
+                  <p className="text-gray-300 text-center italic">
+                    "{testimonial}"
+                  </p>
+                </CardContent>
+              </Card>
             ))}
           </div>
-
-          <div className="mt-16 text-center">
-            <Card className="bg-gray-800/50 border-purple-500/20 max-w-4xl mx-auto">
-              <CardContent className="p-8">
-                <div className="flex justify-center mb-4">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="h-6 w-6 text-yellow-400 fill-current" />
-                  ))}
-                </div>
-                <p className="text-gray-300 text-lg mb-6 italic">
-                  "Economizei horas de trabalho! O AutoPost AI virou meu braço direito para criação de conteúdo. 
-                  Em poucos minutos tenho posts, carrosséis e até roteiros prontos."
-                </p>
-                <div className="text-white font-semibold">Avaliação média: 4.9/5</div>
-                <div className="text-gray-400">Baseado em mais de 2.000 avaliações</div>
-              </CardContent>
-            </Card>
-          </div>
         </div>
       </section>
 
-      {/* Pricing Section */}
-      <section className="py-20">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-white mb-4">
-              💳 Comece Gratuitamente
-            </h2>
-            <p className="text-xl text-gray-300">
-              Experimente todas as funcionalidades sem compromisso
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-            {/* Plano Free */}
-            <Card className="bg-gray-800/50 border-purple-500/20">
-              <CardHeader className="text-center">
-                <div className="w-16 h-16 bg-gray-600/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Lock className="h-8 w-8 text-gray-400" />
-                </div>
-                <CardTitle className="text-2xl text-white">Plano Free</CardTitle>
-                <div className="text-3xl font-bold text-gray-300 mt-2">Grátis</div>
-              </CardHeader>
-              <CardContent>
-                <ul className="space-y-3 text-gray-300">
-                  <li className="flex items-center">
-                    <CheckCircle className="h-5 w-5 text-green-400 mr-2" />
-                    Geração limitada de conteúdo
-                  </li>
-                  <li className="flex items-center">
-                    <CheckCircle className="h-5 w-5 text-green-400 mr-2" />
-                    Templates básicos
-                  </li>
-                  <li className="flex items-center">
-                    <CheckCircle className="h-5 w-5 text-green-400 mr-2" />
-                    1 rede social conectada
-                  </li>
-                </ul>
-              </CardContent>
-            </Card>
-
-            {/* Plano Pro */}
-            <Card className="bg-gray-800/50 border-purple-500 shadow-xl relative">
-              <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-purple-500 text-white px-4 py-1 rounded-full text-sm font-medium">
-                Mais Popular
-              </div>
-              <CardHeader className="text-center">
-                <div className="w-16 h-16 bg-purple-600/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Rocket className="h-8 w-8 text-purple-400" />
-                </div>
-                <CardTitle className="text-2xl text-white">Plano Pro</CardTitle>
-                <div className="text-3xl font-bold text-purple-400 mt-2">R$49/mês</div>
-              </CardHeader>
-              <CardContent>
-                <ul className="space-y-3 text-gray-300">
-                  <li className="flex items-center">
-                    <CheckCircle className="h-5 w-5 text-green-400 mr-2" />
-                    Conteúdo ilimitado
-                  </li>
-                  <li className="flex items-center">
-                    <CheckCircle className="h-5 w-5 text-green-400 mr-2" />
-                    Agendamento e cross-posting
-                  </li>
-                  <li className="flex items-center">
-                    <CheckCircle className="h-5 w-5 text-green-400 mr-2" />
-                    Todas as ferramentas de IA
-                  </li>
-                </ul>
-              </CardContent>
-            </Card>
-
-            {/* Plano Agência */}
-            <Card className="bg-gray-800/50 border-blue-500/50">
-              <CardHeader className="text-center">
-                <div className="w-16 h-16 bg-blue-600/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Users className="h-8 w-8 text-blue-400" />
-                </div>
-                <CardTitle className="text-2xl text-white">Plano Agência</CardTitle>
-                <div className="text-3xl font-bold text-blue-400 mt-2">R$129/mês</div>
-              </CardHeader>
-              <CardContent>
-                <ul className="space-y-3 text-gray-300">
-                  <li className="flex items-center">
-                    <CheckCircle className="h-5 w-5 text-green-400 mr-2" />
-                    Multiusuário
-                  </li>
-                  <li className="flex items-center">
-                    <CheckCircle className="h-5 w-5 text-green-400 mr-2" />
-                    Workspaces separados
-                  </li>
-                  <li className="flex items-center">
-                    <CheckCircle className="h-5 w-5 text-green-400 mr-2" />
-                    Suporte prioritário
-                  </li>
-                </ul>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-r from-purple-600 to-blue-600">
+      {/* 7. GARANTIA */}
+      <section className="py-20 bg-gradient-to-r from-green-600/20 to-purple-600/20">
         <div className="max-w-4xl mx-auto text-center px-4">
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
-            Pronto para Revolucionar sua Criação de Conteúdo?
-          </h2>
-          <p className="text-xl text-purple-100 mb-8">
-            Junte-se a milhares de criadores que já estão usando IA para crescer nas redes sociais.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button asChild size="lg" className="bg-white text-purple-600 hover:bg-gray-100 px-8 py-4 text-lg">
+          <div className="bg-gray-800/50 border border-green-500/30 rounded-2xl p-12">
+            <div className="w-24 h-24 bg-green-600/20 rounded-full flex items-center justify-center mx-auto mb-6">
+              <Shield className="h-12 w-12 text-green-400" />
+            </div>
+            <h2 className="text-3xl font-bold text-white mb-4">
+              Teste grátis por 7 dias. Sem compromisso.
+            </h2>
+            <Button asChild size="lg" className="bg-green-600 hover:bg-green-700 text-white px-8 py-4 text-lg">
               <Link to="/register">
-                Comece Grátis Agora
+                Começar grátis
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Link>
             </Button>
-            <Button variant="outline" size="lg" className="border-white text-white hover:bg-white hover:text-purple-600 px-8 py-4 text-lg">
-              <Link to="/dashboard">Ver Dashboard</Link>
-            </Button>
           </div>
         </div>
       </section>
 
-      {/* FAQ Section */}
+      {/* 8. QUEM ESTÁ POR TRÁS */}
+      <section className="py-20">
+        <div className="max-w-6xl mx-auto px-4">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div>
+              <h2 className="text-4xl font-bold text-white mb-6">
+                Quem criou a AutoPost AI?
+              </h2>
+              <p className="text-xl text-gray-300 leading-relaxed">
+                Profissionais com experiência em marketing, tecnologia e IA, criaram a AutoPost AI 
+                para resolver o maior problema de todos: falta de tempo e criatividade.
+              </p>
+            </div>
+            <div className="flex justify-center">
+              <div className="w-96 h-64 bg-gradient-to-br from-purple-600/20 to-blue-600/20 rounded-xl flex items-center justify-center border border-purple-500/20">
+                <Users className="h-32 w-32 text-purple-400" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 9. RESULTADOS GERADOS */}
       <section className="py-20 bg-gray-800/30 backdrop-blur-sm">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold text-white mb-4">
+              Prints que não deixam dúvidas
+            </h2>
+            <p className="text-xl text-gray-300">
+              Resultados reais de quem testou e aprovou a AutoPost AI
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {[1, 2, 3].map((item) => (
+              <Card key={item} className="bg-gray-800/50 border-purple-500/20">
+                <CardContent className="p-6">
+                  <div className="aspect-video bg-gradient-to-br from-purple-600/20 to-blue-600/20 rounded-lg flex items-center justify-center mb-4">
+                    <Image className="h-16 w-16 text-purple-400" />
+                  </div>
+                  <p className="text-gray-300 text-center">
+                    Resultado real #{item}
+                  </p>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 10. FAQ */}
+      <section className="py-20">
         <div className="max-w-4xl mx-auto px-4">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-white mb-4">
@@ -545,32 +426,54 @@ export default function Index() {
           </div>
 
           <div className="space-y-6">
-            <Card className="bg-gray-800/50 border-purple-500/20">
-              <CardHeader>
-                <CardTitle className="text-white">Como funciona a IA do AutoPost?</CardTitle>
-                <CardDescription className="text-gray-300">
-                  Nossa IA analisa tendências, seu nicho e estilo para criar conteúdo personalizado e relevante para sua audiência.
-                </CardDescription>
-              </CardHeader>
-            </Card>
+            {[
+              {
+                question: "A plataforma serve pra quem não vende nada?",
+                answer: "Sim! A AutoPost AI é perfeita para qualquer pessoa que quer melhorar sua presença nas redes sociais."
+              },
+              {
+                question: "Como funciona a criação de conteúdo?",
+                answer: "Nossa IA analisa seu nicho e cria conteúdo personalizado em segundos. Você pode usar templates ou gerar do zero."
+              },
+              {
+                question: "Preciso pagar algo agora?",
+                answer: "Não! Você pode testar gratuitamente por 7 dias, sem compromisso."
+              },
+              {
+                question: "Posso usar sem entender de design?",
+                answer: "Claro! Nossa plataforma é super intuitiva e tem templates prontos para você personalizar."
+              },
+              {
+                question: "A IA escreve mesmo os textos pra mim?",
+                answer: "Sim! Nossa IA cria textos, legendas, roteiros e muito mais, tudo personalizado para seu estilo."
+              }
+            ].map((faq, index) => (
+              <Card key={index} className="bg-gray-800/50 border-purple-500/20">
+                <CardHeader>
+                  <CardTitle className="text-white flex items-center">
+                    <CheckCircle className="h-6 w-6 text-green-400 mr-3" />
+                    {faq.question}
+                  </CardTitle>
+                  <CardDescription className="text-gray-300 ml-9">
+                    {faq.answer}
+                  </CardDescription>
+                </CardHeader>
+              </Card>
+            ))}
+          </div>
 
-            <Card className="bg-gray-800/50 border-purple-500/20">
-              <CardHeader>
-                <CardTitle className="text-white">Posso usar na versão gratuita?</CardTitle>
-                <CardDescription className="text-gray-300">
-                  Sim! A versão gratuita inclui geração limitada de conteúdo e acesso às principais funcionalidades.
-                </CardDescription>
-              </CardHeader>
-            </Card>
-
-            <Card className="bg-gray-800/50 border-purple-500/20">
-              <CardHeader>
-                <CardTitle className="text-white">Quais redes sociais são suportadas?</CardTitle>
-                <CardDescription className="text-gray-300">
-                  Instagram, Facebook, LinkedIn, Twitter, YouTube, TikTok e muitas outras plataformas.
-                </CardDescription>
-              </CardHeader>
-            </Card>
+          <div className="text-center mt-12">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button asChild size="lg" className="bg-purple-600 hover:bg-purple-700 text-white px-8 py-4">
+                <Link to="/register">
+                  Começar grátis
+                  <ArrowRight className="ml-2 h-5 w-5" />
+                </Link>
+              </Button>
+              <Button variant="outline" size="lg" className="border-purple-400 text-purple-300 hover:bg-purple-600 hover:text-white px-8 py-4">
+                <Link to="/dashboard">Ver demonstração</Link>
+              </Button>
+            </div>
           </div>
         </div>
       </section>
