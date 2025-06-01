@@ -1,7 +1,7 @@
 import { useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowRight, Play, CheckCircle, Star, Users, TrendingUp, Clock, Sparkles, Brain, BarChart3, Calendar, FileText, MessageSquare, Video, Image, Zap, Target, Globe, Heart, BookOpen, Mic, Shield, Rocket, Lock } from "lucide-react";
+import { ArrowRight, Play, CheckCircle, Star, Users, TrendingUp, Clock, Sparkles, Brain, BarChart3, Calendar, FileText, MessageSquare, Video, Image, Zap, Target, Globe, Heart, BookOpen, Mic, Shield, Rocket, Lock, PenTool, Monitor, BarChart, Library, Layers } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Navbar } from "@/components/Navbar";
 
@@ -24,7 +24,7 @@ export default function Index() {
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-blue-50">
       <Navbar />
       
-      {/* Hero Section with Dra. Ana */}
+      {/* Hero Section */}
       <section className="pt-32 pb-20 px-4">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
@@ -32,81 +32,51 @@ export default function Index() {
             <div className="text-center lg:text-left">
               <div className="inline-flex items-center px-4 py-2 bg-purple-100 rounded-full text-purple-700 text-sm font-medium mb-8">
                 <Sparkles className="h-4 w-4 mr-2" />
-                Seu Social Media Online. Tudo o que você precisa em uma única plataforma.
+                Sua plataforma completa de criação de conteúdo com IA
               </div>
               
               <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent mb-8">
                 Crie Conteúdo
                 <br />
-                com IA em 30 Segundos
+                com IA em Segundos
               </h1>
               
               <p className="text-xl text-gray-600 mb-12 max-w-2xl mx-auto lg:mx-0">
-                A plataforma mais completa para criadores digitais. Crie posts, carrosséis, vídeos, roteiros, bios e muito mais com inteligência artificial — em minutos.
+                Transforme sua criação de conteúdo com nossa plataforma completa de IA. Posts, carrosséis, vídeos, roteiros e muito mais — tudo automatizado.
               </p>
               
-              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start items-center mb-12">
+              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start items-center">
                 <Button asChild size="lg" className="bg-purple-600 hover:bg-purple-700 text-white px-8 py-4 text-lg">
                   <Link to="/register">
-                    Comece Grátis
+                    Comece Grátis Agora
                     <ArrowRight className="ml-2 h-5 w-5" />
                   </Link>
                 </Button>
                 <Button variant="outline" size="lg" className="px-8 py-4 text-lg">
-                  <Link to="/settings">Ver Planos</Link>
+                  <Play className="mr-2 h-5 w-5" />
+                  Ver Demonstração
                 </Button>
               </div>
             </div>
 
-            {/* Right Side - Doctor Image */}
+            {/* Right Side - Animated Image */}
             <div className="flex justify-center lg:justify-end">
               <div className="relative">
-                {/* Doctor Image */}
                 <div className="relative">
                   <img 
                     src="/lovable-uploads/dff2e3f0-a7c9-4e72-a52b-5b2ef799e069.png" 
-                    alt="Doutora profissional sorrindo" 
-                    className="w-80 h-auto rounded-3xl shadow-2xl"
+                    alt="Criadora de conteúdo trabalhando" 
+                    className="w-72 h-auto rounded-3xl shadow-2xl transform hover:scale-105 transition-transform duration-700 animate-pulse"
+                    style={{ animationDuration: '3s' }}
                   />
                   
-                  {/* Speech Bubble */}
-                  <div className="absolute -left-16 top-8 bg-white rounded-xl p-4 shadow-lg max-w-48">
+                  {/* Speech Bubble - Reposicionado para não cobrir o rosto */}
+                  <div className="absolute -right-16 bottom-16 bg-white rounded-xl p-4 shadow-lg max-w-56 animate-bounce" style={{ animationDuration: '4s' }}>
                     <p className="text-sm text-gray-700 font-medium">
                       "2 minutos por dia e tenho conteúdo para a semana toda!"
                     </p>
-                    <div className="absolute bottom-0 right-8 w-0 h-0 border-l-4 border-l-transparent border-r-4 border-r-transparent border-t-4 border-t-white transform translate-y-full"></div>
+                    <div className="absolute bottom-0 left-8 w-0 h-0 border-l-4 border-l-transparent border-r-4 border-r-transparent border-t-4 border-t-white transform translate-y-full"></div>
                   </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Video Demo Section */}
-          <div className="mt-16">
-            <div className="text-center mb-8">
-              <h3 className="text-2xl font-bold mb-4">👉 Ver Demo da Plataforma</h3>
-            </div>
-            <div className="relative max-w-4xl mx-auto">
-              <div className="relative bg-gray-900 rounded-2xl overflow-hidden shadow-2xl">
-                <video
-                  ref={videoRef}
-                  className="w-full h-auto"
-                  poster="/placeholder.svg"
-                  preload="metadata"
-                >
-                  <source src="/demo-video.mp4" type="video/mp4" />
-                  Seu navegador não suporta o elemento de vídeo.
-                </video>
-                
-                <div className="absolute inset-0 flex items-center justify-center bg-black/20">
-                  <Button
-                    onClick={handlePlayVideo}
-                    size="lg"
-                    className="bg-white/10 backdrop-blur-sm hover:bg-white/20 text-white border border-white/20"
-                  >
-                    <Play className="h-6 w-6 mr-2" />
-                    {isPlaying ? 'Pausar' : 'Ver Demo'}
-                  </Button>
                 </div>
               </div>
             </div>
@@ -115,7 +85,7 @@ export default function Index() {
       </section>
 
       {/* Stats Section */}
-      <section className="py-20 bg-gray-50">
+      <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div className="text-center">
@@ -138,77 +108,51 @@ export default function Index() {
         </div>
       </section>
 
-      {/* Features Section */}
-      <section className="py-20">
+      {/* Dashboard Overview */}
+      <section className="py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-gray-900 mb-4">
-              🚀 Tudo que você pode fazer com o AutoPost AI
+              🚀 Dashboard Completo para Criadores
             </h2>
+            <p className="text-xl text-gray-600">
+              Gerencie todo seu conteúdo em um só lugar
+            </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {/* Geração de Conteúdo */}
             <Card className="border-0 shadow-lg hover:shadow-xl transition-shadow">
               <CardHeader>
                 <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-4">
-                  <Brain className="h-6 w-6 text-purple-600" />
+                  <Monitor className="h-6 w-6 text-purple-600" />
                 </div>
-                <CardTitle>🧠 Geração de Conteúdo com IA</CardTitle>
+                <CardTitle>📊 Dashboard Intuitivo</CardTitle>
                 <CardDescription>
-                  Crie posts, legendas, carrosséis e roteiros em segundos com IA avançada.
+                  Visualize suas métricas, agende conteúdos e monitore performance em tempo real.
                 </CardDescription>
               </CardHeader>
             </Card>
 
-            {/* Templates Personalizáveis */}
             <Card className="border-0 shadow-lg hover:shadow-xl transition-shadow">
               <CardHeader>
                 <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
-                  <Image className="h-6 w-6 text-blue-600" />
+                  <FileText className="h-6 w-6 text-blue-600" />
                 </div>
-                <CardTitle>🎨 Templates e Mockups Otimizados</CardTitle>
+                <CardTitle>📝 Meus Conteúdos</CardTitle>
                 <CardDescription>
-                  Modelos prontos para todas as redes sociais — personalizáveis e profissionais.
+                  Organize todos os seus posts, carrosséis, vídeos e materiais em uma biblioteca inteligente.
                 </CardDescription>
               </CardHeader>
             </Card>
 
-            {/* Agendamento */}
             <Card className="border-0 shadow-lg hover:shadow-xl transition-shadow">
               <CardHeader>
                 <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mb-4">
                   <Calendar className="h-6 w-6 text-green-600" />
                 </div>
-                <CardTitle>📅 Agendamento Inteligente + Cross-posting</CardTitle>
+                <CardTitle>📅 Agendamento Inteligente</CardTitle>
                 <CardDescription>
-                  Agende postagens para múltiplas plataformas com um clique e nos horários ideais.
-                </CardDescription>
-              </CardHeader>
-            </Card>
-
-            {/* Análise de Desempenho */}
-            <Card className="border-0 shadow-lg hover:shadow-xl transition-shadow">
-              <CardHeader>
-                <div className="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center mb-4">
-                  <BarChart3 className="h-6 w-6 text-yellow-600" />
-                </div>
-                <CardTitle>📊 Analytics Avançado</CardTitle>
-                <CardDescription>
-                  Entenda o que funciona com relatórios completos e sugestões de melhoria.
-                </CardDescription>
-              </CardHeader>
-            </Card>
-
-            {/* Biblioteca de Conteúdo */}
-            <Card className="border-0 shadow-lg hover:shadow-xl transition-shadow">
-              <CardHeader>
-                <div className="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center mb-4">
-                  <FileText className="h-6 w-6 text-red-600" />
-                </div>
-                <CardTitle>🗂️ Biblioteca de Conteúdo</CardTitle>
-                <CardDescription>
-                  Salve, edite, organize e reutilize tudo em um só lugar.
+                  Programe suas publicações para múltiplas plataformas nos melhores horários.
                 </CardDescription>
               </CardHeader>
             </Card>
@@ -216,103 +160,195 @@ export default function Index() {
         </div>
       </section>
 
-      {/* FERRAMENTAS EXCLUSIVAS DE IA */}
+      {/* Content Creation Tools */}
+      <section className="py-20">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">
+              🎨 Criação de Conteúdo Automatizada
+            </h2>
+            <p className="text-xl text-gray-600">
+              Todas as ferramentas que você precisa em um só lugar
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <Card className="border-0 shadow-lg hover:shadow-xl transition-shadow">
+              <CardHeader className="text-center">
+                <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <MessageSquare className="h-8 w-8 text-red-600" />
+                </div>
+                <CardTitle>📱 Posts</CardTitle>
+                <CardDescription>
+                  Crie posts envolventes para todas as redes sociais com IA.
+                </CardDescription>
+              </CardHeader>
+            </Card>
+
+            <Card className="border-0 shadow-lg hover:shadow-xl transition-shadow">
+              <CardHeader className="text-center">
+                <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Layers className="h-8 w-8 text-blue-600" />
+                </div>
+                <CardTitle>🎠 Carrosséis</CardTitle>
+                <CardDescription>
+                  Designs profissionais para carrosséis do Instagram e LinkedIn.
+                </CardDescription>
+              </CardHeader>
+            </Card>
+
+            <Card className="border-0 shadow-lg hover:shadow-xl transition-shadow">
+              <CardHeader className="text-center">
+                <div className="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Image className="h-8 w-8 text-yellow-600" />
+                </div>
+                <CardTitle>🖼️ Thumbnails</CardTitle>
+                <CardDescription>
+                  Thumbnails de alta conversão para YouTube e outras plataformas.
+                </CardDescription>
+              </CardHeader>
+            </Card>
+
+            <Card className="border-0 shadow-lg hover:shadow-xl transition-shadow">
+              <CardHeader className="text-center">
+                <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Video className="h-8 w-8 text-green-600" />
+                </div>
+                <CardTitle>🎬 Vídeos & Roteiros</CardTitle>
+                <CardDescription>
+                  Roteiros completos e edição automática de vídeos curtos.
+                </CardDescription>
+              </CardHeader>
+            </Card>
+          </div>
+        </div>
+      </section>
+
+      {/* AI Tools Section */}
+      <section className="py-20 bg-gradient-to-r from-purple-600 to-blue-600">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold text-white mb-4">
+              🤖 Ferramentas Exclusivas de IA
+            </h2>
+            <p className="text-xl text-purple-100">
+              Tecnologia de ponta para criadores profissionais
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <Card className="border-0 shadow-lg bg-white/10 backdrop-blur-sm">
+              <CardHeader className="text-center">
+                <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Play className="h-8 w-8 text-white" />
+                </div>
+                <CardTitle className="text-white">📽️ Resumir Vídeo</CardTitle>
+                <CardDescription className="text-purple-100">
+                  Extraia insights e crie conteúdo a partir de qualquer vídeo automaticamente.
+                </CardDescription>
+              </CardHeader>
+            </Card>
+
+            <Card className="border-0 shadow-lg bg-white/10 backdrop-blur-sm">
+              <CardHeader className="text-center">
+                <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <TrendingUp className="h-8 w-8 text-white" />
+                </div>
+                <CardTitle className="text-white">🔥 Detector de Tendências</CardTitle>
+                <CardDescription className="text-purple-100">
+                  Descubra o que está bombando no seu nicho em tempo real.
+                </CardDescription>
+              </CardHeader>
+            </Card>
+
+            <Card className="border-0 shadow-lg bg-white/10 backdrop-blur-sm">
+              <CardHeader className="text-center">
+                <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Target className="h-8 w-8 text-white" />
+                </div>
+                <CardTitle className="text-white">👤 Otimizar Bio</CardTitle>
+                <CardDescription className="text-purple-100">
+                  Crie bios otimizadas para todas as suas redes sociais com IA.
+                </CardDescription>
+              </CardHeader>
+            </Card>
+          </div>
+        </div>
+      </section>
+
+      {/* Digital Products */}
       <section className="py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-gray-900 mb-4">
-              🛠️ Ferramentas Exclusivas de IA
+              📚 Produtos Digitais Completos
             </h2>
+            <p className="text-xl text-gray-600">
+              Crie materiais profissionais em minutos
+            </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {/* Detector de Tendências */}
-            <Card className="border-0 shadow-lg hover:shadow-xl transition-shadow">
-              <CardHeader className="text-center">
-                <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <TrendingUp className="h-8 w-8 text-red-600" />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+            <div>
+              <h3 className="text-2xl font-bold mb-6">Gere Apresentações Profissionais</h3>
+              <ul className="space-y-4">
+                <li className="flex items-center">
+                  <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
+                  <span>E-books com design profissional</span>
+                </li>
+                <li className="flex items-center">
+                  <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
+                  <span>Apresentações de slides completas</span>
+                </li>
+                <li className="flex items-center">
+                  <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
+                  <span>Landing pages otimizadas</span>
+                </li>
+                <li className="flex items-center">
+                  <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
+                  <span>Materiais para cursos online</span>
+                </li>
+              </ul>
+              <Button asChild className="mt-6 bg-purple-600 hover:bg-purple-700">
+                <Link to="/content-generator">
+                  Criar Agora
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
+              </Button>
+            </div>
+            <div className="flex justify-center">
+              <div className="w-80 h-64 bg-gradient-to-br from-purple-100 to-blue-100 rounded-xl flex items-center justify-center">
+                <BookOpen className="h-24 w-24 text-purple-600" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Analytics & Library */}
+      <section className="py-20">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+            <Card className="border-0 shadow-xl">
+              <CardHeader>
+                <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-4">
+                  <BarChart className="h-8 w-8 text-blue-600" />
                 </div>
-                <CardTitle>🔥 Detector de Tendências em Tempo Real</CardTitle>
-                <CardDescription>
-                  Veja o que está bombando no seu nicho — direto de TikTok, Reels, Shorts, Twitter e Google Trends.
+                <CardTitle className="text-2xl">📊 Análises Detalhadas</CardTitle>
+                <CardDescription className="text-lg">
+                  Monitore o desempenho dos seus conteúdos com relatórios completos e insights acionáveis.
                 </CardDescription>
               </CardHeader>
             </Card>
 
-            {/* Shorts e Reels */}
-            <Card className="border-0 shadow-lg hover:shadow-xl transition-shadow">
-              <CardHeader className="text-center">
-                <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Video className="h-8 w-8 text-blue-600" />
+            <Card className="border-0 shadow-xl">
+              <CardHeader>
+                <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-4">
+                  <Library className="h-8 w-8 text-green-600" />
                 </div>
-                <CardTitle>🎬 Shorts e Reels Editados por IA</CardTitle>
-                <CardDescription>
-                  Suba um vídeo, e a IA adiciona trilha sonora, legenda automática e ajuste de cor.
-                </CardDescription>
-              </CardHeader>
-            </Card>
-
-            {/* Roteiros */}
-            <Card className="border-0 shadow-lg hover:shadow-xl transition-shadow">
-              <CardHeader className="text-center">
-                <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <FileText className="h-8 w-8 text-green-600" />
-                </div>
-                <CardTitle>📝 Roteiros Instantâneos para Vídeos</CardTitle>
-                <CardDescription>
-                  Defina tema e nicho, e receba roteiros prontos com gancho, conteúdo e chamada final.
-                </CardDescription>
-              </CardHeader>
-            </Card>
-
-            {/* E-books */}
-            <Card className="border-0 shadow-lg hover:shadow-xl transition-shadow">
-              <CardHeader className="text-center">
-                <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <BookOpen className="h-8 w-8 text-purple-600" />
-                </div>
-                <CardTitle>📘 Gerador de E-books, PDFs e Apresentações</CardTitle>
-                <CardDescription>
-                  Insira um tema e receba um material visual completo com estrutura, conteúdo e design prontos.
-                </CardDescription>
-              </CardHeader>
-            </Card>
-
-            {/* Bio Optimizer */}
-            <Card className="border-0 shadow-lg hover:shadow-xl transition-shadow">
-              <CardHeader className="text-center">
-                <div className="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Target className="h-8 w-8 text-indigo-600" />
-                </div>
-                <CardTitle>👤 Otimizador de Bio</CardTitle>
-                <CardDescription>
-                  A IA cria bios otimizadas para Instagram, TikTok, Twitter e LinkedIn com base na sua persona.
-                </CardDescription>
-              </CardHeader>
-            </Card>
-
-            {/* Thumbnails */}
-            <Card className="border-0 shadow-lg hover:shadow-xl transition-shadow">
-              <CardHeader className="text-center">
-                <div className="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Image className="h-8 w-8 text-orange-600" />
-                </div>
-                <CardTitle>🖼️ Criador de Thumbnails para YouTube</CardTitle>
-                <CardDescription>
-                  Use um prompt ou imagens para gerar thumbnails profissionais que aumentam os cliques.
-                </CardDescription>
-              </CardHeader>
-            </Card>
-
-            {/* Resumo de Vídeos */}
-            <Card className="border-0 shadow-lg hover:shadow-xl transition-shadow">
-              <CardHeader className="text-center">
-                <div className="w-16 h-16 bg-pink-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Play className="h-8 w-8 text-pink-600" />
-                </div>
-                <CardTitle>📽️ Resumo Inteligente de Vídeos</CardTitle>
-                <CardDescription>
-                  Cole um link de vídeo ou envie o seu → receba o resumo + sugestões de conteúdo.
+                <CardTitle className="text-2xl">📚 Biblioteca Inteligente</CardTitle>
+                <CardDescription className="text-lg">
+                  Organize, reutilize e otimize todo seu conteúdo em uma biblioteca centralizada.
                 </CardDescription>
               </CardHeader>
             </Card>
@@ -321,7 +357,7 @@ export default function Index() {
       </section>
 
       {/* Testimonials */}
-      <section className="py-20">
+      <section className="py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-gray-900 mb-4">
@@ -508,7 +544,7 @@ export default function Index() {
       <section className="py-20 bg-gradient-to-r from-purple-600 to-blue-600">
         <div className="max-w-4xl mx-auto text-center px-4">
           <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
-            Pronto para Revolucionar seu Conteúdo?
+            Pronto para Transformar sua Criação de Conteúdo?
           </h2>
           <p className="text-xl text-purple-100 mb-8">
             Junte-se a milhares de criadores que já estão usando IA para crescer nas redes sociais.
@@ -516,12 +552,12 @@ export default function Index() {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button asChild size="lg" className="bg-white text-purple-600 hover:bg-gray-100 px-8 py-4 text-lg">
               <Link to="/register">
-                ➡️ Comece Grátis
+                Comece Grátis Agora
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Link>
             </Button>
             <Button variant="outline" size="lg" className="border-white text-white hover:bg-white hover:text-purple-600 px-8 py-4 text-lg">
-              <Link to="/pricing">➡️ Ver Planos</Link>
+              <Link to="/dashboard">Ver Dashboard</Link>
             </Button>
           </div>
         </div>

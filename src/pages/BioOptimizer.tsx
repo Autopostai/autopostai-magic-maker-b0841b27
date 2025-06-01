@@ -7,27 +7,27 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ArrowLeft, Copy, Instagram, Linkedin, MessageSquare, Twitter } from "lucide-react";
-import { Link } from "react-router-dom";
+import { ArrowLeft, Loader2 } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
-type BioData = {
-  instagram: string;
-  linkedin: { headline: string; description: string };
-  tiktok: string;
-  twitter: string;
-};
-
 export default function BioOptimizer() {
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const [persona, setPersona] = useState("");
-  const [expertise, setExpertise] = useState("");
-  const [tone, setTone] = useState("");
-  const [generatedBios, setGeneratedBios] = useState<BioData | null>(null);
+  const [formData, setFormData] = useState({
+    persona: "",
+    atuacao: "",
+    tom: "",
+    tomCustom: "",
+    plataforma: "",
+    plataformaCustom: "",
+    proposta: "",
+    diferencial: "",
+    cta: "",
+  });
 
   const handleGenerate = async () => {
-    if (!persona || !expertise || !tone) {
+    if (!formData.persona || !formData.atuacao || !formData.tom || !formData.plataforma) {
       toast.error("Preencha todos os campos obrigatórios");
       return;
     }
@@ -35,31 +35,42 @@ export default function BioOptimizer() {
     setLoading(true);
     
     try {
-      // Simular geração de bios
+      // Simular geração de bio
       await new Promise(resolve => setTimeout(resolve, 2000));
       
-      const mockBios: BioData = {
-        instagram: `${persona} | ${expertise} ✨\n📚 Compartilho dicas práticas\n💡 Transformando vidas através do conhecimento\n👇 Novos conteúdos toda semana`,
-        linkedin: {
-          headline: `${expertise} | Ajudo profissionais a alcançar resultados extraordinários`,
-          description: `Como ${persona} especializada em ${expertise}, dedico-me a compartilhar conhecimentos práticos e estratégias comprovadas.\n\n💼 +5 anos de experiência\n🎯 Foco em resultados mensuráveis\n📈 Milhares de profissionais impactados\n\nConecte-se comigo para conteúdos exclusivos sobre crescimento profissional e estratégias de ${expertise.toLowerCase()}.`
-        },
-        tiktok: `${persona} que ama ${expertise} 🚀\nDicas rápidas e práticas ⚡\nSeguindo = conteúdo de valor 📱`,
-        twitter: `${persona} | ${expertise} | Compartilhando insights valiosos para sua jornada de crescimento 🌟`
-      };
+      const tom = formData.tom === "outro" ? formData.tomCustom : formData.tom;
+      const plataforma = formData.plataforma === "outro" ? formData.plataformaCustom : formData.plataforma;
       
-      setGeneratedBios(mockBios);
-      toast.success("Bios geradas com sucesso!");
+      // Gerar bio mockada baseada nos dados
+      let bio = `${formData.persona} | ${formData.atuacao}\n`;
+      
+      if (formData.proposta) {
+        bio += `💡 ${formData.proposta}\n`;
+      }
+      
+      if (formData.diferencial) {
+        bio += `✨ ${formData.diferencial}\n`;
+      }
+      
+      if (formData.cta) {
+        bio += `👇 ${formData.cta}`;
+      }
+      
+      // Navegar para página de resultado
+      navigate('/bio-result', {
+        state: {
+          bio,
+          platform: plataforma,
+          persona: formData.persona,
+          tom
+        }
+      });
+      
     } catch (error) {
-      toast.error("Erro ao gerar bios");
+      toast.error("Erro ao gerar bio");
     } finally {
       setLoading(false);
     }
-  };
-
-  const copyToClipboard = (text: string, platform: string) => {
-    navigator.clipboard.writeText(text);
-    toast.success(`Bio do ${platform} copiada!`);
   };
 
   return (
@@ -76,33 +87,35 @@ export default function BioOptimizer() {
           <div>
             <h1 className="text-3xl font-bold">Otimizador de Bio e Perfil</h1>
             <p className="text-gray-600">
-              Crie bios otimizadas para todas as suas redes sociais
+              Crie bios otimizadas para suas redes sociais
             </p>
           </div>
         </div>
 
-        {/* Formulário */}
+        {/* Formulário Completo */}
         <Card>
           <CardHeader>
             <CardTitle>Informações do Perfil</CardTitle>
             <CardDescription>
-              Conte-nos sobre você para gerar bios personalizadas
+              Quanto mais detalhes, melhor será sua bio personalizada
             </CardDescription>
           </CardHeader>
-          <CardContent className="space-y-4">
+          <CardContent className="space-y-6">
+            {/* Linha 1 - Persona e Tom */}
             <div className="grid md:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="persona">Sua Persona *</Label>
                 <Input
                   id="persona"
-                  placeholder="Ex: Coach, Consultora, Empreendedor..."
-                  value={persona}
-                  onChange={(e) => setPersona(e.target.value)}
+                  placeholder="Ex: Coach, Consultora, Empreendedor, Designer..."
+                  value={formData.persona}
+                  onChange={(e) => setFormData(prev => ({ ...prev, persona: e.target.value }))}
                 />
               </div>
+              
               <div className="space-y-2">
-                <Label htmlFor="tone">Tom Desejado *</Label>
-                <Select value={tone} onValueChange={setTone}>
+                <Label htmlFor="tom">Tom Desejado *</Label>
+                <Select value={formData.tom} onValueChange={(value) => setFormData(prev => ({ ...prev, tom: value }))}>
                   <SelectTrigger>
                     <SelectValue placeholder="Selecione o tom" />
                   </SelectTrigger>
@@ -112,19 +125,92 @@ export default function BioOptimizer() {
                     <SelectItem value="inspiracional">Inspiracional</SelectItem>
                     <SelectItem value="informal">Informal</SelectItem>
                     <SelectItem value="autoridade">Autoridade</SelectItem>
+                    <SelectItem value="amigavel">Amigável</SelectItem>
+                    <SelectItem value="minimalista">Minimalista</SelectItem>
+                    <SelectItem value="outro">Outro</SelectItem>
                   </SelectContent>
                 </Select>
+                {formData.tom === "outro" && (
+                  <Input
+                    placeholder="Descreva o tom desejado"
+                    value={formData.tomCustom}
+                    onChange={(e) => setFormData(prev => ({ ...prev, tomCustom: e.target.value }))}
+                  />
+                )}
               </div>
             </div>
-            
+
+            {/* Linha 2 - Área de Atuação */}
             <div className="space-y-2">
-              <Label htmlFor="expertise">Área de Atuação *</Label>
+              <Label htmlFor="atuacao">Área de Atuação *</Label>
               <Textarea
-                id="expertise"
-                placeholder="Descreva sua área de expertise (ex: Marketing Digital, Desenvolvimento Pessoal, Finanças...)"
+                id="atuacao"
+                placeholder="Ex: Marketing Digital, Desenvolvimento Pessoal, Finanças, Design Gráfico, Coaching de Carreira..."
                 className="min-h-[80px]"
-                value={expertise}
-                onChange={(e) => setExpertise(e.target.value)}
+                value={formData.atuacao}
+                onChange={(e) => setFormData(prev => ({ ...prev, atuacao: e.target.value }))}
+              />
+            </div>
+
+            {/* Linha 3 - Plataforma Alvo */}
+            <div className="space-y-2">
+              <Label htmlFor="plataforma">Plataforma Alvo *</Label>
+              <Select value={formData.plataforma} onValueChange={(value) => setFormData(prev => ({ ...prev, plataforma: value }))}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Selecione a plataforma principal" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="instagram">Instagram</SelectItem>
+                  <SelectItem value="linkedin">LinkedIn</SelectItem>
+                  <SelectItem value="tiktok">TikTok</SelectItem>
+                  <SelectItem value="twitter">Twitter/X</SelectItem>
+                  <SelectItem value="youtube">YouTube</SelectItem>
+                  <SelectItem value="facebook">Facebook</SelectItem>
+                  <SelectItem value="threads">Threads</SelectItem>
+                  <SelectItem value="outro">Outro</SelectItem>
+                </SelectContent>
+              </Select>
+              {formData.plataforma === "outro" && (
+                <Input
+                  placeholder="Digite o nome da plataforma"
+                  value={formData.plataformaCustom}
+                  onChange={(e) => setFormData(prev => ({ ...prev, plataformaCustom: e.target.value }))}
+                />
+              )}
+            </div>
+
+            {/* Linha 4 - Proposta de Valor */}
+            <div className="space-y-2">
+              <Label htmlFor="proposta">O que você entrega? (Proposta de valor)</Label>
+              <Textarea
+                id="proposta"
+                placeholder="Ex: Ajudo empreendedores a aumentar suas vendas em 30 dias, Ensino pessoas a investir sem medo, Crio identidades visuais marcantes..."
+                className="min-h-[80px]"
+                value={formData.proposta}
+                onChange={(e) => setFormData(prev => ({ ...prev, proposta: e.target.value }))}
+              />
+            </div>
+
+            {/* Linha 5 - Diferencial */}
+            <div className="space-y-2">
+              <Label htmlFor="diferencial">O que te torna único? (Diferencial)</Label>
+              <Textarea
+                id="diferencial"
+                placeholder="Ex: +10 anos de experiência, Método exclusivo, Já ajudei 1000+ pessoas, Formação internacional..."
+                className="min-h-[80px]"
+                value={formData.diferencial}
+                onChange={(e) => setFormData(prev => ({ ...prev, diferencial: e.target.value }))}
+              />
+            </div>
+
+            {/* Linha 6 - CTA */}
+            <div className="space-y-2">
+              <Label htmlFor="cta">Quer incluir uma chamada para ação? (Opcional)</Label>
+              <Input
+                id="cta"
+                placeholder="Ex: Link na bio, DM para consultoria gratuita, Acesse meu curso..."
+                value={formData.cta}
+                onChange={(e) => setFormData(prev => ({ ...prev, cta: e.target.value }))}
               />
             </div>
 
@@ -134,152 +220,17 @@ export default function BioOptimizer() {
               className="w-full"
               disabled={loading}
             >
-              {loading ? "Gerando Bios..." : "Gerar Bios Otimizadas"}
+              {loading ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Gerando Bio Otimizada...
+                </>
+              ) : (
+                "Gerar Bio Otimizada"
+              )}
             </Button>
           </CardContent>
         </Card>
-
-        {/* Bios Geradas */}
-        {generatedBios && (
-          <Card>
-            <CardHeader>
-              <CardTitle>Suas Bios Otimizadas</CardTitle>
-              <CardDescription>
-                Bios personalizadas para cada plataforma
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <Tabs defaultValue="instagram" className="w-full">
-                <TabsList className="grid w-full grid-cols-4">
-                  <TabsTrigger value="instagram" className="flex items-center gap-2">
-                    <Instagram className="h-4 w-4" />
-                    Instagram
-                  </TabsTrigger>
-                  <TabsTrigger value="linkedin" className="flex items-center gap-2">
-                    <Linkedin className="h-4 w-4" />
-                    LinkedIn
-                  </TabsTrigger>
-                  <TabsTrigger value="tiktok" className="flex items-center gap-2">
-                    <MessageSquare className="h-4 w-4" />
-                    TikTok
-                  </TabsTrigger>
-                  <TabsTrigger value="twitter" className="flex items-center gap-2">
-                    <Twitter className="h-4 w-4" />
-                    Twitter
-                  </TabsTrigger>
-                </TabsList>
-
-                <TabsContent value="instagram" className="space-y-4">
-                  <div className="space-y-2">
-                    <div className="flex justify-between items-center">
-                      <Label>Bio Instagram (150 caracteres)</Label>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => copyToClipboard(generatedBios.instagram, "Instagram")}
-                      >
-                        <Copy className="h-4 w-4 mr-2" />
-                        Copiar
-                      </Button>
-                    </div>
-                    <Textarea
-                      value={generatedBios.instagram}
-                      readOnly
-                      className="min-h-[120px] bg-gray-50"
-                    />
-                    <p className="text-xs text-gray-500">
-                      {generatedBios.instagram.length}/150 caracteres
-                    </p>
-                  </div>
-                </TabsContent>
-
-                <TabsContent value="linkedin" className="space-y-4">
-                  <div className="space-y-4">
-                    <div className="space-y-2">
-                      <div className="flex justify-between items-center">
-                        <Label>Headline LinkedIn</Label>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => copyToClipboard(generatedBios.linkedin.headline, "LinkedIn Headline")}
-                        >
-                          <Copy className="h-4 w-4 mr-2" />
-                          Copiar
-                        </Button>
-                      </div>
-                      <Textarea
-                        value={generatedBios.linkedin.headline}
-                        readOnly
-                        className="bg-gray-50"
-                      />
-                    </div>
-                    
-                    <div className="space-y-2">
-                      <div className="flex justify-between items-center">
-                        <Label>Descrição LinkedIn</Label>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => copyToClipboard(generatedBios.linkedin.description, "LinkedIn Descrição")}
-                        >
-                          <Copy className="h-4 w-4 mr-2" />
-                          Copiar
-                        </Button>
-                      </div>
-                      <Textarea
-                        value={generatedBios.linkedin.description}
-                        readOnly
-                        className="min-h-[150px] bg-gray-50"
-                      />
-                    </div>
-                  </div>
-                </TabsContent>
-
-                <TabsContent value="tiktok" className="space-y-4">
-                  <div className="space-y-2">
-                    <div className="flex justify-between items-center">
-                      <Label>Bio TikTok</Label>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => copyToClipboard(generatedBios.tiktok, "TikTok")}
-                      >
-                        <Copy className="h-4 w-4 mr-2" />
-                        Copiar
-                      </Button>
-                    </div>
-                    <Textarea
-                      value={generatedBios.tiktok}
-                      readOnly
-                      className="min-h-[100px] bg-gray-50"
-                    />
-                  </div>
-                </TabsContent>
-
-                <TabsContent value="twitter" className="space-y-4">
-                  <div className="space-y-2">
-                    <div className="flex justify-between items-center">
-                      <Label>Bio Twitter</Label>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => copyToClipboard(generatedBios.twitter, "Twitter")}
-                      >
-                        <Copy className="h-4 w-4 mr-2" />
-                        Copiar
-                      </Button>
-                    </div>
-                    <Textarea
-                      value={generatedBios.twitter}
-                      readOnly
-                      className="min-h-[100px] bg-gray-50"
-                    />
-                  </div>
-                </TabsContent>
-              </Tabs>
-            </CardContent>
-          </Card>
-        )}
       </div>
     </DashboardLayout>
   );

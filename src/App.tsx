@@ -60,6 +60,7 @@ const App = () => (
           <Route path="/video-summarizer" element={<VideoSummarizer />} />
           <Route path="/trend-detector" element={<TrendDetector />} />
           <Route path="/bio-optimizer" element={<BioOptimizer />} />
+          <Route path="/bio-result" element={<BioResult />} />
           <Route path="/content-generator" element={<ContentGenerator />} />
           <Route path="/digital-products" element={<DigitalProducts />} />
           <Route path="/content" element={<Content />} />
