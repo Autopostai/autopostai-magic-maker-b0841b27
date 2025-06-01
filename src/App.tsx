@@ -27,6 +27,7 @@ import TemplateGallery from "./pages/TemplateGallery";
 import VideoSummarizer from "./pages/VideoSummarizer";
 import TrendDetector from "./pages/TrendDetector";
 import BioOptimizer from "./pages/BioOptimizer";
+import BioResult from "./pages/BioResult";
 import ContentGenerator from "./pages/ContentGenerator";
 import MockupGallery from "./pages/MockupGallery";
 import MockupPreview from "./pages/MockupPreview";
