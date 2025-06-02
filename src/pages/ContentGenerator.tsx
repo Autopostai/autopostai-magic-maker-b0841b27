@@ -7,29 +7,22 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ArrowLeft, Download, FileText, Presentation, BookOpen, Loader2 } from "lucide-react";
-import { Link } from "react-router-dom";
+import { ArrowLeft, Loader2, FileText, Presentation } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
-type GeneratedContent = {
-  type: "ebook" | "presentation" | "guide";
-  title: string;
-  structure: string[];
-  preview: string;
-  downloadUrl: string;
-};
-
 export default function ContentGenerator() {
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [topic, setTopic] = useState("");
   const [contentType, setContentType] = useState("");
   const [audience, setAudience] = useState("");
   const [style, setStyle] = useState("");
-  const [generatedContent, setGeneratedContent] = useState<GeneratedContent | null>(null);
+  const [detailedDescription, setDetailedDescription] = useState("");
+  const [pageCount, setPageCount] = useState("");
 
   const handleGenerate = async () => {
-    if (!topic || !contentType || !audience) {
+    if (!topic || !contentType || !audience || !detailedDescription) {
       toast.error("Preencha todos os campos obrigatórios");
       return;
     }
@@ -40,45 +33,23 @@ export default function ContentGenerator() {
       // Simular geração de conteúdo
       await new Promise(resolve => setTimeout(resolve, 3000));
       
-      const mockContent: GeneratedContent = {
-        type: contentType as any,
-        title: `${topic}: Guia Completo`,
-        structure: [
-          "Introdução",
-          "Conceitos Fundamentais",
-          "Estratégias Práticas",
-          "Casos de Estudo",
-          "Implementação",
-          "Conclusão e Próximos Passos"
-        ],
-        preview: `Este ${contentType === 'ebook' ? 'eBook' : contentType === 'presentation' ? 'apresentação' : 'guia'} aborda de forma completa o tema "${topic}", oferecendo insights valiosos e estratégias práticas para ${audience.toLowerCase()}.`,
-        downloadUrl: "#"
-      };
+      // Navegar para página de conteúdo textual
+      navigate("/presentation-text", { 
+        state: { 
+          topic, 
+          contentType, 
+          audience, 
+          style, 
+          detailedDescription, 
+          pageCount 
+        } 
+      });
       
-      setGeneratedContent(mockContent);
       toast.success("Conteúdo gerado com sucesso!");
     } catch (error) {
       toast.error("Erro ao gerar conteúdo");
     } finally {
       setLoading(false);
-    }
-  };
-
-  const getTypeIcon = (type: string) => {
-    switch (type) {
-      case "ebook": return <BookOpen className="h-6 w-6" />;
-      case "presentation": return <Presentation className="h-6 w-6" />;
-      case "guide": return <FileText className="h-6 w-6" />;
-      default: return <FileText className="h-6 w-6" />;
-    }
-  };
-
-  const getTypeLabel = (type: string) => {
-    switch (type) {
-      case "ebook": return "eBook";
-      case "presentation": return "Apresentação";
-      case "guide": return "Guia Visual";
-      default: return "Conteúdo";
     }
   };
 
@@ -128,7 +99,6 @@ export default function ContentGenerator() {
                     <SelectValue placeholder="Selecione o formato" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="ebook">eBook (PDF)</SelectItem>
                     <SelectItem value="presentation">Apresentação (Slides)</SelectItem>
                     <SelectItem value="guide">Guia Visual</SelectItem>
                   </SelectContent>
@@ -168,6 +138,34 @@ export default function ContentGenerator() {
               </Select>
             </div>
 
+            <div className="space-y-2">
+              <Label htmlFor="pageCount">Quantas páginas/slides deve ter sua apresentação?</Label>
+              <Input
+                id="pageCount"
+                type="number"
+                placeholder="Ex: 15"
+                value={pageCount}
+                onChange={(e) => setPageCount(e.target.value)}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="detailedDescription">
+                Nos dê o máximo de informações sobre a sua apresentação *
+              </Label>
+              <Textarea
+                id="detailedDescription"
+                placeholder="Como você quer? Quais informações deve ter na apresentação? Qual o conteúdo deve ter? Detalhe nos mínimos detalhes o tipo de apresentação que você quer..."
+                value={detailedDescription}
+                onChange={(e) => setDetailedDescription(e.target.value)}
+                rows={6}
+                className="min-h-32"
+              />
+              <p className="text-sm text-gray-500">
+                Seja específico sobre o conteúdo, estrutura, objetivos e qualquer detalhe importante para sua apresentação.
+              </p>
+            </div>
+
             <Button 
               onClick={handleGenerate}
               size="lg"
@@ -177,73 +175,14 @@ export default function ContentGenerator() {
               {loading ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Gerando Conteúdo...
+                  Gerando Material...
                 </>
               ) : (
-                "Gerar Material Completo"
+                "GERAR MATERIAL"
               )}
             </Button>
           </CardContent>
         </Card>
-
-        {/* Conteúdo Gerado */}
-        {generatedContent && (
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                {getTypeIcon(generatedContent.type)}
-                {getTypeLabel(generatedContent.type)} Gerado
-              </CardTitle>
-              <CardDescription>
-                Seu material está pronto para download
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="space-y-2">
-                <h3 className="text-lg font-semibold">{generatedContent.title}</h3>
-                <p className="text-gray-600">{generatedContent.preview}</p>
-              </div>
-
-              <div className="space-y-2">
-                <h4 className="font-medium">Estrutura do Conteúdo:</h4>
-                <ul className="space-y-1">
-                  {generatedContent.structure.map((item, index) => (
-                    <li key={index} className="flex items-center gap-2 text-sm">
-                      <span className="w-6 h-6 bg-purple-100 text-purple-600 rounded-full flex items-center justify-center text-xs font-medium">
-                        {index + 1}
-                      </span>
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              <div className="bg-gray-50 p-4 rounded-lg">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="font-medium">Arquivo Pronto</p>
-                    <p className="text-sm text-gray-600">
-                      {getTypeLabel(generatedContent.type)} em formato PDF profissional
-                    </p>
-                  </div>
-                  <Button className="flex items-center gap-2">
-                    <Download className="h-4 w-4" />
-                    Baixar {getTypeLabel(generatedContent.type)}
-                  </Button>
-                </div>
-              </div>
-
-              <div className="flex gap-2">
-                <Button variant="outline" className="flex-1">
-                  Editar Conteúdo
-                </Button>
-                <Button variant="outline" className="flex-1">
-                  Gerar Nova Versão
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        )}
       </div>
     </DashboardLayout>
   );

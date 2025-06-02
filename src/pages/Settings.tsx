@@ -7,11 +7,39 @@ import { Switch } from "@/components/ui/switch";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { User, Bell, Shield, CreditCard, Trash2, Globe } from "lucide-react";
+import { User, Bell, Shield, Globe, Trash2, Instagram, Facebook, Youtube, Linkedin, Twitter, Wifi } from "lucide-react";
 import { useState } from "react";
+import { toast } from "sonner";
 
 export default function Settings() {
   const [selectedLanguage, setSelectedLanguage] = useState("pt");
+  const [connectedPlatforms, setConnectedPlatforms] = useState<string[]>([]);
+
+  const socialPlatforms = [
+    { id: "instagram", name: "Instagram", icon: Instagram, description: "Feed, Reels, Stories" },
+    { id: "facebook", name: "Facebook", icon: Facebook, description: "Páginas e Grupos" },
+    { id: "tiktok", name: "TikTok", icon: Wifi, description: "Vídeos curtos" },
+    { id: "linkedin", name: "LinkedIn", icon: Linkedin, description: "Posts profissionais" },
+    { id: "twitter", name: "Twitter/X", icon: Twitter, description: "Posts e threads" },
+    { id: "pinterest", name: "Pinterest", icon: Wifi, description: "Pins e boards" },
+    { id: "youtube", name: "YouTube", icon: Youtube, description: "Shorts, Comunidade" },
+    { id: "kwai", name: "Kwai", icon: Wifi, description: "Vídeos curtos" },
+    { id: "threads", name: "Threads", icon: Wifi, description: "Posts do Meta" },
+  ];
+
+  const handleConnect = (platformId: string) => {
+    setConnectedPlatforms(prev => [...prev, platformId]);
+    const platform = socialPlatforms.find(p => p.id === platformId);
+    toast.success(`${platform?.name} conectado com sucesso!`);
+  };
+
+  const handleDisconnect = (platformId: string) => {
+    setConnectedPlatforms(prev => prev.filter(id => id !== platformId));
+    const platform = socialPlatforms.find(p => p.id === platformId);
+    toast.info(`${platform?.name} desconectado`);
+  };
+
+  const isConnected = (platformId: string) => connectedPlatforms.includes(platformId);
 
   return (
     <DashboardLayout>
@@ -27,6 +55,10 @@ export default function Settings() {
               <User className="h-4 w-4" />
               Perfil
             </TabsTrigger>
+            <TabsTrigger value="connections" className="flex items-center gap-2">
+              <Wifi className="h-4 w-4" />
+              Conexões
+            </TabsTrigger>
             <TabsTrigger value="language" className="flex items-center gap-2">
               <Globe className="h-4 w-4" />
               Idiomas
@@ -38,10 +70,6 @@ export default function Settings() {
             <TabsTrigger value="security" className="flex items-center gap-2">
               <Shield className="h-4 w-4" />
               Segurança
-            </TabsTrigger>
-            <TabsTrigger value="billing" className="flex items-center gap-2">
-              <CreditCard className="h-4 w-4" />
-              Planos
             </TabsTrigger>
           </TabsList>
 
@@ -73,6 +101,49 @@ export default function Settings() {
                   <Input id="bio" placeholder="Conte um pouco sobre você" />
                 </div>
                 <Button>Salvar Alterações</Button>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="connections">
+            <Card>
+              <CardHeader>
+                <CardTitle>Conectar suas redes sociais</CardTitle>
+                <CardDescription>
+                  Conecte suas redes sociais para agendar e publicar automaticamente. As conexões feitas aqui serão usadas em todo o sistema.
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                {socialPlatforms.map((platform) => (
+                  <div key={platform.id} className="flex items-center justify-between p-4 border rounded-lg">
+                    <div className="flex items-center gap-3">
+                      <platform.icon className="h-6 w-6 text-gray-600" />
+                      <div>
+                        <div className="font-medium">{platform.name}</div>
+                        <div className="text-sm text-gray-500">{platform.description}</div>
+                      </div>
+                    </div>
+                    
+                    {isConnected(platform.id) ? (
+                      <Button 
+                        variant="outline" 
+                        size="sm"
+                        onClick={() => handleDisconnect(platform.id)}
+                        className="text-red-600 border-red-200 hover:bg-red-50"
+                      >
+                        Desconectar
+                      </Button>
+                    ) : (
+                      <Button 
+                        size="sm"
+                        onClick={() => handleConnect(platform.id)}
+                        className="bg-purple-600 hover:bg-purple-700"
+                      >
+                        Conectar
+                      </Button>
+                    )}
+                  </div>
+                ))}
               </CardContent>
             </Card>
           </TabsContent>
@@ -230,44 +301,6 @@ export default function Settings() {
                 </CardContent>
               </Card>
             </div>
-          </TabsContent>
-
-          <TabsContent value="billing">
-            <Card>
-              <CardHeader>
-                <CardTitle>Planos e Assinatura</CardTitle>
-                <CardDescription>
-                  Gerencie seu plano e método de pagamento.
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-6">
-                <div className="p-4 bg-purple-50 rounded-lg">
-                  <div className="flex justify-between items-center">
-                    <div>
-                      <div className="font-medium">Plano Creator</div>
-                      <div className="text-sm text-gray-500">R$ 39,90/mês</div>
-                    </div>
-                    <Button variant="outline">Alterar Plano</Button>
-                  </div>
-                </div>
-                
-                <Separator />
-                
-                <div className="space-y-4">
-                  <h3 className="font-medium">Método de Pagamento</h3>
-                  <div className="flex items-center justify-between p-4 border rounded-lg">
-                    <div className="flex items-center gap-3">
-                      <div className="w-8 h-5 bg-blue-600 rounded"></div>
-                      <div>
-                        <div className="font-medium">**** **** **** 4242</div>
-                        <div className="text-sm text-gray-500">Expira em 12/27</div>
-                      </div>
-                    </div>
-                    <Button variant="outline" size="sm">Editar</Button>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
           </TabsContent>
         </Tabs>
       </div>

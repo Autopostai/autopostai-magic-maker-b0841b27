@@ -11,7 +11,6 @@ import {
   MessageSquare,
   Clock,
   Users,
-  CreditCard,
   HelpCircle,
   LogOut,
   TrendingUp,
@@ -153,11 +152,6 @@ const accountItems = [
     icon: Settings,
   },
   {
-    title: "Planos",
-    url: "/pricing",
-    icon: CreditCard,
-  },
-  {
     title: "Suporte",
     url: "/support",
     icon: HelpCircle,
@@ -172,6 +166,13 @@ export function AppSidebar() {
       return location.pathname === "/dashboard";
     }
     return location.pathname.startsWith(url);
+  };
+
+  const getMenuButtonClass = (url: string) => {
+    if (isActive(url)) {
+      return "bg-purple-600 text-white hover:bg-purple-700 hover:text-white";
+    }
+    return "";
   };
 
   return (
@@ -193,7 +194,7 @@ export function AppSidebar() {
             <SidebarMenu>
               {menuItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild isActive={isActive(item.url)}>
+                  <SidebarMenuButton asChild className={getMenuButtonClass(item.url)}>
                     <Link to={item.url}>
                       <item.icon className="h-4 w-4" />
                       <span>{item.title}</span>
@@ -211,7 +212,7 @@ export function AppSidebar() {
             <SidebarMenu>
               {contentItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild isActive={isActive(item.url)}>
+                  <SidebarMenuButton asChild className={getMenuButtonClass(item.url)}>
                     <Link to={item.url}>
                       <item.icon className="h-4 w-4" />
                       <span>{item.title}</span>
@@ -229,7 +230,7 @@ export function AppSidebar() {
             <SidebarMenu>
               {aiToolsItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild isActive={isActive(item.url)}>
+                  <SidebarMenuButton asChild className={getMenuButtonClass(item.url)}>
                     <Link to={item.url}>
                       <item.icon className="h-4 w-4" />
                       <span>{item.title}</span>
@@ -247,7 +248,7 @@ export function AppSidebar() {
             <SidebarMenu>
               {toolsItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild isActive={isActive(item.url)}>
+                  <SidebarMenuButton asChild className={getMenuButtonClass(item.url)}>
                     <Link to={item.url}>
                       <item.icon className="h-4 w-4" />
                       <span>{item.title}</span>
@@ -265,7 +266,7 @@ export function AppSidebar() {
             <SidebarMenu>
               {accountItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild isActive={isActive(item.url)}>
+                  <SidebarMenuButton asChild className={getMenuButtonClass(item.url)}>
                     <Link to={item.url}>
                       <item.icon className="h-4 w-4" />
                       <span>{item.title}</span>

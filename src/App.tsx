@@ -37,6 +37,8 @@ import DigitalProducts from "./pages/DigitalProducts";
 import ContentPlanning from "./pages/ContentPlanning";
 import ContentCalendar from "./pages/ContentCalendar";
 import Metrics from "./pages/Metrics";
+import PresentationText from "./pages/PresentationText";
+import PresentationDesign from "./pages/PresentationDesign";
 
 const queryClient = new QueryClient();
 
@@ -69,6 +71,8 @@ const App = () => (
           <Route path="/bio-optimizer" element={<BioOptimizer />} />
           <Route path="/bio-result" element={<BioResult />} />
           <Route path="/content-generator" element={<ContentGenerator />} />
+          <Route path="/presentation-text" element={<PresentationText />} />
+          <Route path="/presentation-design" element={<PresentationDesign />} />
           <Route path="/digital-products" element={<DigitalProducts />} />
           <Route path="/content" element={<Content />} />
           <Route path="/content/:id" element={<ViewContent />} />

@@ -1,4 +1,3 @@
-
 import { useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -72,19 +71,19 @@ export default function Index() {
             {/* Right Side - Dra. Ana */}
             <div className="flex justify-center lg:justify-end">
               <div className="relative">
-                <div className="relative animate-pulse" style={{ animationDuration: '3s' }}>
+                <div className="relative">
                   <img 
-                    src="/lovable-uploads/dff2e3f0-a7c9-4e72-a52b-5b2ef799e069.png" 
+                    src="/lovable-uploads/6a8a2917-0559-40bf-a6f8-ee433eb983d0.png" 
                     alt="Dra. Ana" 
                     className="w-80 h-auto rounded-3xl shadow-2xl transform hover:scale-105 transition-transform duration-700"
                   />
                   
-                  {/* Speech Bubble */}
-                  <div className="absolute -left-20 top-20 bg-white rounded-xl p-4 shadow-lg max-w-64 animate-bounce border border-purple-200" style={{ animationDuration: '4s' }}>
+                  {/* Speech Bubble - Positioned at bottom */}
+                  <div className="absolute -left-8 bottom-8 bg-white rounded-xl p-4 shadow-lg max-w-64 animate-bounce border border-purple-200" style={{ animationDuration: '4s' }}>
                     <p className="text-sm text-gray-700 font-medium">
                       "Em 2 minutos por dia, eu tenho conteúdo planejado para o mês inteiro."
                     </p>
-                    <div className="absolute bottom-0 right-8 w-0 h-0 border-l-4 border-l-transparent border-r-4 border-r-transparent border-t-4 border-t-white transform translate-y-full"></div>
+                    <div className="absolute top-0 right-8 w-0 h-0 border-l-4 border-l-transparent border-r-4 border-r-transparent border-b-4 border-b-white transform -translate-y-full"></div>
                   </div>
                 </div>
               </div>
