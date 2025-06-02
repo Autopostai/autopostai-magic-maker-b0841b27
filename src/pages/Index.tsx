@@ -73,7 +73,7 @@ export default function Index() {
               <div className="relative">
                 <div className="relative">
                   <img 
-                    src="/lovable-uploads/6a8a2917-0559-40bf-a6f8-ee433eb983d0.png" 
+                    src="/lovable-uploads/5da60abb-f907-4f42-bfdf-10aecb66b633.png" 
                     alt="Dra. Ana" 
                     className="w-80 h-auto rounded-3xl shadow-2xl transform hover:scale-105 transition-transform duration-700"
                   />

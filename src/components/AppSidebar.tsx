@@ -162,9 +162,35 @@ export function AppSidebar() {
   const location = useLocation();
 
   const isActive = (url: string) => {
+    // Exact match for dashboard
     if (url === "/dashboard") {
       return location.pathname === "/dashboard";
     }
+    
+    // For content items with query parameters, check both path and search
+    if (url.includes("?type=")) {
+      const [path, search] = url.split("?");
+      return location.pathname === path && location.search === `?${search}`;
+    }
+    
+    // For other paths, check if current path starts with the url
+    // but avoid conflicts between similar paths
+    if (url === "/content" && location.pathname === "/content-planning") {
+      return false;
+    }
+    
+    if (url === "/content" && location.pathname === "/content-calendar") {
+      return false;
+    }
+    
+    if (url === "/content-planning") {
+      return location.pathname === "/content-planning";
+    }
+    
+    if (url === "/content-calendar") {
+      return location.pathname === "/content-calendar";
+    }
+    
     return location.pathname.startsWith(url);
   };
 

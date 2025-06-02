@@ -11,10 +11,17 @@ export default function PresentationText() {
   const location = useLocation();
   const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState(false);
-  const [textContent, setTextContent] = useState(`
-SLIDE 1: CAPA
-Título: ${location.state?.topic || "Título da Apresentação"}
-Subtítulo: Guia completo para ${location.state?.audience || "seu público"}
+  
+  // Generate content based on the specified number of pages/slides
+  const generateSlideContent = () => {
+    const pageCount = parseInt(location.state?.pageCount) || 9;
+    const topic = location.state?.topic || "Título da Apresentação";
+    const audience = location.state?.audience || "seu público";
+    const detailedDescription = location.state?.detailedDescription || "";
+    
+    let content = `SLIDE 1: CAPA
+Título: ${topic}
+Subtítulo: Guia completo para ${audience}
 
 SLIDE 2: AGENDA
 • Introdução ao tema
@@ -25,43 +32,54 @@ SLIDE 2: AGENDA
 • Conclusão e próximos passos
 
 SLIDE 3: INTRODUÇÃO
-Bem-vindos à nossa apresentação sobre ${location.state?.topic || "o tema principal"}.
+Bem-vindos à nossa apresentação sobre ${topic}.
 Hoje vamos explorar conceitos essenciais e estratégias práticas que você pode aplicar imediatamente.
 
-SLIDE 4: CONCEITOS FUNDAMENTAIS
-• Definição principal do tema
-• Elementos-chave para entender
-• Base teórica necessária
-• Principais benefícios
+`;
 
-SLIDE 5: ESTRATÉGIAS PRÁTICAS
-• Passo 1: Análise inicial
-• Passo 2: Planejamento
-• Passo 3: Implementação
-• Passo 4: Monitoramento
+    // Generate additional slides based on the requested count
+    if (pageCount > 3) {
+      for (let i = 4; i <= pageCount - 1; i++) {
+        const slideTopics = [
+          "CONCEITOS FUNDAMENTAIS",
+          "ESTRATÉGIAS PRÁTICAS", 
+          "CASOS DE ESTUDO",
+          "IMPLEMENTAÇÃO",
+          "BENEFÍCIOS E VANTAGENS",
+          "DESAFIOS E SOLUÇÕES",
+          "MELHORES PRÁTICAS",
+          "FERRAMENTAS RECOMENDADAS",
+          "PLANEJAMENTO",
+          "EXECUÇÃO",
+          "MONITORAMENTO",
+          "RESULTADOS ESPERADOS"
+        ];
+        
+        const topicIndex = (i - 4) % slideTopics.length;
+        const slideTopic = slideTopics[topicIndex];
+        
+        content += `SLIDE ${i}: ${slideTopic}
+• Ponto principal sobre ${slideTopic.toLowerCase()}
+• Informações relevantes baseadas em: ${detailedDescription.slice(0, 50)}...
+• Estratégias aplicáveis
+• Exemplos práticos
 
-SLIDE 6: CASOS DE ESTUDO
-Exemplo 1: Como a estratégia funcionou na prática
-Resultado: Benefícios alcançados
-Lições aprendidas: Pontos importantes
+`;
+      }
+    }
 
-SLIDE 7: IMPLEMENTAÇÃO
-• Ferramentas necessárias
-• Cronograma sugerido
-• Recursos recomendados
-• Checklist de ações
-
-SLIDE 8: CONCLUSÃO
-• Principais pontos abordados
-• Benefícios esperados
-• Próximos passos
-• Como continuar aprendendo
-
-SLIDE 9: OBRIGADO
+    // Final slide (always the last one)
+    content += `SLIDE ${pageCount}: OBRIGADO
 Obrigado pela atenção!
 Perguntas e respostas
 Contato: [seu email/rede social]
-  `);
+
+Apresentação baseada em: ${detailedDescription.slice(0, 100)}...`;
+
+    return content;
+  };
+
+  const [textContent, setTextContent] = useState(generateSlideContent());
 
   const handleGenerateDesign = () => {
     navigate("/presentation-design", { 
@@ -86,7 +104,7 @@ Contato: [seu email/rede social]
           <div>
             <h1 className="text-3xl font-bold">Conteúdo Textual da Apresentação</h1>
             <p className="text-gray-600">
-              Revise e edite o conteúdo antes de gerar o design
+              Revise e edite o conteúdo antes de gerar o design ({location.state?.pageCount || 9} slides)
             </p>
           </div>
         </div>
@@ -114,7 +132,7 @@ Contato: [seu email/rede social]
               <Textarea
                 value={textContent}
                 onChange={(e) => setTextContent(e.target.value)}
-                rows={20}
+                rows={25}
                 className="min-h-96 font-mono text-sm"
               />
             ) : (
