@@ -1,8 +1,7 @@
-
 import { DashboardLayout } from "@/components/DashboardLayout";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowLeft, ArrowRight, FileText, Video, Youtube, Megaphone, MessageSquare, BookOpen, FileSpreadsheet, PresentationChart } from "lucide-react";
+import { ArrowLeft, ArrowRight, FileText, Video, Youtube, Megaphone, MessageSquare, BookOpen, FileSpreadsheet, Presentation } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 
@@ -83,7 +82,7 @@ const contentTypes = [
     id: "presentation",
     title: "Apresentação",
     description: "Slides para palestras e reuniões",
-    icon: PresentationChart,
+    icon: Presentation,
     color: "text-pink-600",
     bgColor: "bg-pink-50"
   }
