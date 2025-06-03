@@ -37,7 +37,6 @@ import {
 } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
 import { Sparkles } from "lucide-react";
-import { useEffect } from "react";
 
 const menuItems = [
   {
@@ -47,18 +46,21 @@ const menuItems = [
   },
   {
     title: "Criar Conteúdo",
-    url: "/create",
+    url: "/create/type",
     icon: PlusCircle,
+    routes: ["/create", "/create/type", "/create/method", "/create/script", "/create/caption", "/create/ai", "/mockups", "/mockup"]
   },
   {
     title: "Planejamento de Conteúdo",
     url: "/content-planning",
     icon: Clipboard,
+    routes: ["/content-planning", "/content-calendar", "/edit-contents"]
   },
   {
     title: "Meus Conteúdos",
     url: "/content",
     icon: FileText,
+    routes: ["/content"]
   },
 ];
 
@@ -77,11 +79,13 @@ const aiToolsItems = [
     title: "Otimizar Bio",
     url: "/bio-optimizer",
     icon: Users,
+    routes: ["/bio-optimizer", "/bio-result"]
   },
   {
     title: "Gerar Apresentação",
     url: "/content-generator",
     icon: BookOpen,
+    routes: ["/content-generator", "/presentation-text", "/presentation-design"]
   },
   {
     title: "Produtos Digitais",
@@ -128,6 +132,7 @@ const toolsItems = [
     title: "Agendar Posts",
     url: "/create/platforms",
     icon: Clock,
+    routes: ["/create/platforms", "/schedule"]
   },
   {
     title: "Métricas",
@@ -162,66 +167,38 @@ const accountItems = [
 export function AppSidebar() {
   const location = useLocation();
 
-  const isActive = (url: string) => {
-    // Exact match for dashboard
-    if (url === "/dashboard") {
-      return location.pathname === "/dashboard";
+  const isActive = (item: any) => {
+    // Check if current pathname matches the main URL
+    if (location.pathname === item.url) {
+      return true;
     }
     
-    // Exact match for create
-    if (url === "/create") {
-      return location.pathname === "/create";
-    }
-    
-    // Exact match for content-planning
-    if (url === "/content-planning") {
-      return location.pathname === "/content-planning";
-    }
-    
-    // Exact match for content (base)
-    if (url === "/content") {
-      return location.pathname === "/content" && !location.search;
-    }
-    
-    // Exact match for content-generator and related paths
-    if (url === "/content-generator") {
-      return location.pathname === "/content-generator" || 
-             location.pathname === "/presentation-text" || 
-             location.pathname === "/presentation-design";
-    }
-    
-    // Exact match for create/platforms and schedule
-    if (url === "/create/platforms") {
-      return location.pathname === "/create/platforms" || location.pathname === "/schedule";
+    // Check if current pathname matches any of the defined routes for this item
+    if (item.routes) {
+      return item.routes.some((route: string) => {
+        if (route.includes("?")) {
+          const [path, search] = route.split("?");
+          return location.pathname === path && location.search === `?${search}`;
+        }
+        return location.pathname.startsWith(route);
+      });
     }
     
     // For content items with query parameters
-    if (url.includes("?type=")) {
-      const [path, search] = url.split("?");
+    if (item.url.includes("?type=")) {
+      const [path, search] = item.url.split("?");
       return location.pathname === path && location.search === `?${search}`;
     }
     
-    // For other exact paths
-    return location.pathname === url;
+    return false;
   };
 
-  const getMenuButtonClass = (url: string) => {
-    if (isActive(url)) {
+  const getMenuButtonClass = (item: any) => {
+    if (isActive(item)) {
       return "bg-purple-600 text-white hover:bg-purple-700 hover:text-white";
     }
     return "";
   };
-
-  // Prevent auto-scroll by maintaining scroll position
-  useEffect(() => {
-    const sidebarContent = document.querySelector('[data-sidebar="content"]');
-    if (sidebarContent) {
-      const currentScrollTop = sidebarContent.scrollTop;
-      return () => {
-        sidebarContent.scrollTop = currentScrollTop;
-      };
-    }
-  }, [location.pathname]);
 
   return (
     <Sidebar className="border-r">
@@ -236,13 +213,13 @@ export function AppSidebar() {
         </Link>
       </SidebarHeader>
 
-      <SidebarContent className="overflow-y-auto" style={{ scrollBehavior: 'auto' }}>
+      <SidebarContent className="overflow-y-auto">
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu>
               {menuItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild className={getMenuButtonClass(item.url)}>
+                  <SidebarMenuButton asChild className={getMenuButtonClass(item)}>
                     <Link to={item.url}>
                       <item.icon className="h-4 w-4" />
                       <span>{item.title}</span>
@@ -260,7 +237,7 @@ export function AppSidebar() {
             <SidebarMenu>
               {aiToolsItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild className={getMenuButtonClass(item.url)}>
+                  <SidebarMenuButton asChild className={getMenuButtonClass(item)}>
                     <Link to={item.url}>
                       <item.icon className="h-4 w-4" />
                       <span>{item.title}</span>
@@ -278,7 +255,7 @@ export function AppSidebar() {
             <SidebarMenu>
               {contentItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild className={getMenuButtonClass(item.url)}>
+                  <SidebarMenuButton asChild className={getMenuButtonClass(item)}>
                     <Link to={item.url}>
                       <item.icon className="h-4 w-4" />
                       <span>{item.title}</span>
@@ -296,7 +273,7 @@ export function AppSidebar() {
             <SidebarMenu>
               {toolsItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild className={getMenuButtonClass(item.url)}>
+                  <SidebarMenuButton asChild className={getMenuButtonClass(item)}>
                     <Link to={item.url}>
                       <item.icon className="h-4 w-4" />
                       <span>{item.title}</span>
@@ -314,7 +291,7 @@ export function AppSidebar() {
             <SidebarMenu>
               {accountItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild className={getMenuButtonClass(item.url)}>
+                  <SidebarMenuButton asChild className={getMenuButtonClass(item)}>
                     <Link to={item.url}>
                       <item.icon className="h-4 w-4" />
                       <span>{item.title}</span>

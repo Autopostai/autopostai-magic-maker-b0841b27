@@ -1,41 +1,66 @@
 
-import { useState } from "react";
 import { DashboardLayout } from "@/components/DashboardLayout";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowLeft, ArrowRight, Sparkles, Image } from "lucide-react";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { ArrowLeft, ArrowRight, Sparkles, Layout } from "lucide-react";
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import { useState } from "react";
+
+const methods = [
+  {
+    id: "ai",
+    title: "Criar com Inteligência Artificial",
+    description: "Use nossa IA para gerar conteúdo automaticamente com base nas suas preferências",
+    icon: Sparkles,
+    color: "text-purple-600",
+    bgColor: "bg-purple-50",
+    nextRoute: "/create/ai"
+  },
+  {
+    id: "mockup",
+    title: "Usar Mockup Personalizável",
+    description: "Escolha um template pronto e personalize com suas informações",
+    icon: Layout,
+    color: "text-blue-600",
+    bgColor: "bg-blue-50",
+    nextRoute: "/mockups"
+  }
+];
 
 export default function CreateMethod() {
-  const [selectedMethod, setSelectedMethod] = useState<"ai" | "mockup" | null>(null);
-  const [searchParams] = useSearchParams();
+  const [selectedMethod, setSelectedMethod] = useState<string>("");
   const navigate = useNavigate();
-  
-  const contentType = searchParams.get('type') || 'post';
-
-  const getContentTypeTitle = (type: string) => {
-    const titles: Record<string, string> = {
-      'post': 'Post Único',
-      'carousel': 'Carrossel',
-      'thumbnail': 'Thumbnail YouTube',
-      'ads': 'Criativo para Anúncios'
-    };
-    return titles[type] || type;
-  };
+  const location = useLocation();
+  const contentType = location.state?.contentType;
 
   const handleContinue = () => {
     if (selectedMethod) {
-      const query = new URLSearchParams({
-        type: contentType,
-        method: selectedMethod
-      });
-      
-      if (selectedMethod === 'ai') {
-        navigate(`/create/content?${query}`);
-      } else {
-        navigate(`/mockup/gallery?${query}`);
+      const method = methods.find(m => m.id === selectedMethod);
+      if (method) {
+        navigate(method.nextRoute, { 
+          state: { 
+            contentType,
+            method: selectedMethod 
+          } 
+        });
       }
     }
+  };
+
+  const getContentTypeName = (type: string) => {
+    const types: { [key: string]: string } = {
+      post: "Post único",
+      carousel: "Carrossel",
+      thumbnail: "Thumbnail para YouTube",
+      ads: "Criativo para anúncios",
+      video: "Reels / Shorts",
+      script: "Roteiro de vídeo",
+      caption: "Legenda",
+      ebook: "eBook",
+      pdf: "PDF",
+      presentation: "Apresentação"
+    };
+    return types[type] || type;
   };
 
   return (
@@ -44,84 +69,81 @@ export default function CreateMethod() {
         {/* Header */}
         <div className="flex items-center gap-4">
           <Button variant="outline" size="sm" asChild>
-            <Link to="/create">
+            <Link to="/create/type">
               <ArrowLeft className="h-4 w-4 mr-2" />
               Voltar
             </Link>
           </Button>
           <div>
-            <h1 className="text-3xl font-bold">Como você quer criar?</h1>
-            <p className="text-gray-600">Escolha o método de criação do seu conteúdo</p>
+            <h1 className="text-3xl font-bold">Como Você Quer Criar?</h1>
+            <p className="text-gray-600">
+              {contentType && (
+                <span>Criando: <strong>{getContentTypeName(contentType)}</strong> • </span>
+              )}
+              Escolha o método de criação
+            </p>
           </div>
         </div>
 
-        {/* Selected Info */}
-        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-          <p className="text-sm text-blue-800">
-            <span className="font-medium">Tipo de conteúdo:</span> {getContentTypeTitle(contentType)}
-          </p>
-        </div>
-
         {/* Method Selection */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* AI Creation */}
-          <Card 
-            className={`cursor-pointer transition-all duration-200 ${
-              selectedMethod === 'ai' 
-                ? 'border-purple-500 bg-purple-50' 
-                : 'hover:border-gray-300'
-            }`}
-            onClick={() => setSelectedMethod('ai')}
-          >
-            <CardHeader className="text-center">
-              <div className="mx-auto mb-4 w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center">
-                <Sparkles className="w-8 h-8 text-purple-600" />
-              </div>
-              <CardTitle>Criar com IA</CardTitle>
-              <CardDescription>
-                Deixe a inteligência artificial criar conteúdo personalizado para você
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <ul className="space-y-2 text-sm text-gray-600">
-                <li>• Geração automática de texto</li>
-                <li>• Sugestões de layout</li>
-                <li>• Adaptação por público-alvo</li>
-                <li>• Tons de voz personalizados</li>
-                <li>• Hashtags otimizadas</li>
-              </ul>
-            </CardContent>
-          </Card>
+        <Card>
+          <CardHeader>
+            <CardTitle>Métodos de Criação</CardTitle>
+            <CardDescription>
+              Selecione como você gostaria de criar seu conteúdo
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {methods.map((method) => {
+                const Icon = method.icon;
+                const isSelected = selectedMethod === method.id;
+                
+                return (
+                  <div
+                    key={method.id}
+                    className={`
+                      relative cursor-pointer border-2 rounded-lg p-6 transition-all duration-200
+                      ${isSelected 
+                        ? 'border-purple-500 bg-purple-50 shadow-md' 
+                        : 'border-gray-200 hover:border-gray-300 hover:shadow-sm'
+                      }
+                    `}
+                    onClick={() => setSelectedMethod(method.id)}
+                  >
+                    <div className="space-y-4">
+                      <div className={`${method.bgColor} p-4 rounded-lg w-fit`}>
+                        <Icon className={`w-8 h-8 ${method.color}`} />
+                      </div>
+                      <div>
+                        <h3 className="font-semibold text-lg mb-2">{method.title}</h3>
+                        <p className="text-gray-600 text-sm leading-relaxed">
+                          {method.description}
+                        </p>
+                      </div>
+                    </div>
+                    
+                    {isSelected && (
+                      <div className="absolute top-4 right-4">
+                        <div className="w-6 h-6 bg-purple-600 rounded-full flex items-center justify-center">
+                          <span className="text-white text-xs">✓</span>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
 
-          {/* Mockup Creation */}
-          <Card 
-            className={`cursor-pointer transition-all duration-200 ${
-              selectedMethod === 'mockup' 
-                ? 'border-purple-500 bg-purple-50' 
-                : 'hover:border-gray-300'
-            }`}
-            onClick={() => setSelectedMethod('mockup')}
-          >
-            <CardHeader className="text-center">
-              <div className="mx-auto mb-4 w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center">
-                <Image className="w-8 h-8 text-blue-600" />
+            {selectedMethod && (
+              <div className="mt-6 p-4 bg-green-50 border border-green-200 rounded-lg">
+                <p className="text-sm text-green-800">
+                  ✓ Método selecionado: {methods.find(m => m.id === selectedMethod)?.title}
+                </p>
               </div>
-              <CardTitle>Usar Mockup Personalizável</CardTitle>
-              <CardDescription>
-                Escolha um template pronto e personalize com seus textos e imagens
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <ul className="space-y-2 text-sm text-gray-600">
-                <li>• Templates profissionais</li>
-                <li>• Fácil edição de texto</li>
-                <li>• Troca simples de imagens</li>
-                <li>• Designs otimizados</li>
-                <li>• Criação rápida</li>
-              </ul>
-            </CardContent>
-          </Card>
-        </div>
+            )}
+          </CardContent>
+        </Card>
 
         {/* Continue Button */}
         <div className="flex justify-end">
@@ -129,6 +151,7 @@ export default function CreateMethod() {
             onClick={handleContinue}
             disabled={!selectedMethod}
             size="lg"
+            className="bg-purple-600 hover:bg-purple-700"
           >
             Continuar
             <ArrowRight className="h-4 w-4 ml-2" />

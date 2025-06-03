@@ -2,106 +2,106 @@
 import { DashboardLayout } from "@/components/DashboardLayout";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowLeft, Image, FileText, Film, MessageSquare, BookOpen, Youtube, Megaphone } from "lucide-react";
+import { ArrowLeft, ArrowRight, FileText, Video, Youtube, Megaphone, MessageSquare, BookOpen, FileSpreadsheet, PresentationChart } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
+
+const contentTypes = [
+  {
+    id: "post",
+    title: "Post único",
+    description: "Imagem com texto para redes sociais",
+    icon: FileText,
+    color: "text-blue-600",
+    bgColor: "bg-blue-50"
+  },
+  {
+    id: "carousel",
+    title: "Carrossel",
+    description: "Múltiplas imagens em sequência",
+    icon: FileText,
+    color: "text-green-600",
+    bgColor: "bg-green-50"
+  },
+  {
+    id: "thumbnail",
+    title: "Thumbnail para YouTube",
+    description: "Capa atrativa para vídeos",
+    icon: Youtube,
+    color: "text-red-600",
+    bgColor: "bg-red-50"
+  },
+  {
+    id: "ads",
+    title: "Criativo para anúncios",
+    description: "Material para campanhas pagas",
+    icon: Megaphone,
+    color: "text-purple-600",
+    bgColor: "bg-purple-50"
+  },
+  {
+    id: "video",
+    title: "Reels / Shorts",
+    description: "Vídeos curtos para redes sociais",
+    icon: Video,
+    color: "text-orange-600",
+    bgColor: "bg-orange-50"
+  },
+  {
+    id: "script",
+    title: "Roteiro de vídeo",
+    description: "Script para gravação de conteúdo",
+    icon: MessageSquare,
+    color: "text-indigo-600",
+    bgColor: "bg-indigo-50"
+  },
+  {
+    id: "caption",
+    title: "Legenda",
+    description: "Texto para acompanhar postagens",
+    icon: FileText,
+    color: "text-teal-600",
+    bgColor: "bg-teal-50"
+  },
+  {
+    id: "ebook",
+    title: "eBook",
+    description: "Livro digital educativo",
+    icon: BookOpen,
+    color: "text-amber-600",
+    bgColor: "bg-amber-50"
+  },
+  {
+    id: "pdf",
+    title: "PDF",
+    description: "Documento em formato PDF",
+    icon: FileSpreadsheet,
+    color: "text-cyan-600",
+    bgColor: "bg-cyan-50"
+  },
+  {
+    id: "presentation",
+    title: "Apresentação",
+    description: "Slides para palestras e reuniões",
+    icon: PresentationChart,
+    color: "text-pink-600",
+    bgColor: "bg-pink-50"
+  }
+];
 
 export default function CreateContentType() {
+  const [selectedType, setSelectedType] = useState<string>("");
   const navigate = useNavigate();
 
-  const contentTypes = [
-    {
-      id: "post",
-      title: "Post Único",
-      description: "Crie um post único para suas redes sociais",
-      icon: Image,
-      color: "bg-blue-50 border-blue-200",
-      iconColor: "text-blue-600",
-      iconBg: "bg-blue-100",
-      route: "/create/method"
-    },
-    {
-      id: "carousel",
-      title: "Carrossel",
-      description: "Crie carrosséis com múltiplas imagens",
-      icon: FileText,
-      color: "bg-purple-50 border-purple-200",
-      iconColor: "text-purple-600", 
-      iconBg: "bg-purple-100",
-      route: "/create/method"
-    },
-    {
-      id: "thumbnail",
-      title: "Thumbnail YouTube",
-      description: "Crie thumbnails atrativas para seus vídeos",
-      icon: Youtube,
-      color: "bg-red-50 border-red-200",
-      iconColor: "text-red-600",
-      iconBg: "bg-red-100",
-      route: "/create/method"
-    },
-    {
-      id: "ads",
-      title: "Criativos para Anúncios",
-      description: "Crie peças publicitárias para suas campanhas",
-      icon: Megaphone,
-      color: "bg-orange-50 border-orange-200",
-      iconColor: "text-orange-600",
-      iconBg: "bg-orange-100",
-      route: "/create/method"
-    },
-    {
-      id: "reels",
-      title: "Reels/Shorts",
-      description: "Crie vídeos curtos para Instagram e TikTok",
-      icon: Film,
-      color: "bg-pink-50 border-pink-200",
-      iconColor: "text-pink-600",
-      iconBg: "bg-pink-100",
-      route: "/create/ai"
-    },
-    {
-      id: "script",
-      title: "Roteiro para Vídeo",
-      description: "Gere roteiros otimizados para seus vídeos",
-      icon: MessageSquare,
-      color: "bg-green-50 border-green-200",
-      iconColor: "text-green-600",
-      iconBg: "bg-green-100",
-      route: "/create/script"
-    },
-    {
-      id: "caption",
-      title: "Legenda",
-      description: "Crie legendas envolventes para seus posts",
-      icon: MessageSquare,
-      color: "bg-yellow-50 border-yellow-200",
-      iconColor: "text-yellow-600",
-      iconBg: "bg-yellow-100",
-      route: "/create/caption"
-    },
-    {
-      id: "ebook",
-      title: "Gerar eBook/PDF/Apresentação",
-      description: "Crie materiais educativos completos",
-      icon: BookOpen,
-      color: "bg-indigo-50 border-indigo-200",
-      iconColor: "text-indigo-600",
-      iconBg: "bg-indigo-100",
-      route: "/content-generator"
-    }
-  ];
-
-  const handleContentTypeSelect = (contentType: any) => {
-    if (["post", "carousel", "thumbnail", "ads"].includes(contentType.id)) {
-      navigate(`${contentType.route}?type=${contentType.id}`);
-    } else {
-      navigate(contentType.route);
+  const handleContinue = () => {
+    if (selectedType) {
+      navigate("/create/method", { state: { contentType: selectedType } });
     }
   };
 
   return (
     <DashboardLayout>
-      <div className="space-y-6 max-w-6xl mx-auto">
+      <div className="space-y-6 max-w-5xl mx-auto">
         {/* Header */}
         <div className="flex items-center gap-4">
           <Button variant="outline" size="sm" asChild>
@@ -111,44 +111,80 @@ export default function CreateContentType() {
             </Link>
           </Button>
           <div>
-            <h1 className="text-3xl font-bold">Escolha o tipo de conteúdo</h1>
-            <p className="text-gray-600">Selecione o que você deseja criar hoje</p>
+            <h1 className="text-3xl font-bold">Escolha o Tipo de Conteúdo</h1>
+            <p className="text-gray-600">Selecione o formato do conteúdo que você deseja criar</p>
           </div>
         </div>
 
-        {/* Content Types Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {contentTypes.map((type) => (
-            <Card 
-              key={type.id}
-              className={`cursor-pointer transition-all duration-200 hover:scale-105 hover:shadow-lg ${type.color}`}
-              onClick={() => handleContentTypeSelect(type)}
-            >
-              <CardHeader className="text-center pb-4">
-                <div className={`mx-auto mb-4 w-16 h-16 ${type.iconBg} rounded-full flex items-center justify-center`}>
-                  <type.icon className={`w-8 h-8 ${type.iconColor}`} />
-                </div>
-                <CardTitle className="text-xl">{type.title}</CardTitle>
-                <CardDescription className="text-sm">
-                  {type.description}
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="pt-0">
-                <Button className="w-full" variant="outline">
-                  Começar
-                </Button>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
+        {/* Content Type Selection */}
+        <Card>
+          <CardHeader>
+            <CardTitle>Tipos de Conteúdo Disponíveis</CardTitle>
+            <CardDescription>
+              Clique no tipo de conteúdo que você deseja criar
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {contentTypes.map((type) => {
+                const Icon = type.icon;
+                const isSelected = selectedType === type.id;
+                
+                return (
+                  <div
+                    key={type.id}
+                    className={`
+                      relative cursor-pointer border-2 rounded-lg p-6 transition-all duration-200
+                      ${isSelected 
+                        ? 'border-purple-500 bg-purple-50 shadow-md' 
+                        : 'border-gray-200 hover:border-gray-300 hover:shadow-sm'
+                      }
+                    `}
+                    onClick={() => setSelectedType(type.id)}
+                  >
+                    <div className="text-center space-y-3">
+                      <div className={`${type.bgColor} p-4 rounded-lg mx-auto w-fit`}>
+                        <Icon className={`w-8 h-8 ${type.color}`} />
+                      </div>
+                      <div>
+                        <h3 className="font-semibold text-lg">{type.title}</h3>
+                        <p className="text-sm text-gray-500 mt-1">{type.description}</p>
+                      </div>
+                    </div>
+                    
+                    {isSelected && (
+                      <div className="absolute top-2 right-2">
+                        <div className="w-6 h-6 bg-purple-600 rounded-full flex items-center justify-center">
+                          <span className="text-white text-xs">✓</span>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
 
-        {/* Info Section */}
-        <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mt-8">
-          <h3 className="font-semibold text-blue-900 mb-2">💡 Dica:</h3>
-          <p className="text-blue-800 text-sm">
-            Para Posts, Carrosséis, Thumbnails e Criativos, você poderá escolher entre criar com IA ou usar nossos templates personalizáveis. 
-            Os outros tipos de conteúdo são gerados automaticamente pela nossa inteligência artificial.
-          </p>
+            {selectedType && (
+              <div className="mt-6 p-4 bg-green-50 border border-green-200 rounded-lg">
+                <p className="text-sm text-green-800">
+                  ✓ Tipo selecionado: {contentTypes.find(t => t.id === selectedType)?.title}
+                </p>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+
+        {/* Continue Button */}
+        <div className="flex justify-end">
+          <Button 
+            onClick={handleContinue}
+            disabled={!selectedType}
+            size="lg"
+            className="bg-purple-600 hover:bg-purple-700"
+          >
+            Continuar
+            <ArrowRight className="h-4 w-4 ml-2" />
+          </Button>
         </div>
       </div>
     </DashboardLayout>

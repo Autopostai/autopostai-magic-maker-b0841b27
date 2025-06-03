@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -24,6 +23,46 @@ export default function ContentCalendar() {
   const [selectedContent, setSelectedContent] = useState<any>(null);
   const [showContentDialog, setShowContentDialog] = useState(false);
 
+  // Função para distribuir postagens estrategicamente no mês
+  const distributePostsStrategically = (postsCount: number) => {
+    const currentDate = new Date();
+    const year = currentDate.getFullYear();
+    const month = currentDate.getMonth();
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    const startDay = currentDate.getDate();
+    
+    // Calcular dias disponíveis no mês atual
+    const availableDays = daysInMonth - startDay + 1;
+    
+    // Se temos mais posts que dias disponíveis, alguns dias terão múltiplos posts
+    const postsPerDay = Math.ceil(postsCount / availableDays);
+    const interval = Math.floor(availableDays / postsCount);
+    
+    const distributedDays = [];
+    let currentDay = startDay;
+    
+    for (let i = 0; i < postsCount; i++) {
+      // Se o intervalo for maior que 1, distribua com espaçamento
+      if (interval > 1) {
+        distributedDays.push(currentDay);
+        currentDay += interval;
+        
+        // Se ultrapassar o final do mês, volte para distribuir
+        if (currentDay > daysInMonth) {
+          currentDay = startDay + (i % interval) + 1;
+        }
+      } else {
+        // Para muitas postagens, distribua sequencialmente
+        distributedDays.push(startDay + i);
+        if (startDay + i > daysInMonth) {
+          distributedDays[distributedDays.length - 1] = daysInMonth;
+        }
+      }
+    }
+    
+    return distributedDays;
+  };
+
   // Gerar dados do calendário baseado nas preferências do usuário
   const generateCalendarData = () => {
     if (!planningData) return [];
@@ -42,21 +81,30 @@ export default function ContentCalendar() {
           "Exercícios para Iniciantes",
           "Rotina de Cuidados com a Pele",
           "Meditação e Mindfulness",
-          "Receitas Fit e Nutritivas"
+          "Receitas Fit e Nutritivas",
+          "Benefícios da Água",
+          "Vitaminas Essenciais",
+          "Sono de Qualidade"
         ],
         "Marketing digital": [
           "Estratégias de Instagram",
           "Como Criar Conteúdo Viral",
           "Métricas que Realmente Importam",
           "Ferramentas de Automação",
-          "Copywriting Persuasivo"
+          "Copywriting Persuasivo",
+          "SEO para Iniciantes",
+          "Email Marketing",
+          "Growth Hacking"
         ],
         "Culinária": [
           "Receitas Rápidas e Fáceis",
           "Técnicas de Cozimento",
           "Ingredientes Secretos",
           "Doces Sem Açúcar",
-          "Pratos Vegetarianos"
+          "Pratos Vegetarianos",
+          "Conservação de Alimentos",
+          "Temperos Especiais",
+          "Cozinha Internacional"
         ]
       };
       
@@ -65,12 +113,18 @@ export default function ContentCalendar() {
         "Motivação Diária",
         "Crescimento Pessoal",
         "Organização e Planejamento",
-        "Desenvolvimento de Hábitos"
+        "Desenvolvimento de Hábitos",
+        "Gestão do Tempo",
+        "Objetivos e Metas",
+        "Autoconhecimento"
       ];
     };
     
     const themes = getContentByNiche(niche);
     const generatedData = [];
+    
+    // Usar distribuição estratégica
+    const distributedDays = distributePostsStrategically(postsCount);
     
     // Começar do mês atual
     const currentDate = new Date();
@@ -78,7 +132,7 @@ export default function ContentCalendar() {
     const month = currentDate.getMonth() + 1;
     
     for (let i = 0; i < postsCount; i++) {
-      const day = (i % 30) + 1;
+      const day = distributedDays[i] || (i % 30) + 1;
       const dateStr = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
       
       const themeIndex = i % themes.length;
@@ -149,6 +203,8 @@ export default function ContentCalendar() {
       setCalendarData(updatedData);
       setIsEditDialogOpen(false);
       setEditingContent(null);
+      setSelectedContent({ ...selectedContent, ...editingContent });
+      setShowContentDialog(true); // Voltar para o dialog de visualização
       toast.success("Conteúdo atualizado com sucesso!");
     }
   };
@@ -210,7 +266,7 @@ export default function ContentCalendar() {
           <CardHeader>
             <CardTitle>Resumo do Planejamento</CardTitle>
             <CardDescription>
-              Visão geral do seu calendário de conteúdo
+              Visão geral do seu calendário de conteúdo - Posts distribuídos estrategicamente
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -339,10 +395,36 @@ export default function ContentCalendar() {
         <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
           <DialogContent className="max-w-2xl">
             <DialogHeader>
-              <DialogTitle>Editar Conteúdo</DialogTitle>
+              <DialogTitle>Editar Conteúdo Individual</DialogTitle>
             </DialogHeader>
             {editingContent && (
               <div className="space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <Label htmlFor="edit-type">Tipo de Conteúdo</Label>
+                    <Select value={editingContent.type} onValueChange={(value) => setEditingContent({...editingContent, type: value})}>
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="Carrossel">Carrossel</SelectItem>
+                        <SelectItem value="Vídeo">Vídeo</SelectItem>
+                        <SelectItem value="Imagem com texto">Imagem com texto</SelectItem>
+                        <SelectItem value="Reels">Reels</SelectItem>
+                        <SelectItem value="Stories">Stories</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div>
+                    <Label htmlFor="edit-time">Horário de Postagem</Label>
+                    <Input
+                      id="edit-time"
+                      value={editingContent.time}
+                      onChange={(e) => setEditingContent({...editingContent, time: e.target.value})}
+                      placeholder="Ex: 14:00"
+                    />
+                  </div>
+                </div>
                 <div>
                   <Label htmlFor="edit-title">Título</Label>
                   <Input
@@ -350,19 +432,6 @@ export default function ContentCalendar() {
                     value={editingContent.title}
                     onChange={(e) => setEditingContent({...editingContent, title: e.target.value})}
                   />
-                </div>
-                <div>
-                  <Label htmlFor="edit-type">Tipo de Conteúdo</Label>
-                  <Select value={editingContent.type} onValueChange={(value) => setEditingContent({...editingContent, type: value})}>
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="Carrossel">Carrossel</SelectItem>
-                      <SelectItem value="Vídeo">Vídeo</SelectItem>
-                      <SelectItem value="Imagem com texto">Imagem com texto</SelectItem>
-                    </SelectContent>
-                  </Select>
                 </div>
                 <div>
                   <Label htmlFor="edit-description">Descrição da Ideia</Label>
