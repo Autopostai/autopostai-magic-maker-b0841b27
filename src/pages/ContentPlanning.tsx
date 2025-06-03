@@ -76,9 +76,12 @@ export default function ContentPlanning() {
   };
 
   const handleGeneratePlanning = () => {
-    // Aqui você salvaria os dados e redirecionaria para o calendário
-    navigate("/content-calendar");
+    // Passar dados para o calendário com lógica personalizada
+    navigate("/content-calendar", { state: formData });
   };
+
+  // Determinar se o campo de posts por dia deve ser exibido
+  const shouldShowDailyPosts = parseInt(formData.postsPerMonth) >= 30;
 
   return (
     <DashboardLayout>
@@ -116,16 +119,18 @@ export default function ContentPlanning() {
                   onChange={(e) => setFormData(prev => ({ ...prev, postsPerMonth: e.target.value }))}
                 />
               </div>
-              <div>
-                <Label htmlFor="postsPerDay">Quantidade de postagens por dia</Label>
-                <Input
-                  id="postsPerDay"
-                  type="number"
-                  placeholder="Ex: 1"
-                  value={formData.postsPerDay}
-                  onChange={(e) => setFormData(prev => ({ ...prev, postsPerDay: e.target.value }))}
-                />
-              </div>
+              {shouldShowDailyPosts && (
+                <div>
+                  <Label htmlFor="postsPerDay">Quantidade de postagens por dia</Label>
+                  <Input
+                    id="postsPerDay"
+                    type="number"
+                    placeholder="Ex: 1"
+                    value={formData.postsPerDay}
+                    onChange={(e) => setFormData(prev => ({ ...prev, postsPerDay: e.target.value }))}
+                  />
+                </div>
+              )}
             </CardContent>
           </Card>
 

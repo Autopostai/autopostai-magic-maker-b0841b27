@@ -61,6 +61,34 @@ const menuItems = [
   },
 ];
 
+const aiToolsItems = [
+  {
+    title: "Resumir Vídeo",
+    url: "/video-summarizer",
+    icon: PlayCircle,
+  },
+  {
+    title: "Detector de Tendências",
+    url: "/trend-detector",
+    icon: TrendingUp,
+  },
+  {
+    title: "Otimizar Bio",
+    url: "/bio-optimizer",
+    icon: Users,
+  },
+  {
+    title: "Gerar Apresentação",
+    url: "/content-generator",
+    icon: BookOpen,
+  },
+  {
+    title: "Produtos Digitais",
+    url: "/digital-products",
+    icon: Package,
+  },
+];
+
 const contentItems = [
   {
     title: "Posts",
@@ -91,34 +119,6 @@ const contentItems = [
     title: "Roteiros",
     url: "/content?type=script",
     icon: MessageSquare,
-  },
-];
-
-const aiToolsItems = [
-  {
-    title: "Resumir Vídeo",
-    url: "/video-summarizer",
-    icon: PlayCircle,
-  },
-  {
-    title: "Detector de Tendências",
-    url: "/trend-detector",
-    icon: TrendingUp,
-  },
-  {
-    title: "Otimizar Bio",
-    url: "/bio-optimizer",
-    icon: Users,
-  },
-  {
-    title: "Gerar Apresentação",
-    url: "/content-generator",
-    icon: BookOpen,
-  },
-  {
-    title: "Produtos Digitais",
-    url: "/digital-products",
-    icon: Package,
   },
 ];
 
@@ -162,9 +162,27 @@ export function AppSidebar() {
   const location = useLocation();
 
   const isActive = (url: string) => {
-    // Exact match for dashboard
+    // Exact match for most routes
     if (url === "/dashboard") {
       return location.pathname === "/dashboard";
+    }
+    
+    if (url === "/create") {
+      return location.pathname === "/create";
+    }
+    
+    if (url === "/content-planning") {
+      return location.pathname === "/content-planning";
+    }
+    
+    if (url === "/content-generator") {
+      return location.pathname === "/content-generator" || 
+             location.pathname === "/presentation-text" || 
+             location.pathname === "/presentation-design";
+    }
+    
+    if (url === "/create/platforms") {
+      return location.pathname === "/create/platforms" || location.pathname === "/schedule";
     }
     
     // For content items with query parameters, check both path and search
@@ -174,23 +192,6 @@ export function AppSidebar() {
     }
     
     // For other paths, check if current path starts with the url
-    // but avoid conflicts between similar paths
-    if (url === "/content" && location.pathname === "/content-planning") {
-      return false;
-    }
-    
-    if (url === "/content" && location.pathname === "/content-calendar") {
-      return false;
-    }
-    
-    if (url === "/content-planning") {
-      return location.pathname === "/content-planning";
-    }
-    
-    if (url === "/content-calendar") {
-      return location.pathname === "/content-calendar";
-    }
-    
     return location.pathname.startsWith(url);
   };
 
@@ -214,7 +215,7 @@ export function AppSidebar() {
         </Link>
       </SidebarHeader>
 
-      <SidebarContent>
+      <SidebarContent className="overflow-y-auto">
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu>
@@ -233,10 +234,10 @@ export function AppSidebar() {
         </SidebarGroup>
 
         <SidebarGroup>
-          <SidebarGroupLabel>Conteúdos</SidebarGroupLabel>
+          <SidebarGroupLabel>Ferramentas IA</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {contentItems.map((item) => (
+              {aiToolsItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild className={getMenuButtonClass(item.url)}>
                     <Link to={item.url}>
@@ -251,10 +252,10 @@ export function AppSidebar() {
         </SidebarGroup>
 
         <SidebarGroup>
-          <SidebarGroupLabel>Ferramentas IA</SidebarGroupLabel>
+          <SidebarGroupLabel>Conteúdos</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {aiToolsItems.map((item) => (
+              {contentItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild className={getMenuButtonClass(item.url)}>
                     <Link to={item.url}>

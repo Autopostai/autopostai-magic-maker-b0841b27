@@ -1,73 +1,103 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { DashboardLayout } from "@/components/DashboardLayout";
-import { Calendar, Edit, Download, Clock, Users, MessageSquare, Video, Image, X } from "lucide-react";
+import { Calendar, Edit, Download, Clock, Users, MessageSquare, Video, Image, X, Share2, Copy } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useLocation } from "react-router-dom";
+import { toast } from "sonner";
 
 export default function ContentCalendar() {
+  const location = useLocation();
+  const planningData = location.state;
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [editingContent, setEditingContent] = useState<any>(null);
+  const [shareLink, setShareLink] = useState("");
+  const [showShareDialog, setShowShareDialog] = useState(false);
 
-  // Dados de exemplo do calendário gerado pela IA
-  const [calendarData, setCalendarData] = useState([
-    {
-      date: "2025-06-03",
-      content: {
-        type: "Carrossel",
-        title: "10 Dicas de Produtividade para 2025",
-        description: "A ideia desse conteúdo é apresentar 10 dicas práticas para melhorar a produtividade no dia a dia, focando em métodos simples que qualquer pessoa pode aplicar.",
-        platform: "Instagram",
-        time: "09:00"
-      }
-    },
-    {
-      date: "2025-06-04",
-      content: {
-        type: "Vídeo",
-        title: "Como Definir Metas Alcançáveis",
-        description: "Este vídeo motivacional ensina sobre planejamento estratégico, mostrando como estabelecer objetivos realistas e criar um plano de ação efetivo.",
-        platform: "TikTok",
-        time: "18:00"
-      }
-    },
-    {
-      date: "2025-06-05",
-      content: {
-        type: "Imagem com texto",
-        title: "Frase Motivacional da Quinta",
-        description: "Post inspirador para meio da semana, com uma frase poderosa sobre persistência e crescimento pessoal, acompanhada de um design atrativo.",
-        platform: "Instagram",
-        time: "08:00"
-      }
-    },
-    {
-      date: "2025-06-06",
-      content: {
-        type: "Carrossel",
-        title: "5 Hábitos para o Sucesso",
-        description: "Carrossel educativo que detalha cinco hábitos fundamentais que pessoas bem-sucedidas praticam diariamente.",
-        platform: "Instagram",
-        time: "10:00"
-      }
-    },
-    {
-      date: "2025-06-07",
-      content: {
-        type: "Vídeo",
-        title: "Mindset de Crescimento",
-        description: "Vídeo sobre como desenvolver uma mentalidade de crescimento e superar limitações pessoais.",
-        platform: "TikTok",
-        time: "19:00"
-      }
+  // Gerar dados do calendário baseado nas preferências do usuário
+  const generateCalendarData = () => {
+    if (!planningData) return [];
+    
+    const postsCount = parseInt(planningData.postsPerMonth) || 25;
+    const niche = planningData.niche || "Geral";
+    const contentTypes = planningData.contentTypes || ["Carrossel", "Vídeo", "Imagem com texto"];
+    const platforms = planningData.platforms || ["Instagram", "TikTok"];
+    const tone = planningData.communicationTone || "Educativo";
+    
+    // Gerar temas baseados no nicho
+    const getContentByNiche = (niche: string) => {
+      const themes = {
+        "Saúde e bem-estar": [
+          "Dicas de Alimentação Saudável",
+          "Exercícios para Iniciantes",
+          "Rotina de Cuidados com a Pele",
+          "Meditação e Mindfulness",
+          "Receitas Fit e Nutritivas"
+        ],
+        "Marketing digital": [
+          "Estratégias de Instagram",
+          "Como Criar Conteúdo Viral",
+          "Métricas que Realmente Importam",
+          "Ferramentas de Automação",
+          "Copywriting Persuasivo"
+        ],
+        "Culinária": [
+          "Receitas Rápidas e Fáceis",
+          "Técnicas de Cozimento",
+          "Ingredientes Secretos",
+          "Doces Sem Açúcar",
+          "Pratos Vegetarianos"
+        ]
+      };
+      
+      return themes[niche as keyof typeof themes] || [
+        "Dicas de Produtividade",
+        "Motivação Diária",
+        "Crescimento Pessoal",
+        "Organização e Planejamento",
+        "Desenvolvimento de Hábitos"
+      ];
+    };
+    
+    const themes = getContentByNiche(niche);
+    const generatedData = [];
+    
+    // Começar do mês atual
+    const currentDate = new Date();
+    const year = currentDate.getFullYear();
+    const month = currentDate.getMonth() + 1; // +1 porque getMonth() retorna 0-11
+    
+    for (let i = 0; i < postsCount; i++) {
+      const day = (i % 30) + 1; // Distribuir ao longo do mês
+      const dateStr = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
+      
+      const themeIndex = i % themes.length;
+      const contentTypeIndex = i % contentTypes.length;
+      const platformIndex = i % platforms.length;
+      
+      generatedData.push({
+        date: dateStr,
+        content: {
+          type: contentTypes[contentTypeIndex],
+          title: themes[themeIndex],
+          description: `Conteúdo ${tone.toLowerCase()} sobre ${themes[themeIndex].toLowerCase()} para ${niche.toLowerCase()}. Este post vai engajar sua audiência e agregar valor ao seu feed.`,
+          platform: platforms[platformIndex],
+          time: `${Math.floor(Math.random() * 12) + 8}:00`
+        }
+      });
     }
-  ]);
+    
+    return generatedData;
+  };
+
+  const [calendarData, setCalendarData] = useState(generateCalendarData());
 
   const getContentIcon = (type: string) => {
     switch (type) {
@@ -110,7 +140,21 @@ export default function ContentCalendar() {
       setCalendarData(updatedData);
       setIsEditDialogOpen(false);
       setEditingContent(null);
+      toast.success("Conteúdo atualizado com sucesso!");
     }
+  };
+
+  const handleShareCalendar = () => {
+    // Gerar link único
+    const uniqueId = Math.random().toString(36).substr(2, 9);
+    const generatedLink = `https://autopost.ai/calendar/shared/${uniqueId}`;
+    setShareLink(generatedLink);
+    setShowShareDialog(true);
+  };
+
+  const handleCopyLink = () => {
+    navigator.clipboard.writeText(shareLink);
+    toast.success("Link copiado para a área de transferência!");
   };
 
   const selectedContent = calendarData.find(item => item.date === selectedDate);
@@ -138,6 +182,14 @@ export default function ContentCalendar() {
             <Download className="mr-2 h-4 w-4" />
             Baixar PDF do Planejamento
           </Button>
+          <Button 
+            variant="outline" 
+            className="border-green-600 text-green-600 hover:bg-green-50"
+            onClick={handleShareCalendar}
+          >
+            <Share2 className="mr-2 h-4 w-4" />
+            Compartilhar Calendário
+          </Button>
         </div>
 
         {/* Resumo do Planejamento */}
@@ -155,16 +207,16 @@ export default function ContentCalendar() {
                 <div className="text-sm text-gray-600">Posts no Mês</div>
               </div>
               <div className="text-center p-4 bg-blue-50 rounded-lg">
-                <div className="text-2xl font-bold text-blue-600">3</div>
+                <div className="text-2xl font-bold text-blue-600">{planningData?.contentTypes?.length || 3}</div>
                 <div className="text-sm text-gray-600">Tipos de Conteúdo</div>
               </div>
               <div className="text-center p-4 bg-green-50 rounded-lg">
-                <div className="text-2xl font-bold text-green-600">2</div>
+                <div className="text-2xl font-bold text-green-600">{planningData?.platforms?.length || 2}</div>
                 <div className="text-sm text-gray-600">Plataformas</div>
               </div>
               <div className="text-center p-4 bg-orange-50 rounded-lg">
-                <div className="text-2xl font-bold text-orange-600">1</div>
-                <div className="text-sm text-gray-600">Post por Dia</div>
+                <div className="text-2xl font-bold text-orange-600">{planningData?.niche || "Geral"}</div>
+                <div className="text-sm text-gray-600">Nicho</div>
               </div>
             </div>
           </CardContent>
@@ -317,6 +369,29 @@ export default function ContentCalendar() {
                 </div>
               </div>
             )}
+          </DialogContent>
+        </Dialog>
+
+        {/* Dialog de Compartilhamento */}
+        <Dialog open={showShareDialog} onOpenChange={setShowShareDialog}>
+          <DialogContent className="max-w-md">
+            <DialogHeader>
+              <DialogTitle>Compartilhar Calendário</DialogTitle>
+            </DialogHeader>
+            <div className="space-y-4">
+              <p className="text-sm text-gray-600">
+                Link gerado para compartilhamento público do seu calendário:
+              </p>
+              <div className="flex gap-2">
+                <Input value={shareLink} readOnly className="flex-1" />
+                <Button onClick={handleCopyLink} size="sm">
+                  <Copy className="h-4 w-4" />
+                </Button>
+              </div>
+              <p className="text-xs text-gray-500">
+                Qualquer pessoa com este link poderá visualizar seu calendário de conteúdo.
+              </p>
+            </div>
           </DialogContent>
         </Dialog>
       </div>
