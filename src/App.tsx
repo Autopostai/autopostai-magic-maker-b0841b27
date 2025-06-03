@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -12,7 +13,6 @@ import CreateMethod from "./pages/CreateMethod";
 import CreateContentType from "./pages/CreateContentType";
 import CreateScript from "./pages/CreateScript";
 import CreateCaption from "./pages/CreateCaption";
-import CreateAI from "./pages/CreateAI";
 import Content from "./pages/Content";
 import ViewContent from "./pages/ViewContent";
 import Analytics from "./pages/Analytics";
@@ -63,7 +63,6 @@ function App() {
                 <Route path="/create/method" element={<CreateMethod />} />
                 <Route path="/create/script" element={<CreateScript />} />
                 <Route path="/create/caption" element={<CreateCaption />} />
-                <Route path="/create/ai" element={<CreateAI />} />
                 <Route path="/create/platforms" element={<ConnectPlatforms />} />
                 <Route path="/content" element={<Content />} />
                 <Route path="/content/:id" element={<ViewContent />} />

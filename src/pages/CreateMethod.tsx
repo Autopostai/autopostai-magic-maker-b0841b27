@@ -14,7 +14,7 @@ const methods = [
     icon: Sparkles,
     color: "text-purple-600",
     bgColor: "bg-purple-50",
-    nextRoute: "/create/ai"
+    nextRoute: "/create"
   },
   {
     id: "mockup",
