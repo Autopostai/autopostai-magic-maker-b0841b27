@@ -1,3 +1,4 @@
+
 import { DashboardLayout } from "@/components/DashboardLayout";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -33,37 +34,15 @@ export default function CreateMethod() {
   const contentType = location.state?.contentType;
 
   const handleContinue = () => {
-    if (selectedMethod && contentType) {
+    if (selectedMethod) {
       const method = methods.find(m => m.id === selectedMethod);
       if (method) {
-        // Route to appropriate editor based on content type and method
-        if (selectedMethod === "ai") {
-          // For AI method, go to parameter setup first
-          navigate(method.nextRoute, { 
-            state: { 
-              contentType,
-              method: selectedMethod 
-            } 
-          });
-        } else {
-          // For mockup method, go to mockup gallery or directly to editor
-          if (contentType === "video") {
-            navigate("/video-editor", { 
-              state: { 
-                contentType,
-                method: selectedMethod 
-              } 
-            });
-          } else {
-            // For image-based content types
-            navigate("/image-editor", { 
-              state: { 
-                contentType,
-                method: selectedMethod 
-              } 
-            });
-          }
-        }
+        navigate(method.nextRoute, { 
+          state: { 
+            contentType,
+            method: selectedMethod 
+          } 
+        });
       }
     }
   };

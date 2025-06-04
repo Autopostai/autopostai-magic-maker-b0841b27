@@ -1,196 +1,506 @@
-
+import { useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowRight, Sparkles, Zap, Users, BarChart3 } from "lucide-react";
+import { ArrowRight, Play, CheckCircle, Star, Users, TrendingUp, Clock, Sparkles, Brain, BarChart3, Calendar, FileText, MessageSquare, Video, Image, Zap, Target, Globe, Heart, BookOpen, Mic, Shield, Rocket, Lock, PenTool, Monitor, BarChart, Library, Layers } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Navbar } from "@/components/Navbar";
-import { HowItWorks } from "@/components/HowItWorks";
 
 export default function Index() {
+  const [isPlaying, setIsPlaying] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  const handlePlayVideo = () => {
+    if (videoRef.current) {
+      if (isPlaying) {
+        videoRef.current.pause();
+      } else {
+        videoRef.current.play();
+      }
+      setIsPlaying(!isPlaying);
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-blue-50">
+    <div className="min-h-screen bg-white">
       <Navbar />
       
-      {/* Container principal centralizado */}
-      <div className="w-full">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Hero Section - Com mascote integrada */}
-          <section className="pt-20 pb-16">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
-              {/* Conteúdo principal */}
-              <div className="text-center lg:text-left">
-                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight">
-                  Crie Conteúdo Profissional para{" "}
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-blue-600">
-                    Redes Sociais
-                  </span>{" "}
-                  com IA
-                </h1>
-                <p className="text-xl text-gray-600 mb-8 leading-relaxed">
-                  Transforme suas ideias em conteúdo viral. Posts, stories, reels e muito mais 
-                  criados automaticamente em segundos.
-                </p>
-                <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start items-center">
-                  <Button size="lg" asChild className="bg-purple-600 hover:bg-purple-700 text-lg px-8 py-4">
-                    <Link to="/register">
-                      Começar Gratuitamente
-                      <ArrowRight className="ml-2 h-5 w-5" />
-                    </Link>
-                  </Button>
-                  <Button size="lg" variant="outline" asChild className="text-lg px-8 py-4">
-                    <Link to="/pricing">Ver Planos</Link>
-                  </Button>
-                </div>
-              </div>
+      {/* 1. HERO SECTION */}
+      <section id="inicio" className="pt-32 pb-20 px-4 text-gray-900">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            {/* Left Side - Content */}
+            <div className="text-center lg:text-left">
+              <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-8">
+                Crie Conteúdo com
+                <span className="bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent"> IA em 30 Segundos</span>
+              </h1>
+              
+              <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto lg:mx-0">
+                A plataforma de criação e gestão de conteúdo mais completa do MUNDO
+              </p>
 
-              {/* Mascote Dra. Ana com balão de fala */}
-              <div className="relative flex justify-center lg:justify-end">
+              <ul className="text-lg text-gray-600 mb-8 space-y-3 text-left max-w-xl mx-auto lg:mx-0">
+                <li className="flex items-center">
+                  <CheckCircle className="h-5 w-5 text-purple-500 mr-3" />
+                  Comece grátis agora
+                </li>
+                <li className="flex items-center">
+                  <CheckCircle className="h-5 w-5 text-purple-500 mr-3" />
+                  Geração automática de posts, carrosséis, vídeos e mais
+                </li>
+                <li className="flex items-center">
+                  <CheckCircle className="h-5 w-5 text-purple-500 mr-3" />
+                  Use IA ou edite mockups prontos
+                </li>
+              </ul>
+              
+              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start items-center">
+                <Button asChild size="lg" className="bg-purple-600 hover:bg-purple-700 text-white px-8 py-4 text-lg">
+                  <Link to="/register">
+                    Começar grátis
+                    <ArrowRight className="ml-2 h-5 w-5" />
+                  </Link>
+                </Button>
+                <Button variant="outline" size="lg" className="border-purple-600 text-purple-600 hover:bg-purple-600 hover:text-white px-8 py-4 text-lg">
+                  <Play className="mr-2 h-5 w-5" />
+                  Ver demonstração
+                </Button>
+              </div>
+            </div>
+
+            {/* Right Side - Dra. Ana */}
+            <div className="flex justify-center lg:justify-end">
+              <div className="relative">
                 <div className="relative">
-                  {/* Balão de fala animado */}
-                  <div className="absolute -top-20 -left-48 lg:-left-64 bg-white rounded-2xl shadow-xl p-4 border-2 border-purple-200 animate-float max-w-xs z-10">
-                    <p className="text-sm text-gray-800 font-medium leading-relaxed">
-                      "Com apenas 2 minutos eu consigo criar conteúdo para a semana inteira."
-                    </p>
-                    {/* Seta do balão apontando para a mascote */}
-                    <div className="absolute bottom-0 right-8 w-0 h-0 border-l-[12px] border-r-[12px] border-t-[12px] border-l-transparent border-r-transparent border-t-white transform translate-y-full"></div>
-                    <div className="absolute bottom-0 right-8 w-0 h-0 border-l-[14px] border-r-[14px] border-t-[14px] border-l-transparent border-r-transparent border-t-purple-200 transform translate-y-full -translate-x-[2px]"></div>
-                  </div>
+                  <img 
+                    src="/lovable-uploads/5da60abb-f907-4f42-bfdf-10aecb66b633.png" 
+                    alt="Dra. Ana" 
+                    className="w-80 h-auto rounded-3xl shadow-2xl transform hover:scale-105 transition-transform duration-700"
+                  />
                   
-                  {/* Mascote em tamanho destacado com card de fundo */}
-                  <div className="relative bg-white rounded-3xl p-6 shadow-2xl border border-purple-100">
-                    <div className="w-64 h-64 lg:w-80 lg:h-80 rounded-2xl overflow-hidden">
-                      <img 
-                        src="/lovable-uploads/0c089d26-e322-4be6-a385-905636979629.png" 
-                        alt="Doutora Ana - Mascote AutoPostAI" 
-                        className="w-full h-full object-cover object-center animate-bounce-gentle"
-                      />
-                    </div>
-                    
-                    {/* Efeito de brilho ao redor do card */}
-                    <div className="absolute inset-0 rounded-3xl bg-gradient-to-r from-purple-400/20 to-blue-400/20 animate-pulse-soft -z-10 scale-110"></div>
+                  {/* Speech Bubble - Positioned at bottom */}
+                  <div className="absolute -left-8 bottom-8 bg-white rounded-xl p-4 shadow-lg max-w-64 animate-bounce border border-purple-200" style={{ animationDuration: '4s' }}>
+                    <p className="text-sm text-gray-700 font-medium">
+                      "Em 2 minutos por dia, eu tenho conteúdo planejado para o mês inteiro."
+                    </p>
+                    <div className="absolute top-0 right-8 w-0 h-0 border-l-4 border-l-transparent border-r-4 border-r-transparent border-b-4 border-b-white transform -translate-y-full"></div>
                   </div>
                 </div>
               </div>
             </div>
-          </section>
+          </div>
+        </div>
+      </section>
 
-          {/* Features Section - Centralizada */}
-          <section className="py-16">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-                Tudo que você precisa em um só lugar
+      {/* 2. VÍDEO DE INTRODUÇÃO */}
+      <section className="py-20 px-4 bg-gray-50">
+        <div className="max-w-4xl mx-auto text-center">
+          <h2 className="text-4xl font-bold text-gray-900 mb-6">
+            Como funciona a AutoPost AI?
+          </h2>
+          <p className="text-xl text-gray-600 mb-12">
+            Veja em ação como gerar conteúdos prontos com apenas alguns cliques
+          </p>
+          
+          <div className="relative bg-black rounded-2xl border-2 border-purple-500/30 overflow-hidden shadow-2xl">
+            <div className="aspect-video bg-gradient-to-br from-purple-600/20 to-blue-600/20 flex items-center justify-center">
+              <Button 
+                size="lg" 
+                className="bg-purple-600 hover:bg-purple-700 text-white rounded-full p-6"
+                onClick={handlePlayVideo}
+              >
+                <Play className="h-8 w-8 mr-2" />
+                Assistir Demonstração
+              </Button>
+            </div>
+          </div>
+          
+          <Button asChild size="lg" className="mt-8 bg-purple-600 hover:bg-purple-700 text-white px-8 py-4">
+            <Link to="/dashboard">
+              Ver demonstração
+              <ArrowRight className="ml-2 h-5 w-5" />
+            </Link>
+          </Button>
+        </div>
+      </section>
+
+      {/* 3. O QUE É A AUTOPOST AI */}
+      <section className="py-20 bg-purple-600 text-white">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div>
+              <h2 className="text-4xl font-bold mb-6">
+                O que é a AutoPost AI?
               </h2>
-              <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-                Ferramentas poderosas para criar, editar e agendar seu conteúdo
+              <p className="text-xl leading-relaxed">
+                Plataforma completa para quem quer crescer nas redes sociais sem perder tempo. 
+                Crie conteúdos de alta performance, mesmo que você não venda nada. 
+                Ideal para criadores, empreendedores e iniciantes.
               </p>
             </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto">
-              <Card className="text-center hover:shadow-lg transition-all duration-300 hover:scale-105">
-                <CardHeader>
-                  <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mx-auto mb-4">
-                    <Sparkles className="h-6 w-6 text-purple-600" />
-                  </div>
-                  <CardTitle className="text-xl">IA Criativa</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <CardDescription>
-                    Gere conteúdo único e envolvente com nossa inteligência artificial avançada
-                  </CardDescription>
-                </CardContent>
-              </Card>
-
-              <Card className="text-center hover:shadow-lg transition-all duration-300 hover:scale-105">
-                <CardHeader>
-                  <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mx-auto mb-4">
-                    <Zap className="h-6 w-6 text-blue-600" />
-                  </div>
-                  <CardTitle className="text-xl">Editor Profissional</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <CardDescription>
-                    Ferramentas de edição completas para vídeos e imagens, estilo Canva e CapCut
-                  </CardDescription>
-                </CardContent>
-              </Card>
-
-              <Card className="text-center hover:shadow-lg transition-all duration-300 hover:scale-105">
-                <CardHeader>
-                  <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mx-auto mb-4">
-                    <Users className="h-6 w-6 text-green-600" />
-                  </div>
-                  <CardTitle className="text-xl">Multi-Plataforma</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <CardDescription>
-                    Publique automaticamente no Instagram, TikTok, YouTube e muito mais
-                  </CardDescription>
-                </CardContent>
-              </Card>
-
-              <Card className="text-center hover:shadow-lg transition-all duration-300 hover:scale-105">
-                <CardHeader>
-                  <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center mx-auto mb-4">
-                    <BarChart3 className="h-6 w-6 text-orange-600" />
-                  </div>
-                  <CardTitle className="text-xl">Análise Inteligente</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <CardDescription>
-                    Acompanhe performance e otimize seu conteúdo com insights detalhados
-                  </CardDescription>
-                </CardContent>
-              </Card>
+            <div className="flex justify-center">
+              <div className="w-96 h-64 bg-white/20 rounded-xl flex items-center justify-center border border-white/20">
+                <Monitor className="h-32 w-32 text-white" />
+              </div>
             </div>
-          </section>
+          </div>
+        </div>
+      </section>
 
-          {/* How It Works - Centralizada */}
-          <div className="max-w-6xl mx-auto">
-            <HowItWorks />
+      {/* 4. FUNCIONA PRA MIM? */}
+      <section className="py-20 px-4 bg-white">
+        <div className="max-w-6xl mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div className="flex justify-center">
+              <div className="w-96 h-64 bg-gray-100 rounded-xl flex items-center justify-center border border-gray-200">
+                <Users className="h-32 w-32 text-purple-600" />
+              </div>
+            </div>
+            <div>
+              <h2 className="text-4xl font-bold text-gray-900 mb-8">
+                Funciona pra mim?
+              </h2>
+              <ul className="space-y-4 text-lg text-gray-600">
+                <li className="flex items-center">
+                  <CheckCircle className="h-6 w-6 text-purple-500 mr-4" />
+                  Não vende nada, mas quer melhorar seu Instagram
+                </li>
+                <li className="flex items-center">
+                  <CheckCircle className="h-6 w-6 text-purple-500 mr-4" />
+                  É criador de conteúdo
+                </li>
+                <li className="flex items-center">
+                  <CheckCircle className="h-6 w-6 text-purple-500 mr-4" />
+                  Tem um negócio local
+                </li>
+                <li className="flex items-center">
+                  <CheckCircle className="h-6 w-6 text-purple-500 mr-4" />
+                  É social media ou agência
+                </li>
+                <li className="flex items-center">
+                  <CheckCircle className="h-6 w-6 text-purple-500 mr-4" />
+                  Tem pouco tempo e precisa de agilidade
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 5. OS 7 DIFERENCIAIS DA AUTOPOST AI */}
+      <section id="funcionalidades" className="py-20 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">
+              Os 7 Diferenciais da AutoPost AI
+            </h2>
           </div>
 
-          {/* CTA Section - Centralizada */}
-          <section className="py-16">
-            <div className="bg-gradient-to-r from-purple-600 to-blue-600 rounded-2xl text-white text-center p-12 max-w-5xl mx-auto">
-              <h2 className="text-3xl md:text-4xl font-bold mb-4">
-                Pronto para revolucionar seu conteúdo?
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <Card className="bg-white border-purple-200 hover:border-purple-400 transition-all shadow-lg">
+              <CardHeader className="text-center">
+                <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Brain className="h-8 w-8 text-purple-600" />
+                </div>
+                <CardTitle className="text-gray-900">Criação com IA</CardTitle>
+                <CardDescription className="text-gray-600">
+                  Posts, carrosséis, vídeos e e-books em segundos
+                </CardDescription>
+              </CardHeader>
+            </Card>
+
+            <Card className="bg-white border-blue-200 hover:border-blue-400 transition-all shadow-lg">
+              <CardHeader className="text-center">
+                <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Layers className="h-8 w-8 text-blue-600" />
+                </div>
+                <CardTitle className="text-gray-900">Mockups Editáveis</CardTitle>
+                <CardDescription className="text-gray-600">
+                  Templates prontos para personalizar
+                </CardDescription>
+              </CardHeader>
+            </Card>
+
+            <Card className="bg-white border-purple-200 hover:border-purple-400 transition-all shadow-lg">
+              <CardHeader className="text-center">
+                <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <TrendingUp className="h-8 w-8 text-purple-600" />
+                </div>
+                <CardTitle className="text-gray-900">Detector de Tendências</CardTitle>
+                <CardDescription className="text-gray-600">
+                  Veja o que está bombando em seu nicho
+                </CardDescription>
+              </CardHeader>
+            </Card>
+
+            <Card className="bg-white border-blue-200 hover:border-blue-400 transition-all shadow-lg">
+              <CardHeader className="text-center">
+                <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Video className="h-8 w-8 text-blue-600" />
+                </div>
+                <CardTitle className="text-gray-900">Editor de Vídeos Automático</CardTitle>
+                <CardDescription className="text-gray-600">
+                  Suba o vídeo, receba a versão editada
+                </CardDescription>
+              </CardHeader>
+            </Card>
+
+            <Card className="bg-white border-purple-200 hover:border-purple-400 transition-all shadow-lg">
+              <CardHeader className="text-center">
+                <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <FileText className="h-8 w-8 text-purple-600" />
+                </div>
+                <CardTitle className="text-gray-900">Resumo Inteligente</CardTitle>
+                <CardDescription className="text-gray-600">
+                  Receba o resumo e crie conteúdo com 1 clique
+                </CardDescription>
+              </CardHeader>
+            </Card>
+
+            <Card className="bg-white border-blue-200 hover:border-blue-400 transition-all shadow-lg">
+              <CardHeader className="text-center">
+                <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Calendar className="h-8 w-8 text-blue-600" />
+                </div>
+                <CardTitle className="text-gray-900">Agendamento Automático</CardTitle>
+                <CardDescription className="text-gray-600">
+                  Publique automaticamente em todas as plataformas
+                </CardDescription>
+              </CardHeader>
+            </Card>
+
+            <Card className="bg-white border-purple-200 hover:border-purple-400 transition-all shadow-lg">
+              <CardHeader className="text-center">
+                <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <BarChart className="h-8 w-8 text-purple-600" />
+                </div>
+                <CardTitle className="text-gray-900">Dashboard e Desempenho</CardTitle>
+                <CardDescription className="text-gray-600">
+                  Veja o que está funcionando e otimize
+                </CardDescription>
+              </CardHeader>
+            </Card>
+          </div>
+        </div>
+      </section>
+
+      {/* 6. DEPOIMENTOS REAIS */}
+      <section id="depoimentos" className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">
+              Veja como a AutoPost AI tem transformado o conteúdo de nossos usuários
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {[
+              "Eu nunca soube o que postar. Agora tenho conteúdo para o mês todo.",
+              "Uso 10 minutos por semana e meu engajamento triplicou.",
+              "A IA escreve melhor que eu! Economizo horas todo dia.",
+              "Minha agenda nunca mais ficou vazia. Obrigada AutoPost!",
+              "Criei 50 posts em uma tarde. Impossível sem a plataforma.",
+              "Finalmente consigo ser consistente nas redes sociais.",
+              "Meus clientes ficaram impressionados com a qualidade.",
+              "De 100 para 5000 seguidores em 3 meses usando AutoPost."
+            ].map((testimonial, index) => (
+              <Card key={index} className="bg-gray-50 border-gray-200 shadow-lg">
+                <CardContent className="p-6">
+                  <div className="flex justify-center mb-4">
+                    {[...Array(5)].map((_, i) => (
+                      <Star key={i} className="h-5 w-5 text-yellow-400 fill-current" />
+                    ))}
+                  </div>
+                  <p className="text-gray-700 text-center italic">
+                    "{testimonial}"
+                  </p>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 7. GARANTIA */}
+      <section className="py-20 bg-purple-600">
+        <div className="max-w-4xl mx-auto text-center px-4">
+          <div className="bg-white/10 border border-purple-400/30 rounded-2xl p-12">
+            <div className="w-24 h-24 bg-purple-500/20 rounded-full flex items-center justify-center mx-auto mb-6">
+              <Shield className="h-12 w-12 text-white" />
+            </div>
+            <h2 className="text-3xl font-bold text-white mb-4">
+              O teste grátis são 3 dias.
+            </h2>
+            <Button asChild size="lg" className="bg-white text-purple-600 hover:bg-gray-100 px-8 py-4 text-lg">
+              <Link to="/register">
+                Começar grátis
+                <ArrowRight className="ml-2 h-5 w-5" />
+              </Link>
+            </Button>
+          </div>
+        </div>
+      </section>
+
+      {/* 8. QUEM ESTÁ POR TRÁS */}
+      <section className="py-20 bg-white">
+        <div className="max-w-6xl mx-auto px-4">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div>
+              <h2 className="text-4xl font-bold text-gray-900 mb-6">
+                Quem criou a AutoPost AI?
               </h2>
-              <p className="text-xl mb-8 opacity-90">
-                Junte-se a milhares de criadores que já estão criando conteúdo viral
+              <p className="text-xl text-gray-600 leading-relaxed">
+                Profissionais com experiência em marketing, tecnologia e IA, criaram a AutoPost AI 
+                para resolver o maior problema de todos: falta de tempo e criatividade.
               </p>
-              <Button size="lg" variant="secondary" asChild className="text-lg px-8 py-4">
+            </div>
+            <div className="flex justify-center">
+              <div className="w-96 h-64 bg-gray-100 rounded-xl flex items-center justify-center border border-gray-200">
+                <Users className="h-32 w-32 text-purple-600" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 9. RESULTADOS GERADOS */}
+      <section className="py-20 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">
+              Prints que não deixam dúvidas
+            </h2>
+            <p className="text-xl text-gray-600">
+              Resultados reais de quem testou e aprovou a AutoPost AI
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {[1, 2, 3].map((item) => (
+              <Card key={item} className="bg-white border-gray-200 shadow-lg">
+                <CardContent className="p-6">
+                  <div className="aspect-video bg-gray-100 rounded-lg flex items-center justify-center mb-4">
+                    <Image className="h-16 w-16 text-purple-600" />
+                  </div>
+                  <p className="text-gray-700 text-center">
+                    Resultado real #{item}
+                  </p>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 10. FAQ */}
+      <section className="py-20 bg-white">
+        <div className="max-w-4xl mx-auto px-4">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">
+              Perguntas Frequentes
+            </h2>
+          </div>
+
+          <div className="space-y-6">
+            {[
+              {
+                question: "A plataforma serve pra quem não vende nada?",
+                answer: "Sim! A AutoPost AI é perfeita para qualquer pessoa que quer melhorar sua presença nas redes sociais."
+              },
+              {
+                question: "Como funciona a criação de conteúdo?",
+                answer: "Nossa IA analisa seu nicho e cria conteúdo personalizado em segundos. Você pode usar templates ou gerar do zero."
+              },
+              {
+                question: "Preciso pagar algo agora?",
+                answer: "O teste grátis são 3 dias."
+              },
+              {
+                question: "Posso usar sem entender de design?",
+                answer: "Claro! Nossa plataforma é super intuitiva e tem templates prontos para você personalizar."
+              },
+              {
+                question: "A IA escreve mesmo os textos pra mim?",
+                answer: "Sim! Nossa IA cria textos, legendas, roteiros e muito mais, tudo personalizado para seu estilo."
+              }
+            ].map((faq, index) => (
+              <Card key={index} className="bg-gray-50 border-gray-200 shadow-lg">
+                <CardHeader>
+                  <CardTitle className="text-gray-900 flex items-center">
+                    <CheckCircle className="h-6 w-6 text-purple-500 mr-3" />
+                    {faq.question}
+                  </CardTitle>
+                  <CardDescription className="text-gray-600 ml-9">
+                    {faq.answer}
+                  </CardDescription>
+                </CardHeader>
+              </Card>
+            ))}
+          </div>
+
+          <div className="text-center mt-12">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button asChild size="lg" className="bg-purple-600 hover:bg-purple-700 text-white px-8 py-4">
                 <Link to="/register">
-                  Começar Agora - Grátis
+                  Começar grátis
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Link>
               </Button>
-            </div>
-          </section>
-        </div>
-
-        {/* Footer */}
-        <footer className="bg-gray-900 text-white py-12 mt-16">
-          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center">
-              <h3 className="text-2xl font-bold mb-4">AutoPostAI</h3>
-              <p className="text-gray-400 mb-4">
-                O futuro da criação de conteúdo para redes sociais
-              </p>
-              <div className="flex justify-center space-x-6">
-                <Link to="/privacy" className="text-gray-400 hover:text-white transition-colors">
-                  Privacidade
-                </Link>
-                <Link to="/terms" className="text-gray-400 hover:text-white transition-colors">
-                  Termos
-                </Link>
-                <Link to="/support" className="text-gray-400 hover:text-white transition-colors">
-                  Suporte
-                </Link>
-              </div>
+              <Button variant="outline" size="lg" className="border-purple-600 text-purple-600 hover:bg-purple-600 hover:text-white px-8 py-4">
+                <Link to="/dashboard">Ver demonstração</Link>
+              </Button>
             </div>
           </div>
-        </footer>
-      </div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="py-12 bg-gray-900 text-white">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+            <div>
+              <h3 className="text-2xl font-bold mb-4 bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">
+                AutoPost.AI
+              </h3>
+              <p className="text-gray-400">
+                A plataforma mais completa para criação de conteúdo com inteligência artificial.
+              </p>
+            </div>
+            <div>
+              <h4 className="font-semibold mb-4">Produto</h4>
+              <ul className="space-y-2 text-gray-400">
+                <li><Link to="/dashboard" className="hover:text-white transition-colors">Dashboard</Link></li>
+                <li><Link to="/create" className="hover:text-white transition-colors">Criar Conteúdo</Link></li>
+                <li><Link to="/analytics" className="hover:text-white transition-colors">Análises</Link></li>
+              </ul>
+            </div>
+            <div>
+              <h4 className="font-semibold mb-4">Recursos</h4>
+              <ul className="space-y-2 text-gray-400">
+                <li><Link to="/video-summarizer" className="hover:text-white transition-colors">Resumir Vídeo</Link></li>
+                <li><Link to="/trend-detector" className="hover:text-white transition-colors">Detector de Tendências</Link></li>
+                <li><Link to="/bio-optimizer" className="hover:text-white transition-colors">Otimizador de Bio</Link></li>
+              </ul>
+            </div>
+            <div>
+              <h4 className="font-semibold mb-4">Suporte</h4>
+              <ul className="space-y-2 text-gray-400">
+                <li><Link to="/support" className="hover:text-white transition-colors">Central de Ajuda</Link></li>
+                <li><a href="mailto:contato@autopost.ai" className="hover:text-white transition-colors">Contato</a></li>
+              </ul>
+            </div>
+          </div>
+          <div className="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center">
+            <p className="text-gray-400">
+              © 2025 AutoPost.AI. Todos os direitos reservados.
+            </p>
+            <div className="flex space-x-6 mt-4 md:mt-0">
+              <a href="#" className="text-gray-400 hover:text-white transition-colors">Termos</a>
+              <a href="#" className="text-gray-400 hover:text-white transition-colors">Privacidade</a>
+            </div>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }

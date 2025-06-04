@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -18,7 +19,6 @@ import Analytics from "./pages/Analytics";
 import Settings from "./pages/Settings";
 import Support from "./pages/Support";
 import Library from "./pages/Library";
-import AllProjects from "./pages/AllProjects";
 import ConnectPlatforms from "./pages/ConnectPlatforms";
 import SelectPlatforms from "./pages/SelectPlatforms";
 import Schedule from "./pages/Schedule";
@@ -39,8 +39,6 @@ import TemplateGallery from "./pages/TemplateGallery";
 import MockupGallery from "./pages/MockupGallery";
 import MockupPreview from "./pages/MockupPreview";
 import MockupEditor from "./pages/MockupEditor";
-import VideoEditor from "./pages/VideoEditor";
-import ImageEditor from "./pages/ImageEditor";
 import NotFound from "./pages/NotFound";
 import Pricing from "./pages/Pricing";
 
@@ -72,7 +70,6 @@ function App() {
                 <Route path="/settings" element={<Settings />} />
                 <Route path="/support" element={<Support />} />
                 <Route path="/library" element={<Library />} />
-                <Route path="/all-projects" element={<AllProjects />} />
                 <Route path="/platforms" element={<SelectPlatforms />} />
                 <Route path="/schedule" element={<Schedule />} />
                 <Route path="/video-summarizer" element={<VideoSummarizer />} />
@@ -92,8 +89,6 @@ function App() {
                 <Route path="/mockups" element={<MockupGallery />} />
                 <Route path="/mockup/:id" element={<MockupPreview />} />
                 <Route path="/mockup/:id/editor" element={<MockupEditor />} />
-                <Route path="/video-editor" element={<VideoEditor />} />
-                <Route path="/image-editor" element={<ImageEditor />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </BrowserRouter>
