@@ -1,10 +1,10 @@
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowRight, Sparkles, Zap, Users, BarChart3 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Navbar } from "@/components/Navbar";
 import { HowItWorks } from "@/components/HowItWorks";
-import { StatsComponent } from "@/components/StatsComponent";
 
 export default function Index() {
   return (
@@ -113,9 +113,6 @@ export default function Index() {
 
         {/* How It Works */}
         <HowItWorks />
-
-        {/* Stats */}
-        <StatsComponent />
 
         {/* CTA Section */}
         <section className="py-16">
