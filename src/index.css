@@ -98,6 +98,7 @@
 
   body {
     @apply bg-background text-foreground;
+    overflow-x: hidden;
   }
 }
 
@@ -107,23 +108,62 @@
     transform: translateY(0px);
   }
   50% {
-    transform: translateY(-10px);
+    transform: translateY(-8px);
   }
 }
 
 @keyframes bounce-gentle {
   0%, 100% {
-    transform: translateY(0px);
+    transform: translateY(0px) scale(1);
   }
   50% {
-    transform: translateY(-5px);
+    transform: translateY(-6px) scale(1.02);
+  }
+}
+
+@keyframes pulse-soft {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 0.6;
   }
 }
 
 .animate-float {
-  animation: float 3s ease-in-out infinite;
+  animation: float 4s ease-in-out infinite;
 }
 
 .animate-bounce-gentle {
-  animation: bounce-gentle 4s ease-in-out infinite;
+  animation: bounce-gentle 5s ease-in-out infinite;
+}
+
+.animate-pulse-soft {
+  animation: pulse-soft 3s ease-in-out infinite;
+}
+
+/* Responsividade específica */
+@media (max-width: 1024px) {
+  .animate-float {
+    animation: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .animate-bounce-gentle {
+    animation: bounce-gentle 6s ease-in-out infinite;
+  }
+}
+
+/* Garantir que não haja overflow horizontal */
+html, body {
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+
+#root {
+  overflow-x: hidden;
+  max-width: 100vw;
 }
