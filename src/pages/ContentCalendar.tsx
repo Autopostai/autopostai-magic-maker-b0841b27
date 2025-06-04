@@ -9,20 +9,17 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { toast } from "sonner";
 
 export default function ContentCalendar() {
   const location = useLocation();
-  const navigate = useNavigate();
   const planningData = location.state;
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [editingContent, setEditingContent] = useState<any>(null);
   const [shareLink, setShareLink] = useState("");
   const [showShareDialog, setShowShareDialog] = useState(false);
-  const [selectedContent, setSelectedContent] = useState<any>(null);
-  const [showContentDialog, setShowContentDialog] = useState(false);
 
   // Gerar dados do calendário baseado nas preferências do usuário
   const generateCalendarData = () => {
@@ -75,10 +72,10 @@ export default function ContentCalendar() {
     // Começar do mês atual
     const currentDate = new Date();
     const year = currentDate.getFullYear();
-    const month = currentDate.getMonth() + 1;
+    const month = currentDate.getMonth() + 1; // +1 porque getMonth() retorna 0-11
     
     for (let i = 0; i < postsCount; i++) {
-      const day = (i % 30) + 1;
+      const day = (i % 30) + 1; // Distribuir ao longo do mês
       const dateStr = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
       
       const themeIndex = i % themes.length;
@@ -128,21 +125,15 @@ export default function ContentCalendar() {
     }
   };
 
-  const handleContentClick = (content: any, dateStr: string) => {
-    setSelectedContent({ ...content, date: dateStr });
-    setShowContentDialog(true);
-  };
-
   const handleEditContent = (content: any) => {
     setEditingContent({ ...content });
     setIsEditDialogOpen(true);
-    setShowContentDialog(false);
   };
 
   const handleSaveEdit = () => {
-    if (editingContent && selectedContent?.date) {
+    if (editingContent && selectedDate) {
       const updatedData = calendarData.map(item => 
-        item.date === selectedContent.date 
+        item.date === selectedDate 
           ? { ...item, content: editingContent }
           : item
       );
@@ -154,8 +145,9 @@ export default function ContentCalendar() {
   };
 
   const handleShareCalendar = () => {
+    // Gerar link único
     const uniqueId = Math.random().toString(36).substr(2, 9);
-    const generatedLink = `${window.location.origin}/shared-calendar/${uniqueId}`;
+    const generatedLink = `https://autopost.ai/calendar/shared/${uniqueId}`;
     setShareLink(generatedLink);
     setShowShareDialog(true);
   };
@@ -165,9 +157,7 @@ export default function ContentCalendar() {
     toast.success("Link copiado para a área de transferência!");
   };
 
-  const handleEditContents = () => {
-    navigate("/edit-contents", { state: { calendarData, planningData } });
-  };
+  const selectedContent = calendarData.find(item => item.date === selectedDate);
 
   return (
     <DashboardLayout>
@@ -184,10 +174,7 @@ export default function ContentCalendar() {
 
         {/* Botões de Ação */}
         <div className="flex flex-col sm:flex-row gap-4 mb-8">
-          <Button 
-            className="bg-purple-600 hover:bg-purple-700 text-white"
-            onClick={handleEditContents}
-          >
+          <Button className="bg-purple-600 hover:bg-purple-700 text-white">
             <Edit className="mr-2 h-4 w-4" />
             Editar Conteúdos
           </Button>
@@ -244,13 +231,16 @@ export default function ContentCalendar() {
             </CardDescription>
           </CardHeader>
           <CardContent>
+            {/* Grid do Calendário */}
             <div className="grid grid-cols-7 gap-2 mb-4">
+              {/* Cabeçalho dos dias da semana */}
               {['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'].map((day) => (
                 <div key={day} className="p-2 text-center font-semibold text-gray-600 bg-gray-50 rounded">
                   {day}
                 </div>
               ))}
               
+              {/* Dias do mês */}
               {Array.from({ length: 30 }, (_, i) => {
                 const day = i + 1;
                 const dateStr = `2025-06-${day.toString().padStart(2, '0')}`;
@@ -263,20 +253,66 @@ export default function ContentCalendar() {
                   >
                     <div className="font-semibold text-gray-900 mb-1">{day}</div>
                     {hasContent && (
-                      <div
-                        className={`text-xs p-2 rounded cursor-pointer hover:opacity-80 ${getContentColor(hasContent.content.type)}`}
-                        onClick={() => handleContentClick(hasContent.content, dateStr)}
-                      >
-                        <div className="flex items-center gap-1 mb-1">
-                          {getContentIcon(hasContent.content.type)}
-                          <span className="truncate font-medium">{hasContent.content.type}</span>
-                        </div>
-                        <div className="truncate font-medium">{hasContent.content.title}</div>
-                        <div className="flex items-center gap-1 mt-1">
-                          <Clock className="h-3 w-3" />
-                          <span>{hasContent.content.time}</span>
-                        </div>
-                      </div>
+                      <Dialog>
+                        <DialogTrigger asChild>
+                          <div
+                            className={`text-xs p-2 rounded cursor-pointer hover:opacity-80 ${getContentColor(hasContent.content.type)}`}
+                            onClick={() => setSelectedDate(dateStr)}
+                          >
+                            <div className="flex items-center gap-1 mb-1">
+                              {getContentIcon(hasContent.content.type)}
+                              <span className="truncate font-medium">{hasContent.content.type}</span>
+                            </div>
+                            <div className="truncate font-medium">{hasContent.content.title}</div>
+                            <div className="flex items-center gap-1 mt-1">
+                              <Clock className="h-3 w-3" />
+                              <span>{hasContent.content.time}</span>
+                            </div>
+                          </div>
+                        </DialogTrigger>
+                        <DialogContent className="max-w-2xl">
+                          <DialogHeader>
+                            <DialogTitle>Detalhes do Conteúdo - {day} de Junho</DialogTitle>
+                          </DialogHeader>
+                          <div className="space-y-4">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                              <div>
+                                <label className="font-semibold text-sm text-gray-700">Tipo de Conteúdo:</label>
+                                <p className="text-gray-600">{hasContent.content.type}</p>
+                              </div>
+                              <div>
+                                <label className="font-semibold text-sm text-gray-700">Plataforma:</label>
+                                <p className="text-gray-600">{hasContent.content.platform}</p>
+                              </div>
+                              <div>
+                                <label className="font-semibold text-sm text-gray-700">Horário:</label>
+                                <p className="text-gray-600">{hasContent.content.time}</p>
+                              </div>
+                            </div>
+                            <div>
+                              <label className="font-semibold text-sm text-gray-700">Título:</label>
+                              <p className="text-gray-600">{hasContent.content.title}</p>
+                            </div>
+                            <div>
+                              <label className="font-semibold text-sm text-gray-700">Descrição da Ideia:</label>
+                              <p className="text-gray-600">{hasContent.content.description}</p>
+                            </div>
+                            <div className="flex gap-2 mt-4">
+                              <Button 
+                                size="sm" 
+                                className="bg-purple-600 hover:bg-purple-700"
+                                onClick={() => handleEditContent(hasContent.content)}
+                              >
+                                <Edit className="mr-2 h-4 w-4" />
+                                Editar
+                              </Button>
+                              <Button size="sm" variant="outline">
+                                Criar Agora
+                              </Button>
+                            </div>
+                          </div>
+                        </DialogContent>
+                      </Dialog>
                     )}
                   </div>
                 );
@@ -284,56 +320,6 @@ export default function ContentCalendar() {
             </div>
           </CardContent>
         </Card>
-
-        {/* Dialog de Visualização de Conteúdo */}
-        <Dialog open={showContentDialog} onOpenChange={setShowContentDialog}>
-          <DialogContent className="max-w-2xl">
-            <DialogHeader>
-              <DialogTitle>
-                Detalhes do Conteúdo - {selectedContent?.date ? new Date(selectedContent.date + 'T00:00:00').getDate() : ''} de Junho
-              </DialogTitle>
-            </DialogHeader>
-            {selectedContent && (
-              <div className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label className="font-semibold text-sm text-gray-700">Tipo de Conteúdo:</label>
-                    <p className="text-gray-600">{selectedContent.type}</p>
-                  </div>
-                  <div>
-                    <label className="font-semibold text-sm text-gray-700">Plataforma:</label>
-                    <p className="text-gray-600">{selectedContent.platform}</p>
-                  </div>
-                  <div>
-                    <label className="font-semibold text-sm text-gray-700">Horário:</label>
-                    <p className="text-gray-600">{selectedContent.time}</p>
-                  </div>
-                </div>
-                <div>
-                  <label className="font-semibold text-sm text-gray-700">Título:</label>
-                  <p className="text-gray-600">{selectedContent.title}</p>
-                </div>
-                <div>
-                  <label className="font-semibold text-sm text-gray-700">Descrição da Ideia:</label>
-                  <p className="text-gray-600">{selectedContent.description}</p>
-                </div>
-                <div className="flex gap-2 mt-4">
-                  <Button 
-                    size="sm" 
-                    className="bg-purple-600 hover:bg-purple-700"
-                    onClick={() => handleEditContent(selectedContent)}
-                  >
-                    <Edit className="mr-2 h-4 w-4" />
-                    Editar
-                  </Button>
-                  <Button size="sm" variant="outline">
-                    Criar Agora
-                  </Button>
-                </div>
-              </div>
-            )}
-          </DialogContent>
-        </Dialog>
 
         {/* Dialog de Edição */}
         <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
