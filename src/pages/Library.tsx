@@ -6,8 +6,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { 
   Upload, Search, Filter, Grid3X3, List, Image, 
-  Video, FileText, Download, Trash2, Eye
+  Video, FileText, Download, Trash2, Eye, FolderOpen
 } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export default function Library() {
   const mediaItems = [
@@ -180,6 +181,16 @@ export default function Library() {
                   </CardContent>
                 </Card>
               ))}
+            </div>
+
+            {/* Ver todos os projetos button */}
+            <div className="text-center pt-6">
+              <Button asChild variant="outline" size="lg">
+                <Link to="/all-projects">
+                  <FolderOpen className="h-4 w-4 mr-2" />
+                  Ver todos os projetos
+                </Link>
+              </Button>
             </div>
 
             {/* Storage Info */}
