@@ -38,7 +38,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Sparkles } from "lucide-react";
 
-const menuItems = [
+const mainMenuItems = [
   {
     title: "Dashboard",
     url: "/dashboard",
@@ -125,7 +125,7 @@ const contentItems = [
 const toolsItems = [
   {
     title: "Agendar Posts",
-    url: "/create/platforms",
+    url: "/schedule",
     icon: Clock,
   },
   {
@@ -172,7 +172,7 @@ export function AppSidebar() {
     }
     
     if (url === "/content-planning") {
-      return location.pathname === "/content-planning";
+      return location.pathname === "/content-planning" || location.pathname === "/content-calendar";
     }
     
     if (url === "/content-generator") {
@@ -181,8 +181,8 @@ export function AppSidebar() {
              location.pathname === "/presentation-design";
     }
     
-    if (url === "/create/platforms") {
-      return location.pathname === "/create/platforms" || location.pathname === "/schedule";
+    if (url === "/schedule") {
+      return location.pathname === "/schedule" || location.pathname === "/create/platforms";
     }
     
     // For content items with query parameters, check both path and search
@@ -219,7 +219,7 @@ export function AppSidebar() {
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu>
-              {menuItems.map((item) => (
+              {mainMenuItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild className={getMenuButtonClass(item.url)}>
                     <Link to={item.url}>

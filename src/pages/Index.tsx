@@ -24,7 +24,7 @@ export default function Index() {
     <div className="min-h-screen bg-white">
       <Navbar />
       
-      {/* 1. HERO SECTION */}
+      {/* 1. HERO SECTION - Centralizado */}
       <section id="inicio" className="pt-32 pb-20 px-4 text-gray-900">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
@@ -81,7 +81,7 @@ export default function Index() {
                   {/* Speech Bubble - Positioned at bottom */}
                   <div className="absolute -left-8 bottom-8 bg-white rounded-xl p-4 shadow-lg max-w-64 animate-bounce border border-purple-200" style={{ animationDuration: '4s' }}>
                     <p className="text-sm text-gray-700 font-medium">
-                      "Em 2 minutos por dia, eu tenho conteúdo planejado para o mês inteiro."
+                      "Com apenas 2 minutos eu consigo criar conteúdo para a semana inteira."
                     </p>
                     <div className="absolute top-0 right-8 w-0 h-0 border-l-4 border-l-transparent border-r-4 border-r-transparent border-b-4 border-b-white transform -translate-y-full"></div>
                   </div>

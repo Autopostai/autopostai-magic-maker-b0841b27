@@ -39,6 +39,9 @@ import ContentCalendar from "./pages/ContentCalendar";
 import Metrics from "./pages/Metrics";
 import PresentationText from "./pages/PresentationText";
 import PresentationDesign from "./pages/PresentationDesign";
+import VideoEditor from "./pages/VideoEditor";
+import ImageEditor from "./pages/ImageEditor";
+import Tutorials from "./pages/Tutorials";
 
 const queryClient = new QueryClient();
 
@@ -81,6 +84,9 @@ const App = () => (
           <Route path="/library" element={<Library />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/support" element={<Support />} />
+          <Route path="/tutorials" element={<Tutorials />} />
+          <Route path="/video-editor" element={<VideoEditor />} />
+          <Route path="/image-editor" element={<ImageEditor />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
