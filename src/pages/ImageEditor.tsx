@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { DashboardLayout } from "@/components/DashboardLayout";
 import { Button } from "@/components/ui/button";
@@ -322,19 +321,19 @@ export default function ImageEditor() {
                 <div className="space-y-3">
                   <div>
                     <label className="text-sm text-gray-600 mb-1 block">Posição X</label>
-                    <Input type="number" defaultValue="0" size="sm" />
+                    <Input type="number" defaultValue={0} size="sm" />
                   </div>
                   <div>
                     <label className="text-sm text-gray-600 mb-1 block">Posição Y</label>
-                    <Input type="number" defaultValue="0" size="sm" />
+                    <Input type="number" defaultValue={0} size="sm" />
                   </div>
                   <div>
                     <label className="text-sm text-gray-600 mb-1 block">Largura</label>
-                    <Input type="number" defaultValue="100" size="sm" />
+                    <Input type="number" defaultValue={100} size="sm" />
                   </div>
                   <div>
                     <label className="text-sm text-gray-600 mb-1 block">Altura</label>
-                    <Input type="number" defaultValue="100" size="sm" />
+                    <Input type="number" defaultValue={100} size="sm" />
                   </div>
                   <div>
                     <label className="text-sm text-gray-600 mb-1 block">Opacidade</label>
