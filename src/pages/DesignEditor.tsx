@@ -1,4 +1,3 @@
-
 import { useState, useRef, useEffect } from "react";
 import { DashboardLayout } from "@/components/DashboardLayout";
 import { Button } from "@/components/ui/button";
@@ -13,7 +12,7 @@ import {
   Menu, Share, ZoomIn, ZoomOut, Grid, AlignLeft, AlignCenter, 
   AlignRight, Bold, Italic, Underline, Palette, Eye, Layers,
   ChevronLeft, ChevronRight, Maximize, RotateCcw, FlipHorizontal,
-  FlipVertical, Sliders, Sparkles, Settings, FolderOpen, Apps,
+  FlipVertical, Sliders, Sparkles, Settings, FolderOpen, Grid3X3,
   Wand2, Sun, Strikethrough, List, AlignJustify, Plus, Minus
 } from "lucide-react";
 import { toast } from "sonner";
@@ -449,7 +448,7 @@ export default function DesignEditor() {
                   <Card>
                     <CardContent className="p-4">
                       <h3 className="font-medium mb-4 flex items-center">
-                        <Apps className="h-4 w-4 mr-2" />
+                        <Grid3X3 className="h-4 w-4 mr-2" />
                         Apps
                       </h3>
                       <div className="space-y-2">
