@@ -1,586 +1,433 @@
 
 import { useState, useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { DashboardLayout } from "@/components/DashboardLayout";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { DashboardLayout } from "@/components/DashboardLayout";
-import { Calendar, Edit, Download, Clock, Users, MessageSquare, Video, Image, X, Share2, Copy, List } from "lucide-react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Badge } from "@/components/ui/badge";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { useLocation, useNavigate } from "react-router-dom";
+import { ArrowLeft, Calendar, Edit, Clock, Download, Share2, FileText, Save, Plus } from "lucide-react";
 import { toast } from "sonner";
 
 interface ContentItem {
-  type: string;
+  id: string;
   title: string;
-  description: string;
   platform: string;
+  contentType: string;
+  description: string;
+  date: string;
   time: string;
+  day: number;
 }
 
-interface CalendarItem {
-  date: string;
-  content: ContentItem;
+interface FormData {
+  postsPerMonth: string;
+  niche: string;
+  contentTypes: string[];
+  platforms: string[];
+  communicationTone: string;
+  contentIdeas: string;
+  importantDates: string;
 }
 
 export default function ContentCalendar() {
   const location = useLocation();
   const navigate = useNavigate();
-  const planningData = location.state;
-  const [selectedDate, setSelectedDate] = useState<string | null>(null);
-  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
-  const [isListEditOpen, setIsListEditOpen] = useState(false);
-  const [editingContent, setEditingContent] = useState<any>(null);
-  const [shareLink, setShareLink] = useState("");
-  const [showShareDialog, setShowShareDialog] = useState(false);
+  const [formData] = useState<FormData>(location.state);
+  const [contentItems, setContentItems] = useState<ContentItem[]>([]);
+  const [editingItem, setEditingItem] = useState<ContentItem | null>(null);
+  const [showEditDialog, setShowEditDialog] = useState(false);
+  const [showListEdit, setShowListEdit] = useState(false);
 
-  // Gerar dados do calendário baseado nas preferências do usuário
-  const generateCalendarData = () => {
-    if (!planningData) return [];
+  useEffect(() => {
+    if (!formData) {
+      navigate("/content-planning");
+      return;
+    }
+    generateContent();
+  }, [formData, navigate]);
+
+  const generateContent = () => {
+    const postsCount = parseInt(formData.postsPerMonth);
+    const items: ContentItem[] = [];
     
-    const postsCount = parseInt(planningData.postsPerMonth) || 25;
-    const niche = planningData.niche || "Geral";
-    const contentTypes = planningData.contentTypes || ["Carrossel", "Vídeo", "Imagem com texto"];
-    const platforms = planningData.platforms || ["Instagram", "TikTok"];
-    const tone = planningData.communicationTone || "Educativo";
-    
-    // Gerar temas baseados no nicho - mais específicos e variados
-    const getContentByNiche = (niche: string) => {
-      const nicheContent: { [key: string]: string[] } = {
-        "saúde e bem-estar": [
-          "5 Exercícios para Fazer em Casa",
-          "Alimentos que Aumentam a Imunidade",
-          "Rotina Matinal Saudável",
-          "Como Melhorar a Qualidade do Sono",
-          "Benefícios da Meditação Diária",
-          "Receitas Detox para o Verão",
-          "Alongamentos para Quem Trabalha no Computador",
-          "Dicas para Manter a Hidratação",
-          "Superalimentos que Você Precisa Conhecer",
-          "Como Reduzir o Estresse Naturalmente"
-        ],
-        "marketing digital": [
-          "Como Aumentar o Engajamento no Instagram",
-          "Estratégias de Copywriting que Convertem",
-          "Métricas Essenciais para Acompanhar",
-          "Como Criar Conteúdo Viral",
-          "Funil de Vendas: Passo a Passo",
-          "Automação de Marketing para Iniciantes",
-          "Tendências de Social Media 2025",
-          "Como Fazer um Bom Storytelling",
-          "SEO Básico para Empreendedores",
-          "Email Marketing que Funciona"
-        ],
-        "culinária": [
-          "Receita Rápida de 15 Minutos",
-          "Sobremesas Sem Açúcar",
-          "Como Temperar Carnes Perfeitamente",
-          "Pratos Vegetarianos Nutritivos",
-          "Técnicas de Corte Profissionais",
-          "Receitas com Ingredientes Básicos",
-          "Como Fazer Pães Caseiros",
-          "Drinks Refrescantes para o Verão",
-          "Comida de Boteco em Casa",
-          "Receitas Low Carb Deliciosas"
-        ],
-        "educação": [
-          "Técnicas de Estudo Eficazes",
-          "Como Fazer Resumos Perfeitos",
-          "Métodos de Memorização",
-          "Organização para Estudantes",
-          "Como Manter o Foco nos Estudos",
-          "Preparação para Provas",
-          "Tecnologia na Educação",
-          "Desenvolvimento de Hábitos de Leitura",
-          "Como Fazer Apresentações Impactantes",
-          "Gestão de Tempo para Estudos"
-        ],
-        "tecnologia": [
-          "Apps Essenciais para Produtividade",
-          "Tendências Tecnológicas 2025",
-          "Como Proteger Seus Dados Online",
-          "Inteligência Artificial no Dia a Dia",
-          "Gadgets que Valem a Pena",
-          "Programação para Iniciantes",
-          "Como Otimizar seu Smartphone",
-          "Ferramentas de Automação",
-          "Cibersegurança Básica",
-          "Inovações que Mudarão o Mundo"
-        ]
-      };
-      
-      // Buscar por palavras-chave no nicho
-      const nicheKey = Object.keys(nicheContent).find(key => 
-        niche.toLowerCase().includes(key) || key.includes(niche.toLowerCase())
-      );
-      
-      return nicheContent[nicheKey] || [
-        "Dicas de Produtividade",
-        "Motivação Diária",
-        "Crescimento Pessoal",
-        "Organização e Planejamento",
-        "Desenvolvimento de Hábitos",
-        "Como Alcançar Objetivos",
-        "Reflexões sobre Sucesso",
-        "Inspiração para o Dia",
-        "Lições de Vida",
-        "Transformação Pessoal"
-      ];
-    };
-    
-    const themes = getContentByNiche(niche);
-    const generatedData: CalendarItem[] = [];
-    
-    // Começar do mês atual
-    const currentDate = new Date();
-    const year = currentDate.getFullYear();
-    const month = currentDate.getMonth() + 1;
-    
-    // Distribuir posts ao longo do mês
-    const daysInMonth = new Date(year, month, 0).getDate();
-    const interval = Math.max(1, Math.floor(daysInMonth / postsCount));
+    const contentThemes = generateThemesByNiche(formData.niche);
     
     for (let i = 0; i < postsCount; i++) {
-      let day = (i * interval) + 1;
-      if (day > daysInMonth) {
-        day = daysInMonth - (postsCount - i - 1);
-      }
-      if (day < 1) day = 1;
+      const day = Math.floor((i * 30) / postsCount) + 1;
+      const platform = formData.platforms[i % formData.platforms.length];
+      const contentType = formData.contentTypes[i % formData.contentTypes.length];
+      const theme = contentThemes[i % contentThemes.length];
       
-      const dateStr = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
-      
-      const themeIndex = i % themes.length;
-      const contentTypeIndex = i % contentTypes.length;
-      const platformIndex = i % platforms.length;
-      
-      // Horários variados ao longo do dia
-      const hours = [8, 9, 10, 14, 16, 18, 19, 20];
-      const hour = hours[i % hours.length];
-      
-      generatedData.push({
-        date: dateStr,
-        content: {
-          type: contentTypes[contentTypeIndex],
-          title: themes[themeIndex],
-          description: `Conteúdo ${tone.toLowerCase()} sobre ${themes[themeIndex].toLowerCase()} direcionado para ${niche.toLowerCase()}. Este post foi pensado para engajar sua audiência ${platforms[platformIndex]} e agregar valor ao seu feed.`,
-          platform: platforms[platformIndex],
-          time: `${hour}:00`
-        }
+      items.push({
+        id: `content-${i + 1}`,
+        title: theme.title,
+        platform,
+        contentType,
+        description: theme.description,
+        date: `2024-12-${day.toString().padStart(2, '0')}`,
+        time: getRandomTime(),
+        day
       });
     }
     
-    return generatedData.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+    setContentItems(items.sort((a, b) => a.day - b.day));
   };
 
-  const [calendarData, setCalendarData] = useState<CalendarItem[]>(generateCalendarData());
-
-  const getContentIcon = (type: string) => {
-    switch (type) {
-      case "Vídeo":
-      case "Vídeos":
-        return <Video className="h-4 w-4" />;
-      case "Carrossel":
-        return <MessageSquare className="h-4 w-4" />;
-      case "Imagem com texto":
-        return <Image className="h-4 w-4" />;
-      default:
-        return <MessageSquare className="h-4 w-4" />;
+  const generateThemesByNiche = (niche: string) => {
+    const themes: { title: string; description: string }[] = [];
+    
+    if (niche.toLowerCase().includes('saúde') || niche.toLowerCase().includes('bem-estar')) {
+      themes.push(
+        { title: "5 Dicas para Melhorar o Sono", description: "Compartilhe técnicas de higiene do sono e rotinas noturnas" },
+        { title: "Benefícios da Meditação", description: "Explique como a meditação pode transformar a saúde mental" },
+        { title: "Alimentação Saudável", description: "Dicas práticas para uma dieta equilibrada" },
+        { title: "Exercícios em Casa", description: "Rotina de treinos que pode ser feita em casa" },
+        { title: "Importância da Hidratação", description: "Como a água impacta nossa saúde diária" }
+      );
+    } else if (niche.toLowerCase().includes('marketing') || niche.toLowerCase().includes('digital')) {
+      themes.push(
+        { title: "Estratégias de Instagram", description: "Como crescer organicamente no Instagram" },
+        { title: "Copywriting Persuasivo", description: "Técnicas para escrever textos que vendem" },
+        { title: "SEO para Iniciantes", description: "Conceitos básicos de otimização para buscadores" },
+        { title: "E-mail Marketing", description: "Como criar campanhas de e-mail eficazes" },
+        { title: "Análise de Métricas", description: "Principais KPIs para acompanhar no marketing digital" }
+      );
+    } else {
+      themes.push(
+        { title: `Dicas de ${niche}`, description: `Compartilhe conhecimentos valiosos sobre ${niche}` },
+        { title: `Erros Comuns em ${niche}`, description: `Principais erros que iniciantes cometem` },
+        { title: `Ferramentas para ${niche}`, description: `Melhores ferramentas e recursos da área` },
+        { title: `Tendências em ${niche}`, description: `O que está em alta no mercado` },
+        { title: `Casos de Sucesso`, description: `Exemplos inspiradores na área de ${niche}` }
+      );
     }
+    
+    return themes;
   };
 
-  const getContentColor = (type: string) => {
-    switch (type) {
-      case "Vídeo":
-      case "Vídeos":
-        return "bg-red-100 border-red-200 text-red-700";
-      case "Carrossel":
-        return "bg-blue-100 border-blue-200 text-blue-700";
-      case "Imagem com texto":
-        return "bg-green-100 border-green-200 text-green-700";
-      default:
-        return "bg-gray-100 border-gray-200 text-gray-700";
-    }
+  const getRandomTime = () => {
+    const hours = ['08:00', '10:00', '12:00', '14:00', '16:00', '18:00', '20:00'];
+    return hours[Math.floor(Math.random() * hours.length)];
   };
 
-  const handleEditContent = (content: any) => {
-    setEditingContent({ ...content });
-    setIsEditDialogOpen(true);
+  const handleEditItem = (item: ContentItem) => {
+    setEditingItem({ ...item });
+    setShowEditDialog(true);
   };
 
   const handleSaveEdit = () => {
-    if (editingContent && selectedDate) {
-      const updatedData = calendarData.map(item => 
-        item.date === selectedDate 
-          ? { ...item, content: editingContent }
-          : item
-      );
-      setCalendarData(updatedData);
-      setIsEditDialogOpen(false);
-      setEditingContent(null);
-      toast.success("Conteúdo atualizado com sucesso!");
-    }
+    if (!editingItem) return;
+    
+    setContentItems(prev => 
+      prev.map(item => 
+        item.id === editingItem.id ? editingItem : item
+      )
+    );
+    
+    setShowEditDialog(false);
+    setEditingItem(null);
+    toast.success("Conteúdo atualizado com sucesso!");
   };
 
-  const handleCreateNow = () => {
-    navigate("/create/method");
+  const handleCreateNow = (item: ContentItem) => {
+    navigate("/create/method", { 
+      state: { 
+        contentType: item.contentType,
+        platform: item.platform,
+        title: item.title,
+        description: item.description
+      } 
+    });
   };
 
   const handleShareCalendar = () => {
-    const uniqueId = Math.random().toString(36).substr(2, 9);
-    const generatedLink = `https://autopost.ai/calendar/shared/${uniqueId}`;
-    setShareLink(generatedLink);
-    setShowShareDialog(true);
+    const url = `${window.location.origin}/shared-calendar/${Date.now()}`;
+    navigator.clipboard.writeText(url);
+    toast.success("Link do calendário copiado para a área de transferência!");
   };
 
-  const handleCopyLink = () => {
-    navigator.clipboard.writeText(shareLink);
-    toast.success("Link copiado para a área de transferência!");
+  const handleDownloadPDF = () => {
+    toast.success("PDF do planejamento será baixado em breve!");
   };
 
-  const selectedContent = calendarData.find(item => item.date === selectedDate);
+  if (!formData) {
+    return null;
+  }
+
+  const daysInMonth = Array.from({ length: 31 }, (_, i) => i + 1);
 
   return (
     <DashboardLayout>
       <div className="p-6 max-w-7xl mx-auto">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2 flex items-center gap-2">
-            <Calendar className="h-8 w-8 text-purple-600" />
-            Calendário de Conteúdo Gerado
-          </h1>
-          <p className="text-gray-600">
-            Seu planejamento de conteúdo personalizado está pronto! Você pode editar ou baixar em PDF.
-          </p>
+        <div className="flex items-center gap-4 mb-8">
+          <Button variant="outline" size="sm" onClick={() => navigate("/content-planning")}>
+            <ArrowLeft className="h-4 w-4 mr-2" />
+            Voltar
+          </Button>
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900 mb-2 flex items-center gap-2">
+              <Calendar className="h-8 w-8 text-purple-600" />
+              Calendário de Conteúdo
+            </h1>
+            <p className="text-gray-600">
+              {contentItems.length} conteúdos planejados para {formData.niche}
+            </p>
+          </div>
         </div>
 
-        {/* Botões de Ação */}
-        <div className="flex flex-col sm:flex-row gap-4 mb-8">
-          <Button 
-            className="bg-purple-600 hover:bg-purple-700 text-white"
-            onClick={() => setIsListEditOpen(true)}
-          >
-            <List className="mr-2 h-4 w-4" />
+        <div className="flex gap-4 mb-6">
+          <Button onClick={() => setShowListEdit(true)} variant="outline">
+            <FileText className="h-4 w-4 mr-2" />
             Editar Conteúdos
           </Button>
-          <Button variant="outline" className="border-purple-600 text-purple-600 hover:bg-purple-50">
-            <Download className="mr-2 h-4 w-4" />
+          <Button onClick={handleDownloadPDF} variant="outline">
+            <Download className="h-4 w-4 mr-2" />
             Baixar PDF do Planejamento
           </Button>
-          <Button 
-            variant="outline" 
-            className="border-green-600 text-green-600 hover:bg-green-50"
-            onClick={handleShareCalendar}
-          >
-            <Share2 className="mr-2 h-4 w-4" />
+          <Button onClick={handleShareCalendar} variant="outline">
+            <Share2 className="h-4 w-4 mr-2" />
             Compartilhar Calendário
           </Button>
         </div>
 
-        {/* Resumo do Planejamento */}
-        <Card className="mb-8">
-          <CardHeader>
-            <CardTitle>Resumo do Planejamento</CardTitle>
-            <CardDescription>
-              Visão geral do seu calendário de conteúdo
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-              <div className="text-center p-4 bg-purple-50 rounded-lg">
-                <div className="text-2xl font-bold text-purple-600">{calendarData.length}</div>
-                <div className="text-sm text-gray-600">Posts no Mês</div>
-              </div>
-              <div className="text-center p-4 bg-blue-50 rounded-lg">
-                <div className="text-2xl font-bold text-blue-600">{planningData?.contentTypes?.length || 3}</div>
-                <div className="text-sm text-gray-600">Tipos de Conteúdo</div>
-              </div>
-              <div className="text-center p-4 bg-green-50 rounded-lg">
-                <div className="text-2xl font-bold text-green-600">{planningData?.platforms?.length || 2}</div>
-                <div className="text-sm text-gray-600">Plataformas</div>
-              </div>
-              <div className="text-center p-4 bg-orange-50 rounded-lg">
-                <div className="text-2xl font-bold text-orange-600">{planningData?.niche || "Geral"}</div>
-                <div className="text-sm text-gray-600">Nicho</div>
-              </div>
+        <div className="grid grid-cols-7 gap-2">
+          {['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'].map(day => (
+            <div key={day} className="p-2 text-center font-medium text-gray-500 border-b">
+              {day}
             </div>
-          </CardContent>
-        </Card>
-
-        {/* Calendário */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Junho 2025</CardTitle>
-            <CardDescription>
-              Clique em qualquer conteúdo para ver os detalhes e editar
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            {/* Grid do Calendário */}
-            <div className="grid grid-cols-7 gap-2 mb-4">
-              {/* Cabeçalho dos dias da semana */}
-              {['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'].map((day) => (
-                <div key={day} className="p-2 text-center font-semibold text-gray-600 bg-gray-50 rounded">
-                  {day}
-                </div>
-              ))}
-              
-              {/* Dias do mês */}
-              {Array.from({ length: 30 }, (_, i) => {
-                const day = i + 1;
-                const dateStr = `2025-06-${day.toString().padStart(2, '0')}`;
-                const hasContent = calendarData.find(item => item.date === dateStr);
+          ))}
+          
+          {daysInMonth.map(day => {
+            const dayContent = contentItems.filter(item => item.day === day);
+            
+            return (
+              <div key={day} className="min-h-[120px] p-2 border border-gray-200 rounded-lg">
+                <div className="font-medium text-sm text-gray-600 mb-2">{day}</div>
                 
-                return (
-                  <div
-                    key={day}
-                    className="p-2 min-h-[100px] border rounded-lg transition-colors bg-white border-gray-200 hover:bg-gray-50"
-                  >
-                    <div className="font-semibold text-gray-900 mb-1">{day}</div>
-                    {hasContent && (
-                      <Dialog>
-                        <DialogTrigger asChild>
-                          <div
-                            className={`text-xs p-2 rounded cursor-pointer hover:opacity-80 ${getContentColor(hasContent.content.type)}`}
-                            onClick={() => setSelectedDate(dateStr)}
-                          >
-                            <div className="flex items-center gap-1 mb-1">
-                              {getContentIcon(hasContent.content.type)}
-                              <span className="truncate font-medium">{hasContent.content.type}</span>
-                            </div>
-                            <div className="truncate font-medium">{hasContent.content.title}</div>
-                            <div className="flex items-center gap-1 mt-1">
-                              <Clock className="h-3 w-3" />
-                              <span>{hasContent.content.time}</span>
-                            </div>
-                          </div>
-                        </DialogTrigger>
-                        <DialogContent className="max-w-2xl">
-                          <DialogHeader>
-                            <DialogTitle>Detalhes do Conteúdo - {day} de Junho</DialogTitle>
-                          </DialogHeader>
-                          <div className="space-y-4">
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                              <div>
-                                <label className="font-semibold text-sm text-gray-700">Tipo de Conteúdo:</label>
-                                <p className="text-gray-600">{hasContent.content.type}</p>
-                              </div>
-                              <div>
-                                <label className="font-semibold text-sm text-gray-700">Plataforma:</label>
-                                <p className="text-gray-600">{hasContent.content.platform}</p>
-                              </div>
-                              <div>
-                                <label className="font-semibold text-sm text-gray-700">Horário:</label>
-                                <p className="text-gray-600">{hasContent.content.time}</p>
-                              </div>
-                            </div>
-                            <div>
-                              <label className="font-semibold text-sm text-gray-700">Título:</label>
-                              <p className="text-gray-600">{hasContent.content.title}</p>
-                            </div>
-                            <div>
-                              <label className="font-semibold text-sm text-gray-700">Descrição da Ideia:</label>
-                              <p className="text-gray-600">{hasContent.content.description}</p>
-                            </div>
-                            <div className="flex gap-2 mt-4">
-                              <Button 
-                                size="sm" 
-                                className="bg-purple-600 hover:bg-purple-700"
-                                onClick={() => handleEditContent(hasContent.content)}
-                              >
-                                <Edit className="mr-2 h-4 w-4" />
-                                Editar
-                              </Button>
-                              <Button 
-                                size="sm" 
-                                variant="outline"
-                                onClick={handleCreateNow}
-                              >
-                                Criar Agora
-                              </Button>
-                            </div>
-                          </div>
-                        </DialogContent>
-                      </Dialog>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
-          </CardContent>
-        </Card>
+                {dayContent.map(item => (
+                  <Dialog key={item.id}>
+                    <DialogTrigger asChild>
+                      <div className="bg-purple-100 text-purple-800 p-2 rounded text-xs mb-1 cursor-pointer hover:bg-purple-200 transition-colors">
+                        <div className="font-medium truncate">{item.title}</div>
+                        <div className="text-purple-600">{item.time}</div>
+                        <Badge variant="secondary" className="text-xs mt-1">
+                          {item.platform}
+                        </Badge>
+                      </div>
+                    </DialogTrigger>
+                    <DialogContent>
+                      <DialogHeader>
+                        <DialogTitle>{item.title}</DialogTitle>
+                        <DialogDescription>
+                          {item.date} às {item.time}
+                        </DialogDescription>
+                      </DialogHeader>
+                      <div className="space-y-4">
+                        <div>
+                          <strong>Plataforma:</strong> {item.platform}
+                        </div>
+                        <div>
+                          <strong>Tipo de Conteúdo:</strong> {item.contentType}
+                        </div>
+                        <div>
+                          <strong>Descrição:</strong> {item.description}
+                        </div>
+                        <div className="flex gap-2">
+                          <Button onClick={() => handleEditItem(item)} variant="outline">
+                            <Edit className="h-4 w-4 mr-2" />
+                            Editar
+                          </Button>
+                          <Button onClick={() => handleCreateNow(item)}>
+                            <Plus className="h-4 w-4 mr-2" />
+                            Criar Agora
+                          </Button>
+                        </div>
+                      </div>
+                    </DialogContent>
+                  </Dialog>
+                ))}
+              </div>
+            );
+          })}
+        </div>
 
         {/* Dialog de Edição Individual */}
-        <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
-          <DialogContent className="max-w-2xl">
+        <Dialog open={showEditDialog} onOpenChange={setShowEditDialog}>
+          <DialogContent>
             <DialogHeader>
               <DialogTitle>Editar Conteúdo</DialogTitle>
             </DialogHeader>
-            {editingContent && (
+            {editingItem && (
               <div className="space-y-4">
                 <div>
-                  <Label htmlFor="edit-title">Título</Label>
+                  <Label>Título</Label>
                   <Input
-                    id="edit-title"
-                    value={editingContent.title}
-                    onChange={(e) => setEditingContent({...editingContent, title: e.target.value})}
+                    value={editingItem.title}
+                    onChange={(e) => setEditingItem(prev => prev ? { ...prev, title: e.target.value } : null)}
                   />
                 </div>
                 <div>
-                  <Label htmlFor="edit-type">Tipo de Conteúdo</Label>
-                  <Select value={editingContent.type} onValueChange={(value) => setEditingContent({...editingContent, type: value})}>
+                  <Label>Plataforma</Label>
+                  <Select value={editingItem.platform} onValueChange={(value) => setEditingItem(prev => prev ? { ...prev, platform: value } : null)}>
                     <SelectTrigger>
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="Carrossel">Carrossel</SelectItem>
-                      <SelectItem value="Vídeo">Vídeo</SelectItem>
-                      <SelectItem value="Imagem com texto">Imagem com texto</SelectItem>
-                      <SelectItem value="Reels">Reels</SelectItem>
-                      <SelectItem value="Stories">Stories</SelectItem>
+                      {formData.platforms.map(platform => (
+                        <SelectItem key={platform} value={platform}>{platform}</SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                 </div>
                 <div>
-                  <Label htmlFor="edit-time">Horário</Label>
-                  <Input
-                    id="edit-time"
-                    type="time"
-                    value={editingContent.time}
-                    onChange={(e) => setEditingContent({...editingContent, time: e.target.value})}
-                  />
+                  <Label>Tipo de Conteúdo</Label>
+                  <Select value={editingItem.contentType} onValueChange={(value) => setEditingItem(prev => prev ? { ...prev, contentType: value } : null)}>
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {formData.contentTypes.map(type => (
+                        <SelectItem key={type} value={type}>{type}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
                 <div>
-                  <Label htmlFor="edit-description">Descrição da Ideia</Label>
+                  <Label>Descrição</Label>
                   <Textarea
-                    id="edit-description"
-                    value={editingContent.description}
-                    onChange={(e) => setEditingContent({...editingContent, description: e.target.value})}
-                    rows={4}
+                    value={editingItem.description}
+                    onChange={(e) => setEditingItem(prev => prev ? { ...prev, description: e.target.value } : null)}
                   />
                 </div>
-                <div className="flex gap-2">
-                  <Button onClick={handleSaveEdit} className="bg-purple-600 hover:bg-purple-700">
-                    Salvar Alterações
-                  </Button>
-                  <Button variant="outline" onClick={() => setIsEditDialogOpen(false)}>
-                    Cancelar
-                  </Button>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <Label>Data</Label>
+                    <Input
+                      type="date"
+                      value={editingItem.date}
+                      onChange={(e) => setEditingItem(prev => prev ? { ...prev, date: e.target.value } : null)}
+                    />
+                  </div>
+                  <div>
+                    <Label>Horário</Label>
+                    <Input
+                      type="time"
+                      value={editingItem.time}
+                      onChange={(e) => setEditingItem(prev => prev ? { ...prev, time: e.target.value } : null)}
+                    />
+                  </div>
                 </div>
+                <Button onClick={handleSaveEdit} className="w-full">
+                  <Save className="h-4 w-4 mr-2" />
+                  Salvar Alterações
+                </Button>
               </div>
             )}
           </DialogContent>
         </Dialog>
 
         {/* Dialog de Edição em Lista */}
-        <Dialog open={isListEditOpen} onOpenChange={setIsListEditOpen}>
+        <Dialog open={showListEdit} onOpenChange={setShowListEdit}>
           <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>Editar Todos os Conteúdos</DialogTitle>
-            </DialogHeader>
-            <div className="space-y-6">
-              {calendarData.map((item, index) => (
-                <Card key={item.date} className="p-4">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <Label>Título</Label>
-                      <Input
-                        value={item.content.title}
-                        onChange={(e) => {
-                          const newData = [...calendarData];
-                          newData[index].content.title = e.target.value;
-                          setCalendarData(newData);
-                        }}
-                      />
-                    </div>
-                    <div>
-                      <Label>Plataforma</Label>
-                      <Select 
-                        value={item.content.platform} 
-                        onValueChange={(value) => {
-                          const newData = [...calendarData];
-                          newData[index].content.platform = value;
-                          setCalendarData(newData);
-                        }}
-                      >
-                        <SelectTrigger>
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="Instagram">Instagram</SelectItem>
-                          <SelectItem value="TikTok">TikTok</SelectItem>
-                          <SelectItem value="YouTube">YouTube</SelectItem>
-                          <SelectItem value="Facebook">Facebook</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                    <div>
-                      <Label>Horário</Label>
-                      <Input
-                        type="time"
-                        value={item.content.time}
-                        onChange={(e) => {
-                          const newData = [...calendarData];
-                          newData[index].content.time = e.target.value;
-                          setCalendarData(newData);
-                        }}
-                      />
-                    </div>
-                    <div className="md:col-span-1">
-                      <Label>Data: {new Date(item.date).toLocaleDateString('pt-BR')}</Label>
-                    </div>
-                    <div className="md:col-span-2">
-                      <Label>Descrição da Ideia</Label>
-                      <Textarea
-                        value={item.content.description}
-                        onChange={(e) => {
-                          const newData = [...calendarData];
-                          newData[index].content.description = e.target.value;
-                          setCalendarData(newData);
-                        }}
-                        rows={2}
-                      />
-                    </div>
-                  </div>
-                </Card>
-              ))}
-              <div className="flex gap-2 mt-6">
-                <Button 
-                  onClick={() => {
-                    setIsListEditOpen(false);
-                    toast.success("Alterações salvas com sucesso!");
-                  }} 
-                  className="bg-purple-600 hover:bg-purple-700"
-                >
-                  Salvar Todas as Alterações
-                </Button>
-                <Button variant="outline" onClick={() => setIsListEditOpen(false)}>
-                  Cancelar
-                </Button>
-              </div>
-            </div>
-          </DialogContent>
-        </Dialog>
-
-        {/* Dialog de Compartilhamento */}
-        <Dialog open={showShareDialog} onOpenChange={setShowShareDialog}>
-          <DialogContent className="max-w-md">
-            <DialogHeader>
-              <DialogTitle>Compartilhar Calendário</DialogTitle>
+              <DialogDescription>
+                Edite todos os conteúdos do mês em formato de lista
+              </DialogDescription>
             </DialogHeader>
             <div className="space-y-4">
-              <p className="text-sm text-gray-600">
-                Link gerado para compartilhamento público do seu calendário:
-              </p>
-              <div className="flex gap-2">
-                <Input value={shareLink} readOnly className="flex-1" />
-                <Button onClick={handleCopyLink} size="sm">
-                  <Copy className="h-4 w-4" />
-                </Button>
-              </div>
-              <p className="text-xs text-gray-500">
-                Qualquer pessoa com este link poderá visualizar seu calendário de conteúdo.
-              </p>
+              {contentItems.map((item, index) => (
+                <Card key={item.id}>
+                  <CardHeader>
+                    <CardTitle className="text-lg">Conteúdo {index + 1}</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <Label>Título</Label>
+                        <Input
+                          value={item.title}
+                          onChange={(e) => {
+                            const newItems = [...contentItems];
+                            newItems[index].title = e.target.value;
+                            setContentItems(newItems);
+                          }}
+                        />
+                      </div>
+                      <div>
+                        <Label>Plataforma</Label>
+                        <Select 
+                          value={item.platform} 
+                          onValueChange={(value) => {
+                            const newItems = [...contentItems];
+                            newItems[index].platform = value;
+                            setContentItems(newItems);
+                          }}
+                        >
+                          <SelectTrigger>
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {formData.platforms.map(platform => (
+                              <SelectItem key={platform} value={platform}>{platform}</SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <Label>Data</Label>
+                        <Input
+                          type="date"
+                          value={item.date}
+                          onChange={(e) => {
+                            const newItems = [...contentItems];
+                            newItems[index].date = e.target.value;
+                            setContentItems(newItems);
+                          }}
+                        />
+                      </div>
+                      <div>
+                        <Label>Horário</Label>
+                        <Input
+                          type="time"
+                          value={item.time}
+                          onChange={(e) => {
+                            const newItems = [...contentItems];
+                            newItems[index].time = e.target.value;
+                            setContentItems(newItems);
+                          }}
+                        />
+                      </div>
+                    </div>
+                    <div>
+                      <Label>Descrição</Label>
+                      <Textarea
+                        value={item.description}
+                        onChange={(e) => {
+                          const newItems = [...contentItems];
+                          newItems[index].description = e.target.value;
+                          setContentItems(newItems);
+                        }}
+                      />
+                    </div>
+                    <Button onClick={() => handleCreateNow(item)} className="w-full">
+                      <Plus className="h-4 w-4 mr-2" />
+                      Criar Agora
+                    </Button>
+                  </CardContent>
+                </Card>
+              ))}
+              <Button onClick={() => setShowListEdit(false)} className="w-full">
+                <Save className="h-4 w-4 mr-2" />
+                Salvar Todas as Alterações
+              </Button>
             </div>
           </DialogContent>
         </Dialog>
