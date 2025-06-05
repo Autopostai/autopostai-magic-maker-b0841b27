@@ -3,20 +3,35 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { DashboardLayout } from "@/components/DashboardLayout";
-import { Calendar, Edit, Download, Clock, Users, MessageSquare, Video, Image, X, Share2, Copy } from "lucide-react";
+import { Calendar, Edit, Download, Clock, Users, MessageSquare, Video, Image, X, Share2, Copy, List } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+
+interface ContentItem {
+  type: string;
+  title: string;
+  description: string;
+  platform: string;
+  time: string;
+}
+
+interface CalendarItem {
+  date: string;
+  content: ContentItem;
+}
 
 export default function ContentCalendar() {
   const location = useLocation();
+  const navigate = useNavigate();
   const planningData = location.state;
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [isListEditOpen, setIsListEditOpen] = useState(false);
   const [editingContent, setEditingContent] = useState<any>(null);
   const [shareLink, setShareLink] = useState("");
   const [showShareDialog, setShowShareDialog] = useState(false);
@@ -31,77 +46,140 @@ export default function ContentCalendar() {
     const platforms = planningData.platforms || ["Instagram", "TikTok"];
     const tone = planningData.communicationTone || "Educativo";
     
-    // Gerar temas baseados no nicho
+    // Gerar temas baseados no nicho - mais específicos e variados
     const getContentByNiche = (niche: string) => {
-      const themes = {
-        "Saúde e bem-estar": [
-          "Dicas de Alimentação Saudável",
-          "Exercícios para Iniciantes",
-          "Rotina de Cuidados com a Pele",
-          "Meditação e Mindfulness",
-          "Receitas Fit e Nutritivas"
+      const nicheContent: { [key: string]: string[] } = {
+        "saúde e bem-estar": [
+          "5 Exercícios para Fazer em Casa",
+          "Alimentos que Aumentam a Imunidade",
+          "Rotina Matinal Saudável",
+          "Como Melhorar a Qualidade do Sono",
+          "Benefícios da Meditação Diária",
+          "Receitas Detox para o Verão",
+          "Alongamentos para Quem Trabalha no Computador",
+          "Dicas para Manter a Hidratação",
+          "Superalimentos que Você Precisa Conhecer",
+          "Como Reduzir o Estresse Naturalmente"
         ],
-        "Marketing digital": [
-          "Estratégias de Instagram",
+        "marketing digital": [
+          "Como Aumentar o Engajamento no Instagram",
+          "Estratégias de Copywriting que Convertem",
+          "Métricas Essenciais para Acompanhar",
           "Como Criar Conteúdo Viral",
-          "Métricas que Realmente Importam",
-          "Ferramentas de Automação",
-          "Copywriting Persuasivo"
+          "Funil de Vendas: Passo a Passo",
+          "Automação de Marketing para Iniciantes",
+          "Tendências de Social Media 2025",
+          "Como Fazer um Bom Storytelling",
+          "SEO Básico para Empreendedores",
+          "Email Marketing que Funciona"
         ],
-        "Culinária": [
-          "Receitas Rápidas e Fáceis",
-          "Técnicas de Cozimento",
-          "Ingredientes Secretos",
-          "Doces Sem Açúcar",
-          "Pratos Vegetarianos"
+        "culinária": [
+          "Receita Rápida de 15 Minutos",
+          "Sobremesas Sem Açúcar",
+          "Como Temperar Carnes Perfeitamente",
+          "Pratos Vegetarianos Nutritivos",
+          "Técnicas de Corte Profissionais",
+          "Receitas com Ingredientes Básicos",
+          "Como Fazer Pães Caseiros",
+          "Drinks Refrescantes para o Verão",
+          "Comida de Boteco em Casa",
+          "Receitas Low Carb Deliciosas"
+        ],
+        "educação": [
+          "Técnicas de Estudo Eficazes",
+          "Como Fazer Resumos Perfeitos",
+          "Métodos de Memorização",
+          "Organização para Estudantes",
+          "Como Manter o Foco nos Estudos",
+          "Preparação para Provas",
+          "Tecnologia na Educação",
+          "Desenvolvimento de Hábitos de Leitura",
+          "Como Fazer Apresentações Impactantes",
+          "Gestão de Tempo para Estudos"
+        ],
+        "tecnologia": [
+          "Apps Essenciais para Produtividade",
+          "Tendências Tecnológicas 2025",
+          "Como Proteger Seus Dados Online",
+          "Inteligência Artificial no Dia a Dia",
+          "Gadgets que Valem a Pena",
+          "Programação para Iniciantes",
+          "Como Otimizar seu Smartphone",
+          "Ferramentas de Automação",
+          "Cibersegurança Básica",
+          "Inovações que Mudarão o Mundo"
         ]
       };
       
-      return themes[niche as keyof typeof themes] || [
+      // Buscar por palavras-chave no nicho
+      const nicheKey = Object.keys(nicheContent).find(key => 
+        niche.toLowerCase().includes(key) || key.includes(niche.toLowerCase())
+      );
+      
+      return nicheContent[nicheKey] || [
         "Dicas de Produtividade",
         "Motivação Diária",
         "Crescimento Pessoal",
         "Organização e Planejamento",
-        "Desenvolvimento de Hábitos"
+        "Desenvolvimento de Hábitos",
+        "Como Alcançar Objetivos",
+        "Reflexões sobre Sucesso",
+        "Inspiração para o Dia",
+        "Lições de Vida",
+        "Transformação Pessoal"
       ];
     };
     
     const themes = getContentByNiche(niche);
-    const generatedData = [];
+    const generatedData: CalendarItem[] = [];
     
     // Começar do mês atual
     const currentDate = new Date();
     const year = currentDate.getFullYear();
-    const month = currentDate.getMonth() + 1; // +1 porque getMonth() retorna 0-11
+    const month = currentDate.getMonth() + 1;
+    
+    // Distribuir posts ao longo do mês
+    const daysInMonth = new Date(year, month, 0).getDate();
+    const interval = Math.max(1, Math.floor(daysInMonth / postsCount));
     
     for (let i = 0; i < postsCount; i++) {
-      const day = (i % 30) + 1; // Distribuir ao longo do mês
+      let day = (i * interval) + 1;
+      if (day > daysInMonth) {
+        day = daysInMonth - (postsCount - i - 1);
+      }
+      if (day < 1) day = 1;
+      
       const dateStr = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
       
       const themeIndex = i % themes.length;
       const contentTypeIndex = i % contentTypes.length;
       const platformIndex = i % platforms.length;
       
+      // Horários variados ao longo do dia
+      const hours = [8, 9, 10, 14, 16, 18, 19, 20];
+      const hour = hours[i % hours.length];
+      
       generatedData.push({
         date: dateStr,
         content: {
           type: contentTypes[contentTypeIndex],
           title: themes[themeIndex],
-          description: `Conteúdo ${tone.toLowerCase()} sobre ${themes[themeIndex].toLowerCase()} para ${niche.toLowerCase()}. Este post vai engajar sua audiência e agregar valor ao seu feed.`,
+          description: `Conteúdo ${tone.toLowerCase()} sobre ${themes[themeIndex].toLowerCase()} direcionado para ${niche.toLowerCase()}. Este post foi pensado para engajar sua audiência ${platforms[platformIndex]} e agregar valor ao seu feed.`,
           platform: platforms[platformIndex],
-          time: `${Math.floor(Math.random() * 12) + 8}:00`
+          time: `${hour}:00`
         }
       });
     }
     
-    return generatedData;
+    return generatedData.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
   };
 
-  const [calendarData, setCalendarData] = useState(generateCalendarData());
+  const [calendarData, setCalendarData] = useState<CalendarItem[]>(generateCalendarData());
 
   const getContentIcon = (type: string) => {
     switch (type) {
       case "Vídeo":
+      case "Vídeos":
         return <Video className="h-4 w-4" />;
       case "Carrossel":
         return <MessageSquare className="h-4 w-4" />;
@@ -115,6 +193,7 @@ export default function ContentCalendar() {
   const getContentColor = (type: string) => {
     switch (type) {
       case "Vídeo":
+      case "Vídeos":
         return "bg-red-100 border-red-200 text-red-700";
       case "Carrossel":
         return "bg-blue-100 border-blue-200 text-blue-700";
@@ -144,8 +223,11 @@ export default function ContentCalendar() {
     }
   };
 
+  const handleCreateNow = () => {
+    navigate("/create/method");
+  };
+
   const handleShareCalendar = () => {
-    // Gerar link único
     const uniqueId = Math.random().toString(36).substr(2, 9);
     const generatedLink = `https://autopost.ai/calendar/shared/${uniqueId}`;
     setShareLink(generatedLink);
@@ -174,8 +256,11 @@ export default function ContentCalendar() {
 
         {/* Botões de Ação */}
         <div className="flex flex-col sm:flex-row gap-4 mb-8">
-          <Button className="bg-purple-600 hover:bg-purple-700 text-white">
-            <Edit className="mr-2 h-4 w-4" />
+          <Button 
+            className="bg-purple-600 hover:bg-purple-700 text-white"
+            onClick={() => setIsListEditOpen(true)}
+          >
+            <List className="mr-2 h-4 w-4" />
             Editar Conteúdos
           </Button>
           <Button variant="outline" className="border-purple-600 text-purple-600 hover:bg-purple-50">
@@ -306,7 +391,11 @@ export default function ContentCalendar() {
                                 <Edit className="mr-2 h-4 w-4" />
                                 Editar
                               </Button>
-                              <Button size="sm" variant="outline">
+                              <Button 
+                                size="sm" 
+                                variant="outline"
+                                onClick={handleCreateNow}
+                              >
                                 Criar Agora
                               </Button>
                             </div>
@@ -321,7 +410,7 @@ export default function ContentCalendar() {
           </CardContent>
         </Card>
 
-        {/* Dialog de Edição */}
+        {/* Dialog de Edição Individual */}
         <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
           <DialogContent className="max-w-2xl">
             <DialogHeader>
@@ -347,8 +436,19 @@ export default function ContentCalendar() {
                       <SelectItem value="Carrossel">Carrossel</SelectItem>
                       <SelectItem value="Vídeo">Vídeo</SelectItem>
                       <SelectItem value="Imagem com texto">Imagem com texto</SelectItem>
+                      <SelectItem value="Reels">Reels</SelectItem>
+                      <SelectItem value="Stories">Stories</SelectItem>
                     </SelectContent>
                   </Select>
+                </div>
+                <div>
+                  <Label htmlFor="edit-time">Horário</Label>
+                  <Input
+                    id="edit-time"
+                    type="time"
+                    value={editingContent.time}
+                    onChange={(e) => setEditingContent({...editingContent, time: e.target.value})}
+                  />
                 </div>
                 <div>
                   <Label htmlFor="edit-description">Descrição da Ideia</Label>
@@ -369,6 +469,96 @@ export default function ContentCalendar() {
                 </div>
               </div>
             )}
+          </DialogContent>
+        </Dialog>
+
+        {/* Dialog de Edição em Lista */}
+        <Dialog open={isListEditOpen} onOpenChange={setIsListEditOpen}>
+          <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
+            <DialogHeader>
+              <DialogTitle>Editar Todos os Conteúdos</DialogTitle>
+            </DialogHeader>
+            <div className="space-y-6">
+              {calendarData.map((item, index) => (
+                <Card key={item.date} className="p-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <Label>Título</Label>
+                      <Input
+                        value={item.content.title}
+                        onChange={(e) => {
+                          const newData = [...calendarData];
+                          newData[index].content.title = e.target.value;
+                          setCalendarData(newData);
+                        }}
+                      />
+                    </div>
+                    <div>
+                      <Label>Plataforma</Label>
+                      <Select 
+                        value={item.content.platform} 
+                        onValueChange={(value) => {
+                          const newData = [...calendarData];
+                          newData[index].content.platform = value;
+                          setCalendarData(newData);
+                        }}
+                      >
+                        <SelectTrigger>
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="Instagram">Instagram</SelectItem>
+                          <SelectItem value="TikTok">TikTok</SelectItem>
+                          <SelectItem value="YouTube">YouTube</SelectItem>
+                          <SelectItem value="Facebook">Facebook</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div>
+                      <Label>Horário</Label>
+                      <Input
+                        type="time"
+                        value={item.content.time}
+                        onChange={(e) => {
+                          const newData = [...calendarData];
+                          newData[index].content.time = e.target.value;
+                          setCalendarData(newData);
+                        }}
+                      />
+                    </div>
+                    <div className="md:col-span-1">
+                      <Label>Data: {new Date(item.date).toLocaleDateString('pt-BR')}</Label>
+                    </div>
+                    <div className="md:col-span-2">
+                      <Label>Descrição da Ideia</Label>
+                      <Textarea
+                        value={item.content.description}
+                        onChange={(e) => {
+                          const newData = [...calendarData];
+                          newData[index].content.description = e.target.value;
+                          setCalendarData(newData);
+                        }}
+                        rows={2}
+                      />
+                    </div>
+                  </div>
+                </Card>
+              ))}
+              <div className="flex gap-2 mt-6">
+                <Button 
+                  onClick={() => {
+                    setIsListEditOpen(false);
+                    toast.success("Alterações salvas com sucesso!");
+                  }} 
+                  className="bg-purple-600 hover:bg-purple-700"
+                >
+                  Salvar Todas as Alterações
+                </Button>
+                <Button variant="outline" onClick={() => setIsListEditOpen(false)}>
+                  Cancelar
+                </Button>
+              </div>
+            </div>
           </DialogContent>
         </Dialog>
 

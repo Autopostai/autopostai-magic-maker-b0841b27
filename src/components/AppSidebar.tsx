@@ -162,7 +162,7 @@ export function AppSidebar() {
   const location = useLocation();
 
   const isActive = (url: string) => {
-    // Exact match for most routes
+    // Exact match for specific routes
     if (url === "/dashboard") {
       return location.pathname === "/dashboard";
     }
@@ -182,7 +182,11 @@ export function AppSidebar() {
     }
     
     if (url === "/schedule") {
-      return location.pathname === "/schedule" || location.pathname === "/create/platforms";
+      return location.pathname === "/schedule";
+    }
+
+    if (url === "/content") {
+      return location.pathname === "/content" && !location.search;
     }
     
     // For content items with query parameters, check both path and search
@@ -203,7 +207,7 @@ export function AppSidebar() {
   };
 
   return (
-    <Sidebar className="border-r">
+    <Sidebar className="border-r" style={{ scrollBehavior: 'auto' }}>
       <SidebarHeader className="p-4">
         <Link to="/dashboard" className="flex items-center gap-2 font-bold text-xl">
           <div className="bg-purple-100 p-1 rounded-full">
@@ -215,7 +219,7 @@ export function AppSidebar() {
         </Link>
       </SidebarHeader>
 
-      <SidebarContent className="overflow-y-auto">
+      <SidebarContent className="overflow-y-auto" style={{ scrollBehavior: 'auto' }}>
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu>

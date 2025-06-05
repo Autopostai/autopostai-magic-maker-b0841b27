@@ -9,7 +9,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Checkbox } from "@/components/ui/checkbox";
 import { DashboardLayout } from "@/components/DashboardLayout";
 import { useNavigate } from "react-router-dom";
-import { Sparkles, Calendar, Target, Users, MessageSquare, Globe, Lightbulb, Clock } from "lucide-react";
+import { Sparkles, Calendar, Target, Users, MessageSquare, Globe, Lightbulb, Clock, AlertCircle } from "lucide-react";
+import { toast } from "sonner";
 
 export default function ContentPlanning() {
   const navigate = useNavigate();
@@ -20,9 +21,13 @@ export default function ContentPlanning() {
     contentTypes: [] as string[],
     platforms: [] as string[],
     communicationTone: "",
+    customTone: "",
     contentIdeas: "",
     importantDates: ""
   });
+
+  const [showCustomTone, setShowCustomTone] = useState(false);
+  const [validationErrors, setValidationErrors] = useState<string[]>([]);
 
   const contentTypes = [
     "Vídeos",
@@ -54,7 +59,8 @@ export default function ContentPlanning() {
     "Profundo",
     "Casual",
     "Profissional",
-    "Motivacional"
+    "Motivacional",
+    "Outro"
   ];
 
   const handleContentTypeChange = (type: string, checked: boolean) => {
@@ -75,9 +81,67 @@ export default function ContentPlanning() {
     }));
   };
 
+  const handleToneChange = (value: string) => {
+    setFormData(prev => ({ ...prev, communicationTone: value }));
+    if (value === "Outro") {
+      setShowCustomTone(true);
+    } else {
+      setShowCustomTone(false);
+      setFormData(prev => ({ ...prev, customTone: "" }));
+    }
+  };
+
+  const validateForm = () => {
+    const errors: string[] = [];
+
+    if (!formData.postsPerMonth) {
+      errors.push("Quantidade de postagens no mês");
+    }
+
+    if (!formData.niche.trim()) {
+      errors.push("Nicho");
+    }
+
+    if (formData.contentTypes.length === 0) {
+      errors.push("Tipo de conteúdo preferido");
+    }
+
+    if (formData.platforms.length === 0) {
+      errors.push("Principais plataformas");
+    }
+
+    if (!formData.communicationTone) {
+      errors.push("Tom de comunicação");
+    }
+
+    if (formData.communicationTone === "Outro" && !formData.customTone.trim()) {
+      errors.push("Tom de comunicação personalizado");
+    }
+
+    return errors;
+  };
+
   const handleGeneratePlanning = () => {
-    // Passar dados para o calendário com lógica personalizada
-    navigate("/content-calendar", { state: formData });
+    const errors = validateForm();
+    
+    if (errors.length > 0) {
+      setValidationErrors(errors);
+      toast.error("Campos obrigatórios não preenchidos", {
+        description: "Por favor, preencha todas as informações obrigatórias para continuar."
+      });
+      return;
+    }
+
+    setValidationErrors([]);
+
+    // Preparar dados finais com tom customizado se necessário
+    const finalData = {
+      ...formData,
+      communicationTone: formData.communicationTone === "Outro" ? formData.customTone : formData.communicationTone
+    };
+
+    // Passar dados para o calendário
+    navigate("/content-calendar", { state: finalData });
   };
 
   // Determinar se o campo de posts por dia deve ser exibido
@@ -96,13 +160,31 @@ export default function ContentPlanning() {
           </p>
         </div>
 
+        {validationErrors.length > 0 && (
+          <Card className="mb-6 border-red-200 bg-red-50">
+            <CardContent className="pt-6">
+              <div className="flex items-start gap-2">
+                <AlertCircle className="h-5 w-5 text-red-600 mt-0.5" />
+                <div>
+                  <h4 className="font-medium text-red-800 mb-2">Campos obrigatórios não preenchidos:</h4>
+                  <ul className="text-sm text-red-700 space-y-1">
+                    {validationErrors.map((error, index) => (
+                      <li key={index}>• {error}</li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
         <div className="grid gap-6">
           {/* Quantidade de Posts */}
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Target className="h-5 w-5 text-purple-600" />
-                Frequência de Publicação
+                Frequência de Publicação *
               </CardTitle>
               <CardDescription>
                 Defina quantos posts você quer publicar
@@ -110,13 +192,14 @@ export default function ContentPlanning() {
             </CardHeader>
             <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <Label htmlFor="postsPerMonth">Quantidade de postagens no mês</Label>
+                <Label htmlFor="postsPerMonth">Quantidade de postagens no mês *</Label>
                 <Input
                   id="postsPerMonth"
                   type="number"
                   placeholder="Ex: 30"
                   value={formData.postsPerMonth}
                   onChange={(e) => setFormData(prev => ({ ...prev, postsPerMonth: e.target.value }))}
+                  className={validationErrors.includes("Quantidade de postagens no mês") ? "border-red-500" : ""}
                 />
               </div>
               {shouldShowDailyPosts && (
@@ -139,7 +222,7 @@ export default function ContentPlanning() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Users className="h-5 w-5 text-purple-600" />
-                Seu Nicho
+                Seu Nicho *
               </CardTitle>
               <CardDescription>
                 Qual é o seu nicho ou área de atuação?
@@ -150,6 +233,7 @@ export default function ContentPlanning() {
                 placeholder="Ex: Saúde e bem-estar, Marketing digital, Culinária..."
                 value={formData.niche}
                 onChange={(e) => setFormData(prev => ({ ...prev, niche: e.target.value }))}
+                className={validationErrors.includes("Nicho") ? "border-red-500" : ""}
               />
             </CardContent>
           </Card>
@@ -159,7 +243,7 @@ export default function ContentPlanning() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Sparkles className="h-5 w-5 text-purple-600" />
-                Tipos de Conteúdo Preferido
+                Tipos de Conteúdo Preferido *
               </CardTitle>
               <CardDescription>
                 Selecione os formatos que você prefere criar
@@ -178,6 +262,9 @@ export default function ContentPlanning() {
                   </div>
                 ))}
               </div>
+              {validationErrors.includes("Tipo de conteúdo preferido") && (
+                <p className="text-sm text-red-600 mt-2">Selecione pelo menos um tipo de conteúdo</p>
+              )}
             </CardContent>
           </Card>
 
@@ -186,7 +273,7 @@ export default function ContentPlanning() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Globe className="h-5 w-5 text-purple-600" />
-                Principais Plataformas de Publicação
+                Principais Plataformas de Publicação *
               </CardTitle>
               <CardDescription>
                 Onde você vai publicar seu conteúdo?
@@ -205,6 +292,9 @@ export default function ContentPlanning() {
                   </div>
                 ))}
               </div>
+              {validationErrors.includes("Principais plataformas") && (
+                <p className="text-sm text-red-600 mt-2">Selecione pelo menos uma plataforma</p>
+              )}
             </CardContent>
           </Card>
 
@@ -213,15 +303,15 @@ export default function ContentPlanning() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <MessageSquare className="h-5 w-5 text-purple-600" />
-                Tom de Comunicação Desejado
+                Tom de Comunicação Desejado *
               </CardTitle>
               <CardDescription>
                 Como você quer se comunicar com sua audiência?
               </CardDescription>
             </CardHeader>
-            <CardContent>
-              <Select value={formData.communicationTone} onValueChange={(value) => setFormData(prev => ({ ...prev, communicationTone: value }))}>
-                <SelectTrigger>
+            <CardContent className="space-y-4">
+              <Select value={formData.communicationTone} onValueChange={handleToneChange}>
+                <SelectTrigger className={validationErrors.includes("Tom de comunicação") ? "border-red-500" : ""}>
                   <SelectValue placeholder="Selecione o tom de comunicação" />
                 </SelectTrigger>
                 <SelectContent>
@@ -230,6 +320,19 @@ export default function ContentPlanning() {
                   ))}
                 </SelectContent>
               </Select>
+              
+              {showCustomTone && (
+                <div>
+                  <Label htmlFor="customTone">Digite seu tom de comunicação personalizado *</Label>
+                  <Input
+                    id="customTone"
+                    placeholder="Ex: Descontraído e amigável"
+                    value={formData.customTone}
+                    onChange={(e) => setFormData(prev => ({ ...prev, customTone: e.target.value }))}
+                    className={validationErrors.includes("Tom de comunicação personalizado") ? "border-red-500" : ""}
+                  />
+                </div>
+              )}
             </CardContent>
           </Card>
 
