@@ -1,4 +1,3 @@
-
 import { useState, useRef, useEffect } from "react";
 import { DashboardLayout } from "@/components/DashboardLayout";
 import { Button } from "@/components/ui/button";
@@ -36,7 +35,7 @@ export default function ProfessionalVideoEditor() {
   const [duration, setDuration] = useState(0);
   const [zoom, setZoom] = useState(100);
   const [resolution, setResolution] = useState('1080p');
-  const [aspectRatio, setaspectRatio] = useState('9:16');
+  const [aspectRatio, setAspectRatio] = useState('9:16');
 
   const resolutionOptions = ['720p', '1080p', '2K', '4K'];
   const aspectRatioOptions = [
