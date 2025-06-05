@@ -1,6 +1,4 @@
-
 import { useState, useRef, useEffect } from "react";
-import { DashboardLayout } from "@/components/DashboardLayout";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -29,6 +27,7 @@ import {
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { AppSidebar } from "@/components/AppSidebar";
 
 interface DesignElement {
   id: string;
@@ -587,7 +586,7 @@ export default function DesignEditor() {
         {/* Main Menu */}
         {!mainMenuCollapsed && (
           <div className="w-64 bg-white border-r">
-            <DashboardLayout />
+            <AppSidebar />
           </div>
         )}
 
