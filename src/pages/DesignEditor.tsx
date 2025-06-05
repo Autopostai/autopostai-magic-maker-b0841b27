@@ -27,7 +27,7 @@ import {
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { AppSidebar } from "@/components/AppSidebar";
+import { SimpleNavMenu } from "@/components/SimpleNavMenu";
 
 interface DesignElement {
   id: string;
@@ -586,7 +586,7 @@ export default function DesignEditor() {
         {/* Main Menu */}
         {!mainMenuCollapsed && (
           <div className="w-64 bg-white border-r">
-            <AppSidebar />
+            <SimpleNavMenu />
           </div>
         )}
 
