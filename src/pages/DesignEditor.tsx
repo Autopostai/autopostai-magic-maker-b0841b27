@@ -1,3 +1,4 @@
+
 import { useState, useRef, useEffect } from "react";
 import { DashboardLayout } from "@/components/DashboardLayout";
 import { Button } from "@/components/ui/button";
@@ -13,7 +14,8 @@ import {
   AlignRight, Bold, Italic, Underline, Palette, Eye, Layers,
   ChevronLeft, ChevronRight, Maximize, RotateCcw, FlipHorizontal,
   FlipVertical, Sliders, Sparkles, Settings, FolderOpen, Grid3X3,
-  Wand2, Sun, Strikethrough, List, AlignJustify, Plus, Minus
+  Wand2, Sun, Strikethrough, List, AlignJustify, Plus, Minus,
+  Search, Circle, Square, Triangle, Star, Heart, Zap
 } from "lucide-react";
 import { toast } from "sonner";
 import { 
@@ -25,10 +27,12 @@ import {
   MenubarTrigger,
 } from "@/components/ui/menubar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface DesignElement {
   id: string;
-  type: 'text' | 'image' | 'shape';
+  type: 'text' | 'image' | 'shape' | 'sticker' | 'graphic';
   x: number;
   y: number;
   width: number;
@@ -36,42 +40,64 @@ interface DesignElement {
   content?: string;
   style?: any;
   selected?: boolean;
+  locked?: boolean;
+  visible?: boolean;
+  name?: string;
+  zIndex?: number;
+}
+
+interface Layer {
+  id: string;
+  name: string;
+  visible: boolean;
+  locked: boolean;
+  element: DesignElement;
 }
 
 export default function DesignEditor() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  
   const [elements, setElements] = useState<DesignElement[]>([]);
   const [selectedElement, setSelectedElement] = useState<DesignElement | null>(null);
   const [zoom, setZoom] = useState(100);
-  const [canvasSize, setCanvasSize] = useState({ width: 1080, height: 1080 });
+  const [canvasSize, setCanvasSize] = useState({ width: 1080, height: 1350 });
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [mainMenuCollapsed, setMainMenuCollapsed] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [projectName, setProjectName] = useState("Projeto sem título");
+  const [showLayers, setShowLayers] = useState(false);
+  const [showGrid, setShowGrid] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
+  const [canvasOffset, setCanvasOffset] = useState({ x: 0, y: 0 });
+  const [layers, setLayers] = useState<Layer[]>([]);
   
   // Text editing states
-  const [textFont, setTextFont] = useState('Arial');
+  const [textFont, setTextFont] = useState('Inter');
   const [textSize, setTextSize] = useState(16);
   const [textColor, setTextColor] = useState('#000000');
   const [textBold, setTextBold] = useState(false);
   const [textItalic, setTextItalic] = useState(false);
   const [textUnderline, setTextUnderline] = useState(false);
   const [textStrikethrough, setTextStrikethrough] = useState(false);
-  const [textUppercase, setTextUppercase] = useState(false);
   const [textAlign, setTextAlign] = useState('left');
   const [textOpacity, setTextOpacity] = useState(100);
 
   const fonts = [
-    'Arial', 'Helvetica', 'Georgia', 'Times New Roman', 'Verdana', 
-    'Trebuchet MS', 'Impact', 'Comic Sans MS', 'Courier New', 'Inter',
-    'Roboto', 'Open Sans', 'Lato', 'Montserrat', 'Poppins', 'Nunito'
+    'Inter', 'Roboto', 'Open Sans', 'Lato', 'Montserrat', 'Poppins', 
+    'Nunito', 'Arial', 'Helvetica', 'Georgia', 'Times New Roman', 
+    'Verdana', 'Trebuchet MS', 'Impact', 'Comic Sans MS', 'Courier New'
   ];
 
   const resizeOptions = [
-    { name: 'Instagram Post', width: 1080, height: 1080 },
+    { name: 'Instagram Post (Feed)', width: 1080, height: 1350 },
+    { name: 'Instagram Square', width: 1080, height: 1080 },
     { name: 'Instagram Story', width: 1080, height: 1920 },
     { name: 'YouTube Thumbnail', width: 1280, height: 720 },
     { name: 'Facebook Post', width: 1200, height: 630 },
+    { name: 'Carrossel Instagram', width: 1080, height: 1350 },
     { name: 'LinkedIn Post', width: 1200, height: 627 },
     { name: 'Twitter Post', width: 1200, height: 675 },
     { name: 'Apresentação 16:9', width: 1920, height: 1080 },
@@ -79,11 +105,12 @@ export default function DesignEditor() {
     { name: 'Tamanho Personalizado', width: 0, height: 0 }
   ];
 
-  const fontCombinations = [
-    { title: 'Montserrat + Open Sans', subtitle: 'Moderna e limpa', heading: 'Montserrat', body: 'Open Sans' },
-    { title: 'Playfair + Source Sans', subtitle: 'Elegante e clássica', heading: 'Playfair Display', body: 'Source Sans Pro' },
-    { title: 'Poppins + Inter', subtitle: 'Contemporânea', heading: 'Poppins', body: 'Inter' },
-    { title: 'Roboto + Lato', subtitle: 'Profissional', heading: 'Roboto', body: 'Lato' }
+  const shapes = [
+    { name: 'Círculo', icon: Circle, type: 'circle' },
+    { name: 'Quadrado', icon: Square, type: 'rectangle' },
+    { name: 'Triângulo', icon: Triangle, type: 'triangle' },
+    { name: 'Estrela', icon: Star, type: 'star' },
+    { name: 'Coração', icon: Heart, type: 'heart' }
   ];
 
   useEffect(() => {
@@ -94,31 +121,166 @@ export default function DesignEditor() {
         drawCanvas(ctx);
       }
     }
-  }, [elements, zoom, canvasSize]);
+  }, [elements, zoom, canvasSize, canvasOffset, showGrid]);
+
+  useEffect(() => {
+    // Update layers when elements change
+    const newLayers: Layer[] = elements.map((element, index) => ({
+      id: element.id,
+      name: element.name || `${element.type} ${index + 1}`,
+      visible: element.visible !== false,
+      locked: element.locked || false,
+      element
+    }));
+    setLayers(newLayers);
+  }, [elements]);
 
   const drawCanvas = (ctx: CanvasRenderingContext2D) => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
     // Clear canvas
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
+    // Fill background
     ctx.fillStyle = '#ffffff';
     ctx.fillRect(0, 0, canvasSize.width, canvasSize.height);
 
-    // Draw elements
-    elements.forEach(element => {
+    // Draw grid if enabled
+    if (showGrid) {
+      drawGrid(ctx);
+    }
+
+    // Draw elements sorted by zIndex
+    const sortedElements = [...elements].sort((a, b) => (a.zIndex || 0) - (b.zIndex || 0));
+    
+    sortedElements.forEach(element => {
+      if (element.visible === false) return;
+      
+      ctx.save();
+      ctx.globalAlpha = (element.style?.opacity || 100) / 100;
+      
       if (element.type === 'text' && element.content) {
-        ctx.font = `${element.style?.size || 16}px ${element.style?.font || 'Arial'}`;
-        ctx.fillStyle = element.style?.color || '#000000';
-        ctx.textAlign = element.style?.align || 'left';
-        ctx.fillText(element.content, element.x, element.y);
+        drawTextElement(ctx, element);
+      } else if (element.type === 'shape') {
+        drawShapeElement(ctx, element);
       }
       
       // Draw selection border
       if (element.selected) {
-        ctx.strokeStyle = '#8B5CF6';
-        ctx.lineWidth = 2;
-        ctx.strokeRect(element.x - 5, element.y - 5, element.width + 10, element.height + 10);
+        drawSelectionBorder(ctx, element);
       }
+      
+      ctx.restore();
+    });
+  };
+
+  const drawGrid = (ctx: CanvasRenderingContext2D) => {
+    const gridSize = 20;
+    ctx.strokeStyle = '#e0e0e0';
+    ctx.lineWidth = 0.5;
+    
+    for (let x = 0; x <= canvasSize.width; x += gridSize) {
+      ctx.beginPath();
+      ctx.moveTo(x, 0);
+      ctx.lineTo(x, canvasSize.height);
+      ctx.stroke();
+    }
+    
+    for (let y = 0; y <= canvasSize.height; y += gridSize) {
+      ctx.beginPath();
+      ctx.moveTo(0, y);
+      ctx.lineTo(canvasSize.width, y);
+      ctx.stroke();
+    }
+  };
+
+  const drawTextElement = (ctx: CanvasRenderingContext2D, element: DesignElement) => {
+    const style = element.style || {};
+    let fontSize = style.size || 16;
+    let fontFamily = style.font || 'Inter';
+    
+    ctx.font = `${style.bold ? 'bold' : 'normal'} ${style.italic ? 'italic' : 'normal'} ${fontSize}px ${fontFamily}`;
+    ctx.fillStyle = style.color || '#000000';
+    ctx.textAlign = style.align || 'left';
+    
+    const lines = (element.content || '').split('\n');
+    const lineHeight = fontSize * 1.2;
+    
+    lines.forEach((line, index) => {
+      ctx.fillText(line, element.x, element.y + (index * lineHeight) + fontSize);
+    });
+  };
+
+  const drawShapeElement = (ctx: CanvasRenderingContext2D, element: DesignElement) => {
+    const style = element.style || {};
+    ctx.fillStyle = style.fill || '#8B5CF6';
+    ctx.strokeStyle = style.stroke || 'transparent';
+    ctx.lineWidth = style.strokeWidth || 0;
+    
+    const { x, y, width, height } = element;
+    
+    switch (style.shapeType) {
+      case 'circle':
+        ctx.beginPath();
+        ctx.arc(x + width/2, y + height/2, Math.min(width, height)/2, 0, 2 * Math.PI);
+        ctx.fill();
+        if (style.strokeWidth > 0) ctx.stroke();
+        break;
+      case 'rectangle':
+        if (style.borderRadius) {
+          drawRoundedRect(ctx, x, y, width, height, style.borderRadius);
+        } else {
+          ctx.fillRect(x, y, width, height);
+        }
+        if (style.strokeWidth > 0) ctx.strokeRect(x, y, width, height);
+        break;
+      case 'triangle':
+        ctx.beginPath();
+        ctx.moveTo(x + width/2, y);
+        ctx.lineTo(x, y + height);
+        ctx.lineTo(x + width, y + height);
+        ctx.closePath();
+        ctx.fill();
+        if (style.strokeWidth > 0) ctx.stroke();
+        break;
+    }
+  };
+
+  const drawRoundedRect = (ctx: CanvasRenderingContext2D, x: number, y: number, width: number, height: number, radius: number) => {
+    ctx.beginPath();
+    ctx.moveTo(x + radius, y);
+    ctx.lineTo(x + width - radius, y);
+    ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+    ctx.lineTo(x + width, y + height - radius);
+    ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+    ctx.lineTo(x + radius, y + height);
+    ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+    ctx.lineTo(x, y + radius);
+    ctx.quadraticCurveTo(x, y, x + radius, y);
+    ctx.closePath();
+    ctx.fill();
+  };
+
+  const drawSelectionBorder = (ctx: CanvasRenderingContext2D, element: DesignElement) => {
+    ctx.strokeStyle = '#8B5CF6';
+    ctx.lineWidth = 2;
+    ctx.setLineDash([5, 5]);
+    ctx.strokeRect(element.x - 5, element.y - 5, element.width + 10, element.height + 10);
+    ctx.setLineDash([]);
+    
+    // Draw resize handles
+    const handleSize = 8;
+    ctx.fillStyle = '#8B5CF6';
+    const handles = [
+      { x: element.x - handleSize/2, y: element.y - handleSize/2 },
+      { x: element.x + element.width - handleSize/2, y: element.y - handleSize/2 },
+      { x: element.x - handleSize/2, y: element.y + element.height - handleSize/2 },
+      { x: element.x + element.width - handleSize/2, y: element.y + element.height - handleSize/2 }
+    ];
+    
+    handles.forEach(handle => {
+      ctx.fillRect(handle.x, handle.y, handleSize, handleSize);
     });
   };
 
@@ -138,8 +300,13 @@ export default function DesignEditor() {
         bold: textBold,
         italic: textItalic,
         underline: textUnderline,
-        align: textAlign
-      }
+        align: textAlign,
+        opacity: textOpacity
+      },
+      visible: true,
+      locked: false,
+      zIndex: elements.length,
+      name: `Texto ${elements.length + 1}`
     };
     
     setElements(prev => [...prev, newElement]);
@@ -147,25 +314,91 @@ export default function DesignEditor() {
     toast.success("Elemento de texto adicionado!");
   };
 
-  const handleCanvasClick = (e: React.MouseEvent<HTMLCanvasElement>) => {
+  const addShapeElement = (shapeType: string) => {
+    const newElement: DesignElement = {
+      id: `shape-${Date.now()}`,
+      type: 'shape',
+      x: 100,
+      y: 100,
+      width: 100,
+      height: 100,
+      style: {
+        shapeType,
+        fill: '#8B5CF6',
+        opacity: 100,
+        borderRadius: shapeType === 'rectangle' ? 0 : undefined
+      },
+      visible: true,
+      locked: false,
+      zIndex: elements.length,
+      name: `${shapeType} ${elements.length + 1}`
+    };
+    
+    setElements(prev => [...prev, newElement]);
+    setSelectedElement(newElement);
+    toast.success(`${shapeType} adicionado!`);
+  };
+
+  const handleCanvasMouseDown = (e: React.MouseEvent<HTMLCanvasElement>) => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
     const rect = canvas.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
+    const x = (e.clientX - rect.left) / (zoom / 100) - canvasOffset.x;
+    const y = (e.clientY - rect.top) / (zoom / 100) - canvasOffset.y;
 
     const clickedElement = elements.find(element => 
       x >= element.x && x <= element.x + element.width &&
-      y >= element.y && y <= element.y + element.height
+      y >= element.y && y <= element.y + element.height && 
+      element.visible !== false
     );
 
-    if (clickedElement) {
+    if (clickedElement && !clickedElement.locked) {
       setElements(prev => prev.map(el => ({ ...el, selected: el.id === clickedElement.id })));
       setSelectedElement(clickedElement);
+      setIsDragging(true);
+      setDragStart({ x: x - clickedElement.x, y: y - clickedElement.y });
     } else {
       setElements(prev => prev.map(el => ({ ...el, selected: false })));
       setSelectedElement(null);
+      setIsDragging(true);
+      setDragStart({ x, y });
+    }
+  };
+
+  const handleCanvasMouseMove = (e: React.MouseEvent<HTMLCanvasElement>) => {
+    if (!isDragging) return;
+    
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const rect = canvas.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / (zoom / 100) - canvasOffset.x;
+    const y = (e.clientY - rect.top) / (zoom / 100) - canvasOffset.y;
+
+    if (selectedElement) {
+      // Move selected element
+      const newX = x - dragStart.x;
+      const newY = y - dragStart.y;
+      
+      updateSelectedElement({ x: newX, y: newY });
+    } else {
+      // Pan canvas
+      const deltaX = x - dragStart.x;
+      const deltaY = y - dragStart.y;
+      setCanvasOffset(prev => ({ x: prev.x + deltaX, y: prev.y + deltaY }));
+    }
+  };
+
+  const handleCanvasMouseUp = () => {
+    setIsDragging(false);
+  };
+
+  const handleWheel = (e: React.WheelEvent<HTMLCanvasElement>) => {
+    if (e.shiftKey) {
+      e.preventDefault();
+      const delta = e.deltaY > 0 ? -10 : 10;
+      setZoom(prev => Math.max(25, Math.min(200, prev + delta)));
     }
   };
 
@@ -187,33 +420,71 @@ export default function DesignEditor() {
     }
   };
 
-  const fitToScreen = () => {
-    setZoom(100);
+  const toggleLayerVisibility = (layerId: string) => {
+    setElements(prev => prev.map(el => 
+      el.id === layerId ? { ...el, visible: !el.visible } : el
+    ));
   };
 
-  const applyFontCombination = (combination: typeof fontCombinations[0]) => {
-    setTextFont(combination.heading);
-    toast.success(`Combinação ${combination.title} aplicada!`);
+  const toggleLayerLock = (layerId: string) => {
+    setElements(prev => prev.map(el => 
+      el.id === layerId ? { ...el, locked: !el.locked } : el
+    ));
+  };
+
+  const deleteSelectedElement = () => {
+    if (!selectedElement) return;
+    
+    setElements(prev => prev.filter(el => el.id !== selectedElement.id));
+    setSelectedElement(null);
+    toast.success("Elemento removido!");
+  };
+
+  const duplicateSelectedElement = () => {
+    if (!selectedElement) return;
+    
+    const newElement = {
+      ...selectedElement,
+      id: `${selectedElement.type}-${Date.now()}`,
+      x: selectedElement.x + 20,
+      y: selectedElement.y + 20,
+      selected: false,
+      name: `${selectedElement.name} - Cópia`
+    };
+    
+    setElements(prev => [...prev, newElement]);
+    toast.success("Elemento duplicado!");
   };
 
   return (
     <div className="h-screen flex flex-col bg-gray-100">
-      {/* Header - Purple AutoPost AI */}
+      {/* Header */}
       <div className="bg-purple-600 text-white p-3 flex items-center justify-between z-50">
         <div className="flex items-center gap-4">
-          <Button 
-            variant="ghost" 
-            size="sm" 
-            className="text-white hover:bg-purple-700"
-            onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
-          >
-            <Menu className="h-4 w-4" />
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              className="text-white hover:bg-purple-700"
+              onClick={() => setMainMenuCollapsed(!mainMenuCollapsed)}
+            >
+              <Menu className="h-4 w-4" />
+            </Button>
+            
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              className="text-white hover:bg-purple-700"
+              onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
+            >
+              <Layers className="h-4 w-4" />
+            </Button>
+          </div>
           
           <Menubar className="bg-transparent border-none">
             <MenubarMenu>
               <MenubarTrigger className="text-white hover:bg-purple-700 px-3 py-1 rounded">
-                File
+                Arquivo
               </MenubarTrigger>
               <MenubarContent>
                 <MenubarItem>Novo projeto</MenubarItem>
@@ -225,21 +496,35 @@ export default function DesignEditor() {
             </MenubarMenu>
           </Menubar>
 
-          <Select onValueChange={(value) => {
-            const size = resizeOptions.find(opt => opt.name === value);
-            if (size && size.width > 0) handleResize({ width: size.width, height: size.height });
-          }}>
-            <SelectTrigger className="w-48 bg-purple-700 border-purple-500 text-white">
-              <SelectValue placeholder="Redimensionar" />
-            </SelectTrigger>
-            <SelectContent>
-              {resizeOptions.map(option => (
-                <SelectItem key={option.name} value={option.name}>
-                  {option.name} {option.width > 0 && `(${option.width}x${option.height})`}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button variant="ghost" size="sm" className="text-white hover:bg-purple-700">
+                Redimensionar
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="max-w-md">
+              <DialogHeader>
+                <DialogTitle>Redimensionar Canvas</DialogTitle>
+              </DialogHeader>
+              <div className="space-y-4">
+                {resizeOptions.map(option => (
+                  <Button
+                    key={option.name}
+                    variant="outline"
+                    className="w-full justify-start"
+                    onClick={() => {
+                      if (option.width > 0) {
+                        handleResize({ width: option.width, height: option.height });
+                        toast.success(`Canvas redimensionado para ${option.name}`);
+                      }
+                    }}
+                  >
+                    {option.name} {option.width > 0 && `(${option.width}x${option.height})`}
+                  </Button>
+                ))}
+              </div>
+            </DialogContent>
+          </Dialog>
 
           <div className="flex gap-2">
             <Button variant="ghost" size="sm" className="text-white hover:bg-purple-700">
@@ -299,13 +584,20 @@ export default function DesignEditor() {
       </div>
 
       <div className="flex flex-1 overflow-hidden">
+        {/* Main Menu */}
+        {!mainMenuCollapsed && (
+          <div className="w-64 bg-white border-r">
+            <DashboardLayout />
+          </div>
+        )}
+
         {/* Sidebar */}
         {!sidebarCollapsed && (
           <div className="w-80 bg-white border-r overflow-y-auto">
-            <Tabs defaultValue="design" className="p-4">
+            <Tabs defaultValue="elementos" className="p-4">
               <TabsList className="grid w-full grid-cols-2">
                 <TabsTrigger value="design" className="text-xs">Design</TabsTrigger>
-                <TabsTrigger value="elements" className="text-xs">Elementos</TabsTrigger>
+                <TabsTrigger value="elementos" className="text-xs">Elementos</TabsTrigger>
               </TabsList>
 
               <TabsContent value="design" className="space-y-4 mt-4">
@@ -325,7 +617,7 @@ export default function DesignEditor() {
                 </Card>
               </TabsContent>
 
-              <TabsContent value="elements" className="space-y-4 mt-4">
+              <TabsContent value="elementos" className="space-y-4 mt-4">
                 <div className="space-y-4">
                   <Card>
                     <CardContent className="p-4">
@@ -336,24 +628,6 @@ export default function DesignEditor() {
                       <Button onClick={addTextElement} className="w-full mb-4">
                         Adicionar Texto
                       </Button>
-                      
-                      <div className="space-y-4">
-                        <div>
-                          <Label className="text-sm font-medium">Combinações de fontes</Label>
-                          <div className="space-y-2 mt-2">
-                            {fontCombinations.map((combo, index) => (
-                              <div 
-                                key={index}
-                                className="p-3 border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors"
-                                onClick={() => applyFontCombination(combo)}
-                              >
-                                <div className="font-bold text-sm">{combo.title}</div>
-                                <div className="text-xs text-gray-600">{combo.subtitle}</div>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      </div>
                     </CardContent>
                   </Card>
 
@@ -363,19 +637,104 @@ export default function DesignEditor() {
                         <Shapes className="h-4 w-4 mr-2" />
                         Formas
                       </h3>
-                      <div className="grid grid-cols-4 gap-2">
-                        <Button variant="outline" size="sm" className="aspect-square">
-                          <div className="w-4 h-4 bg-current rounded-full"></div>
+                      <div className="grid grid-cols-3 gap-2">
+                        {shapes.map(shape => (
+                          <Button
+                            key={shape.type}
+                            variant="outline"
+                            size="sm"
+                            className="aspect-square flex-col gap-1 p-2"
+                            onClick={() => addShapeElement(shape.type)}
+                          >
+                            <shape.icon className="h-4 w-4" />
+                            <span className="text-xs">{shape.name}</span>
+                          </Button>
+                        ))}
+                      </div>
+                    </CardContent>
+                  </Card>
+
+                  <Card>
+                    <CardContent className="p-4">
+                      <h3 className="font-medium mb-4 flex items-center">
+                        <Sparkles className="h-4 w-4 mr-2" />
+                        Graphics
+                      </h3>
+                      <div className="space-y-2">
+                        <Input placeholder="Buscar gráficos..." className="mb-3" />
+                        <div className="grid grid-cols-3 gap-2">
+                          {[1, 2, 3, 4, 5, 6].map(i => (
+                            <div key={i} className="aspect-square bg-gray-100 rounded cursor-pointer hover:bg-gray-200 transition-colors">
+                              <div className="w-full h-full flex items-center justify-center text-gray-500 text-xs">
+                                Icon {i}
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+
+                  <Card>
+                    <CardContent className="p-4">
+                      <h3 className="font-medium mb-4 flex items-center">
+                        <Zap className="h-4 w-4 mr-2" />
+                        Stickers
+                      </h3>
+                      <div className="space-y-2">
+                        <Input placeholder="Buscar stickers..." className="mb-3" />
+                        <div className="grid grid-cols-3 gap-2">
+                          {[1, 2, 3, 4, 5, 6].map(i => (
+                            <div key={i} className="aspect-square bg-gray-100 rounded cursor-pointer hover:bg-gray-200 transition-colors">
+                              <div className="w-full h-full flex items-center justify-center text-gray-500 text-xs">
+                                Sticker {i}
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+
+                  <Card>
+                    <CardContent className="p-4">
+                      <h3 className="font-medium mb-4 flex items-center">
+                        <Image className="h-4 w-4 mr-2" />
+                        Photos
+                      </h3>
+                      <div className="space-y-2">
+                        <Input placeholder="Buscar fotos..." className="mb-3" />
+                        <Button variant="outline" className="w-full mb-3">
+                          <Upload className="h-4 w-4 mr-2" />
+                          Upload de fotos
                         </Button>
-                        <Button variant="outline" size="sm" className="aspect-square">
-                          <div className="w-4 h-4 bg-current"></div>
-                        </Button>
-                        <Button variant="outline" size="sm" className="aspect-square">
-                          <div className="w-4 h-3 bg-current" style={{clipPath: 'polygon(50% 0%, 0% 100%, 100% 100%)'}}></div>
-                        </Button>
-                        <Button variant="outline" size="sm" className="aspect-square">
-                          <Sparkles className="h-4 w-4" />
-                        </Button>
+                        <div className="grid grid-cols-2 gap-2">
+                          {[1, 2, 3, 4].map(i => (
+                            <div key={i} className="aspect-square bg-gray-100 rounded cursor-pointer hover:bg-gray-200 transition-colors">
+                              <div className="w-full h-full flex items-center justify-center text-gray-500 text-xs">
+                                Foto {i}
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+
+                  <Card>
+                    <CardContent className="p-4">
+                      <h3 className="font-medium mb-4 flex items-center">
+                        <Grid className="h-4 w-4 mr-2" />
+                        Frames & Grids
+                      </h3>
+                      <div className="grid grid-cols-3 gap-2">
+                        {[1, 2, 3, 4, 5, 6].map(i => (
+                          <div key={i} className="aspect-square bg-gray-100 rounded cursor-pointer hover:bg-gray-200 transition-colors border-2 border-dashed border-gray-300">
+                            <div className="w-full h-full flex items-center justify-center text-gray-500 text-xs">
+                              Grid {i}
+                            </div>
+                          </div>
+                        ))}
                       </div>
                     </CardContent>
                   </Card>
@@ -411,54 +770,6 @@ export default function DesignEditor() {
                           </Button>
                         </TabsContent>
                       </Tabs>
-                    </CardContent>
-                  </Card>
-
-                  <Card>
-                    <CardContent className="p-4">
-                      <h3 className="font-medium mb-4 flex items-center">
-                        <Settings className="h-4 w-4 mr-2" />
-                        Tools
-                      </h3>
-                      <div className="space-y-2">
-                        <Button variant="outline" className="w-full justify-start">
-                          <Sliders className="h-4 w-4 mr-2" />
-                          Filtros
-                        </Button>
-                        <Button variant="outline" className="w-full justify-start">
-                          <Wand2 className="h-4 w-4 mr-2" />
-                          Efeitos
-                        </Button>
-                      </div>
-                    </CardContent>
-                  </Card>
-
-                  <Card>
-                    <CardContent className="p-4">
-                      <h3 className="font-medium mb-4 flex items-center">
-                        <FolderOpen className="h-4 w-4 mr-2" />
-                        Projects
-                      </h3>
-                      <Button variant="outline" className="w-full">
-                        Ver projetos salvos
-                      </Button>
-                    </CardContent>
-                  </Card>
-
-                  <Card>
-                    <CardContent className="p-4">
-                      <h3 className="font-medium mb-4 flex items-center">
-                        <Grid3X3 className="h-4 w-4 mr-2" />
-                        Apps
-                      </h3>
-                      <div className="space-y-2">
-                        <Button variant="outline" className="w-full justify-start text-xs">
-                          Gerador QR Code
-                        </Button>
-                        <Button variant="outline" className="w-full justify-start text-xs">
-                          IA Visual
-                        </Button>
-                      </div>
                     </CardContent>
                   </Card>
                 </div>
@@ -539,13 +850,6 @@ export default function DesignEditor() {
                 >
                   <Underline className="h-4 w-4" />
                 </Button>
-                <Button
-                  variant={textStrikethrough ? "default" : "outline"}
-                  size="sm"
-                  onClick={() => setTextStrikethrough(!textStrikethrough)}
-                >
-                  <Strikethrough className="h-4 w-4" />
-                </Button>
               </div>
 
               <div className="flex gap-1">
@@ -579,25 +883,16 @@ export default function DesignEditor() {
                 >
                   <AlignRight className="h-4 w-4" />
                 </Button>
-                <Button
-                  variant={textAlign === 'justify' ? "default" : "outline"}
-                  size="sm"
-                  onClick={() => setTextAlign('justify')}
-                >
-                  <AlignJustify className="h-4 w-4" />
-                </Button>
               </div>
-
-              <Button variant="outline" size="sm">
-                <List className="h-4 w-4 mr-1" />
-                Lista
-              </Button>
 
               <div className="flex items-center gap-2">
                 <Label className="text-sm">Opacidade:</Label>
                 <Slider
                   value={[textOpacity]}
-                  onValueChange={(value) => setTextOpacity(value[0])}
+                  onValueChange={(value) => {
+                    setTextOpacity(value[0]);
+                    updateSelectedElement({ style: { ...selectedElement.style, opacity: value[0] } });
+                  }}
                   max={100}
                   step={1}
                   className="w-20"
@@ -605,55 +900,213 @@ export default function DesignEditor() {
                 <span className="text-sm">{textOpacity}%</span>
               </div>
 
-              <Button variant="outline" size="sm">
-                <Sparkles className="h-4 w-4 mr-1" />
-                Efeitos
+              <Button 
+                variant="outline" 
+                size="sm" 
+                onClick={deleteSelectedElement}
+                className="text-red-600 hover:text-red-700"
+              >
+                Excluir
               </Button>
 
-              <Button variant="outline" size="sm">
-                <Layers className="h-4 w-4 mr-1" />
-                Posição
+              <Button 
+                variant="outline" 
+                size="sm" 
+                onClick={duplicateSelectedElement}
+              >
+                Duplicar
+              </Button>
+            </div>
+          )}
+
+          {/* Shape Editing Toolbar */}
+          {selectedElement?.type === 'shape' && (
+            <div className="bg-white border-b p-4 flex items-center gap-4 flex-wrap">
+              <Input
+                type="color"
+                value={selectedElement.style?.fill || '#8B5CF6'}
+                onChange={(e) => {
+                  updateSelectedElement({ 
+                    style: { ...selectedElement.style, fill: e.target.value } 
+                  });
+                }}
+                className="w-12 h-8"
+              />
+
+              <div className="flex items-center gap-2">
+                <Label className="text-sm">Opacidade:</Label>
+                <Slider
+                  value={[selectedElement.style?.opacity || 100]}
+                  onValueChange={(value) => {
+                    updateSelectedElement({ 
+                      style: { ...selectedElement.style, opacity: value[0] } 
+                    });
+                  }}
+                  max={100}
+                  step={1}
+                  className="w-20"
+                />
+                <span className="text-sm">{selectedElement.style?.opacity || 100}%</span>
+              </div>
+
+              {selectedElement.style?.shapeType === 'rectangle' && (
+                <div className="flex items-center gap-2">
+                  <Label className="text-sm">Arredondamento:</Label>
+                  <Slider
+                    value={[selectedElement.style?.borderRadius || 0]}
+                    onValueChange={(value) => {
+                      updateSelectedElement({ 
+                        style: { ...selectedElement.style, borderRadius: value[0] } 
+                      });
+                    }}
+                    max={50}
+                    step={1}
+                    className="w-20"
+                  />
+                  <span className="text-sm">{selectedElement.style?.borderRadius || 0}px</span>
+                </div>
+              )}
+
+              <Button 
+                variant="outline" 
+                size="sm" 
+                onClick={deleteSelectedElement}
+                className="text-red-600 hover:text-red-700"
+              >
+                Excluir
+              </Button>
+
+              <Button 
+                variant="outline" 
+                size="sm" 
+                onClick={duplicateSelectedElement}
+              >
+                Duplicar
               </Button>
             </div>
           )}
 
           {/* Canvas Container */}
-          <div className="flex-1 flex items-center justify-center p-8 bg-gray-200 overflow-auto">
-            <div className="relative">
-              <canvas
-                ref={canvasRef}
-                width={canvasSize.width}
-                height={canvasSize.height}
-                onClick={handleCanvasClick}
-                className="border border-gray-300 bg-white shadow-lg cursor-crosshair"
-                style={{ transform: `scale(${zoom / 100})` }}
-              />
-              
-              {/* Page Navigation */}
-              {totalPages > 1 && (
-                <div className="absolute top-4 right-4 bg-white rounded-lg shadow-md p-2 flex items-center gap-2">
-                  <Button 
-                    variant="outline" 
-                    size="sm"
-                    onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
-                    disabled={currentPage === 1}
-                  >
-                    <ChevronLeft className="h-4 w-4" />
-                  </Button>
-                  <span className="text-sm font-medium px-2">
-                    {currentPage} / {totalPages}
-                  </span>
-                  <Button 
-                    variant="outline" 
-                    size="sm"
-                    onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
-                    disabled={currentPage === totalPages}
-                  >
-                    <ChevronRight className="h-4 w-4" />
-                  </Button>
-                </div>
-              )}
+          <div className="flex-1 flex bg-gray-200 overflow-hidden relative">
+            {/* Canvas */}
+            <div 
+              ref={containerRef}
+              className="flex-1 flex items-center justify-center p-8 overflow-auto"
+              style={{ transform: `translate(${canvasOffset.x}px, ${canvasOffset.y}px)` }}
+            >
+              <div className="relative">
+                <canvas
+                  ref={canvasRef}
+                  width={canvasSize.width}
+                  height={canvasSize.height}
+                  onMouseDown={handleCanvasMouseDown}
+                  onMouseMove={handleCanvasMouseMove}
+                  onMouseUp={handleCanvasMouseUp}
+                  onWheel={handleWheel}
+                  className="border border-gray-300 bg-white shadow-lg cursor-crosshair"
+                  style={{ transform: `scale(${zoom / 100})` }}
+                />
+                
+                {/* Page Navigation */}
+                {totalPages > 1 && (
+                  <div className="absolute top-4 right-4 bg-white rounded-lg shadow-md p-2 flex items-center gap-2">
+                    <Button 
+                      variant="outline" 
+                      size="sm"
+                      onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
+                      disabled={currentPage === 1}
+                    >
+                      <ChevronLeft className="h-4 w-4" />
+                    </Button>
+                    <span className="text-sm font-medium px-2">
+                      {currentPage} / {totalPages}
+                    </span>
+                    <Button 
+                      variant="outline" 
+                      size="sm"
+                      onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
+                      disabled={currentPage === totalPages}
+                    >
+                      <ChevronRight className="h-4 w-4" />
+                    </Button>
+                  </div>
+                )}
+
+                {/* Add Page Button */}
+                <Button
+                  className="absolute -right-16 top-1/2 transform -translate-y-1/2"
+                  size="sm"
+                  variant="outline"
+                  onClick={() => {
+                    setTotalPages(prev => prev + 1);
+                    setCurrentPage(totalPages + 1);
+                    toast.success("Nova página adicionada!");
+                  }}
+                >
+                  <Plus className="h-4 w-4" />
+                </Button>
+              </div>
             </div>
+
+            {/* Layers Panel */}
+            {showLayers && (
+              <div className="w-80 bg-white border-l overflow-y-auto">
+                <div className="p-4">
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="font-medium">Camadas</h3>
+                    <Button 
+                      variant="ghost" 
+                      size="sm"
+                      onClick={() => setShowLayers(false)}
+                    >
+                      ✕
+                    </Button>
+                  </div>
+                  <ScrollArea className="h-96">
+                    <div className="space-y-2">
+                      {layers.reverse().map((layer) => (
+                        <div 
+                          key={layer.id}
+                          className={`flex items-center gap-2 p-2 rounded cursor-pointer hover:bg-gray-50 ${
+                            layer.element.selected ? 'bg-purple-50 border border-purple-200' : ''
+                          }`}
+                          onClick={() => {
+                            setElements(prev => prev.map(el => ({ ...el, selected: el.id === layer.id })));
+                            setSelectedElement(layer.element);
+                          }}
+                        >
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="p-1 h-6 w-6"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              toggleLayerVisibility(layer.id);
+                            }}
+                          >
+                            {layer.visible ? <Eye className="h-3 w-3" /> : <Eye className="h-3 w-3 opacity-50" />}
+                          </Button>
+                          
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="p-1 h-6 w-6"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              toggleLayerLock(layer.id);
+                            }}
+                          >
+                            {layer.locked ? "🔒" : "🔓"}
+                          </Button>
+                          
+                          <span className="text-sm flex-1 truncate">{layer.name}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </ScrollArea>
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Bottom Controls */}
@@ -682,7 +1135,14 @@ export default function DesignEditor() {
               >
                 <ZoomIn className="h-4 w-4" />
               </Button>
-              <Button variant="outline" size="sm" onClick={fitToScreen}>
+              <Button 
+                variant="outline" 
+                size="sm" 
+                onClick={() => {
+                  setZoom(100);
+                  setCanvasOffset({ x: 0, y: 0 });
+                }}
+              >
                 <Maximize className="h-4 w-4 mr-1" />
                 Ajustar tela
               </Button>
@@ -694,10 +1154,18 @@ export default function DesignEditor() {
               </span>
               
               <div className="flex gap-2">
-                <Button variant="outline" size="sm">
+                <Button 
+                  variant={showGrid ? "default" : "outline"} 
+                  size="sm"
+                  onClick={() => setShowGrid(!showGrid)}
+                >
                   <Grid className="h-4 w-4" />
                 </Button>
-                <Button variant="outline" size="sm">
+                <Button 
+                  variant={showLayers ? "default" : "outline"} 
+                  size="sm"
+                  onClick={() => setShowLayers(!showLayers)}
+                >
                   <Layers className="h-4 w-4" />
                 </Button>
               </div>
