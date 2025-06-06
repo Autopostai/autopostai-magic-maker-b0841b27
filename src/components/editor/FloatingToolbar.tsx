@@ -83,7 +83,7 @@ export function FloatingToolbar({ element, onUpdate, onDelete, onDuplicate }: Fl
           variant={element.style?.textDecoration === 'underline' ? "default" : "outline"}
           size="sm"
           onClick={() => updateStyle({ 
-            textDecoration: element.style?.textDecoration === 'underline' : 'none' : 'underline' 
+            textDecoration: element.style?.textDecoration === 'underline' ? 'none' : 'underline' 
           })}
         >
           <Underline className="h-4 w-4" />
