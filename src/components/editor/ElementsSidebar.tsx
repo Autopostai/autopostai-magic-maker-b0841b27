@@ -6,8 +6,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { 
   Type, Image, Shapes, Upload, Sparkles, Zap, Grid, 
-  Circle, Square, Triangle, Star, Heart, Polygon,
-  Camera, Frame, Layout, Palette, Brush, Stickers
+  Circle, Square, Triangle, Star, Heart, Hexagon,
+  Camera, Frame, Layout, Palette, Brush, Sticker
 } from "lucide-react";
 import { DesignElement } from "@/types/editor";
 import { toast } from "sonner";
@@ -25,7 +25,7 @@ export function ElementsSidebar({ onAddElement }: ElementsSidebarProps) {
     { name: 'Triângulo', icon: Triangle, type: 'triangle' },
     { name: 'Estrela', icon: Star, type: 'star' },
     { name: 'Coração', icon: Heart, type: 'heart' },
-    { name: 'Polígono', icon: Polygon, type: 'polygon' }
+    { name: 'Hexágono', icon: Hexagon, type: 'polygon' }
   ];
 
   const templates = [
@@ -234,7 +234,7 @@ export function ElementsSidebar({ onAddElement }: ElementsSidebarProps) {
               <Card>
                 <CardContent className="p-4">
                   <h3 className="font-medium mb-4 flex items-center">
-                    <Stickers className="h-4 w-4 mr-2" />
+                    <Sticker className="h-4 w-4 mr-2" />
                     Stickers
                   </h3>
                   <Input placeholder="Buscar stickers..." className="mb-3" />

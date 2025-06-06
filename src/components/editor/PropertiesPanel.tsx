@@ -10,9 +10,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Switch } from "@/components/ui/switch";
 import { 
   Bold, Italic, Underline, AlignLeft, AlignCenter, AlignRight,
-  AlignJustify, Palette, Shadow, Sparkles, Play, Copy, Trash2,
+  AlignJustify, Palette, Sparkles, Play, Copy, Trash2,
   RotateCcw, FlipHorizontal, FlipVertical, Move, Lock, Eye,
-  EyeOff, ChevronUp, ChevronDown
+  EyeOff, ChevronUp, ChevronDown, Filter
 } from "lucide-react";
 import { DesignElement } from "@/types/editor";
 
@@ -320,7 +320,7 @@ export function PropertiesPanel({
             <Card>
               <CardHeader className="pb-2">
                 <CardTitle className="text-sm flex items-center">
-                  <Shadow className="h-4 w-4 mr-2" />
+                  <Filter className="h-4 w-4 mr-2" />
                   Sombra
                 </CardTitle>
               </CardHeader>
