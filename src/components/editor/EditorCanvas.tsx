@@ -1,5 +1,5 @@
 
-import { useRef, useEffect, useState } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import { DesignElement } from "@/types/editor";
 
 interface EditorCanvasProps {
@@ -140,7 +140,7 @@ export function EditorCanvas({
   const drawShapeElement = (ctx: CanvasRenderingContext2D, element: DesignElement) => {
     const style = element.style || {};
     
-    // Apply filters
+    // Apply filters including blur
     if (style.blur) {
       ctx.filter = `blur(${style.blur}px)`;
     }
@@ -164,7 +164,7 @@ export function EditorCanvas({
         ctx.beginPath();
         ctx.arc(x + width/2, y + height/2, Math.min(width, height)/2, 0, 2 * Math.PI);
         ctx.fill();
-        if (style.strokeWidth > 0) ctx.stroke();
+        if (style.strokeWidth && style.strokeWidth > 0) ctx.stroke();
         break;
       case 'rectangle':
         if (style.borderRadius) {
@@ -172,7 +172,7 @@ export function EditorCanvas({
         } else {
           ctx.fillRect(x, y, width, height);
         }
-        if (style.strokeWidth > 0) ctx.strokeRect(x, y, width, height);
+        if (style.strokeWidth && style.strokeWidth > 0) ctx.strokeRect(x, y, width, height);
         break;
       case 'triangle':
         ctx.beginPath();
@@ -181,7 +181,7 @@ export function EditorCanvas({
         ctx.lineTo(x + width, y + height);
         ctx.closePath();
         ctx.fill();
-        if (style.strokeWidth > 0) ctx.stroke();
+        if (style.strokeWidth && style.strokeWidth > 0) ctx.stroke();
         break;
     }
     

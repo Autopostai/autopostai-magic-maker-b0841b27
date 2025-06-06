@@ -39,6 +39,9 @@ export interface ElementStyle {
   borderRadius?: number;
   shapeType?: 'rectangle' | 'circle' | 'triangle' | 'star' | 'heart' | 'polygon';
   
+  // Filters - moved blur here from ElementFilters since it's being used in style
+  blur?: number;
+  
   // Shadow effects
   shadow?: boolean;
   shadowColor?: string;
